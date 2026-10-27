@@ -206,7 +206,7 @@ treats a locator starting with `/` as XPath and anything else as CSS. Mobile tre
 `accessibilityid`. The WinAppDriver/Appium server and the device are yours to run. For web, the CLI starts and stops
 a local browser driver itself unless you pass `--remote-url` to your own Selenium server.
 
-Every command, flag, default and success-JSON shape: `bellatrix help` (or `bellatrix <domain> help`); add `--json`
+Every command, flag, default and success-JSON shape: `bellatrix help` (or `bellatrix <domain> help`, or `--help` on any command); add `--json`
 for the machine-readable form. Exit codes: `0` success, `1` error (`{"error":{"code","message"}}` on stdout), `2`
 invalid `--agent`/`--language` selection. Set `BELLATRIX_TRACE=<file>` to append one JSON line per invocation
 (verb, args with `--text` redacted, exit code, stdout size, context-heavy flags).

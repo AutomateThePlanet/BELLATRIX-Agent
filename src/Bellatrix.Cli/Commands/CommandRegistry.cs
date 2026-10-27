@@ -182,7 +182,7 @@ internal static class CommandRegistry
         {
             Output = "{version}",
         },
-        new(null, "help", "Describe the commands (bellatrix help, or bellatrix <domain> help). --json for machine-readable output.", MetaCommands.Help)
+        new(null, "help", "Describe the commands (bellatrix help [<command> | <domain> [<verb>]], or <command> --help). --json for machine-readable output.", MetaCommands.Help)
         {
             Output = "{version, usage, exitCodes, globalFlags[], domains[], commands[]}",
         },
@@ -205,24 +205,37 @@ internal static class CommandRegistry
 
     public const string Usage = "bellatrix <init|sessions|version|help> [--flag value] | bellatrix <desktop|web|mobile> <verb> [--flag value] | bellatrix <domain> help";
 
+    /// <summary>The usage line of one command: <c>bellatrix [&lt;domain&gt;] &lt;name&gt; [--flag value]</c>.</summary>
+    public static string UsageOf(CommandSpec spec)
+        => "bellatrix " + (spec.Domain is null ? "" : spec.Domain + " ") + spec.Name + (spec.Flags.Count > 0 ? " [--flag value]" : "");
+
     /// <summary>The help document: everything, or one domain's verbs.</summary>
-    public static object HelpDocument(string? domain) => new
+    public static object HelpDocument(string? domain) => HelpDocument(domain is null ? All : For(domain), Usage);
+
+    /// <summary>The help document of one command (<c>bellatrix [&lt;domain&gt;] &lt;command&gt; --help --json</c>).</summary>
+    public static object HelpDocument(CommandSpec spec) => HelpDocument(new[] { spec }, UsageOf(spec));
+
+    private static object HelpDocument(IEnumerable<CommandSpec> specs, string usage) => new
     {
         version = CliRunner.Version,
-        usage = Usage,
+        usage,
         exitCodes = ExitCodes.ToDictionary(e => e.Key.ToString(), e => e.Value),
         globalFlags = Flags.Global.Select(FlagJson),
         domains = Domains,
-        commands = (domain is null ? All : For(domain)).Select(CommandJson),
+        commands = specs.Select(CommandJson),
     };
 
-    public static string HelpText(string? domain)
+    public static string HelpText(string? domain) => HelpText(domain is null ? All : For(domain), Usage);
+
+    public static string HelpText(CommandSpec spec) => HelpText(new[] { spec }, UsageOf(spec));
+
+    private static string HelpText(IEnumerable<CommandSpec> specs, string usage)
     {
         var sb = new StringBuilder();
         sb.AppendLine($"bellatrix {CliRunner.Version} - model-free UI automation CLI (output is always JSON).");
         sb.AppendLine();
-        sb.AppendLine("Usage: " + Usage);
-        foreach (var group in (domain is null ? All : For(domain)).GroupBy(s => s.Domain))
+        sb.AppendLine("Usage: " + usage);
+        foreach (var group in specs.GroupBy(s => s.Domain))
         {
             sb.AppendLine();
             sb.AppendLine(group.Key is null ? "Commands:" : $"{group.Key} verbs (bellatrix {group.Key} <verb>):");
@@ -298,6 +311,18 @@ internal static class MetaCommands
         }
 
         Console.Out.Write(CommandRegistry.HelpText(domain));
+        return 0;
+    }
+
+    /// <summary>One command's help (<c>--help</c>, <c>-h</c> or <c>help</c> on that command): printed, never run.</summary>
+    public static int RenderCommand(CommandSpec spec, bool json)
+    {
+        if (json)
+        {
+            return JsonOutput.Success(CommandRegistry.HelpDocument(spec));
+        }
+
+        Console.Out.Write(CommandRegistry.HelpText(spec));
         return 0;
     }
 }

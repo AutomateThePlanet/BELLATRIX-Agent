@@ -1,4 +1,4 @@
-# Testing `bellatrix` (current release: 3.1.2)
+# Testing `bellatrix` (current release: 3.1.3)
 
 > This guide always describes the latest release. Release history: [CHANGELOG.md](../CHANGELOG.md).
 
@@ -22,7 +22,7 @@ dotnet tool install -g Bellatrix.Cli
 # …or, if an older bellatrix is already installed:
 dotnet tool update  -g Bellatrix.Cli
 
-bellatrix --version          # → {"version":"3.1.2"}
+bellatrix --version          # → {"version":"3.1.3"}
 ```
 
 To try a build from source, pack it and add the folder as a source:
@@ -31,7 +31,7 @@ To try a build from source, pack it and add the folder as a source:
 git clone https://github.com/AutomateThePlanet/BELLATRIX-Agent
 cd BELLATRIX-Agent
 dotnet pack src\Bellatrix.Cli\Bellatrix.Cli.csproj -c Release -o .\artifacts\nuget
-dotnet tool update -g Bellatrix.Cli --add-source .\artifacts\nuget --version 3.1.2
+dotnet tool update -g Bellatrix.Cli --add-source .\artifacts\nuget --version 3.1.3
 ```
 
 > **Run every command for one test from the same folder.** Sessions are stored in `.\.bellatrix\sessions.db` and
