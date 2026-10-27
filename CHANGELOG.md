@@ -7,6 +7,16 @@ All notable changes to `Bellatrix.Cli` (the `bellatrix` command) are documented 
 Versions before 3.1.2 were distributed as packages outside NuGet.org; 3.1.2 is the first NuGet.org release and the
 first release from this repository.
 
+## [3.1.3] - 2026-10-28
+
+### Fixed
+- `--help`, `-h` and `help` on any command print that command's help and exit 0 with no side effects. Previously
+  `bellatrix init --help` ran a real install, and a verb with `--help` ran the verb.
+
+### Added
+- Per-command help: `bellatrix <command> --help`, `bellatrix <domain> <verb> --help`, `bellatrix help <command>` and
+  `bellatrix help <domain> <verb>`; add `--json` for the machine-readable form.
+
 ## [3.1.2] - 2026-10-27
 
 ### Added
@@ -63,4 +73,5 @@ first release from this repository.
   compile-verified against the framework source.
 - Support matrix (language × domain × agent) in the README.
 
+[3.1.3]: https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.3
 [3.1.2]: https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.2
