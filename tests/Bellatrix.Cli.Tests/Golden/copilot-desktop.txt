@@ -1,0 +1,81 @@
+# emitted
+.github/agents/bellatrix-desktop-locator-specialist.agent.md
+.github/agents/bellatrix-desktop-system-tests-generator.agent.md
+.github/instructions/bellatrix.instructions.md
+.github/skills/bellatrix-desktop-app-services/SKILL.md
+.github/skills/bellatrix-desktop-automate-spectra-test/SKILL.md
+.github/skills/bellatrix-desktop-components/SKILL.md
+.github/skills/bellatrix-desktop-execute-scenario/SKILL.md
+.github/skills/bellatrix-desktop-execute-spectra-test/SKILL.md
+.github/skills/bellatrix-desktop-generate-code/SKILL.md
+.github/skills/bellatrix-desktop-locators-and-waits/SKILL.md
+.github/skills/bellatrix-desktop-page-objects-and-patterns/SKILL.md
+.github/skills/bellatrix-desktop-project-structure/SKILL.md
+.github/skills/bellatrix-desktop-system-tests-recipes/SKILL.md
+.github/skills/bellatrix-desktop-test-structure-and-lifecycle/SKILL.md
+.github/skills/bellatrix-desktop-validations-and-assertions/SKILL.md
+# registered: (none)
+# file: .github/agents/bellatrix-desktop-locator-specialist.agent.md
+---
+name: bellatrix-desktop-locator-specialist
+description: Isolated specialist that turns a description plus a snapshot reference into ONE desktop XPath locator, without returning the UI tree to the orchestrator.
+tools: ['read', 'search', 'execute']
+---
+
+# BELLATRIX Desktop Locator Specialist (isolated)
+
+You run in an ISOLATED context. You receive a `{ description, snapshotPath, domain: "desktop" }`
+request, read the snapshot artifact at `snapshotPath` **in your own context only**, and return a
+SINGLE XPath string. The full UI tree MUST NOT be returned to the orchestrator (Context Economy).
+
+## How to read state
+
+# sha256: 645d371c617c4a91
+# file: .github/agents/bellatrix-desktop-system-tests-generator.agent.md
+---
+name: bellatrix-desktop-system-tests-generator
+description: Expert agent for generating production-ready desktop system tests, page objects, and XPath locators using the BELLATRIX framework with bellatrix desktop CLI commands for live Windows application analysis via WinAppDriver. Can automate SPECTRA manual test cases with full traceability.
+agents: ['bellatrix-desktop-locator-specialist']
+---
+
+# BELLATRIX Desktop System Tests Generator
+
+You are a world-class expert in BELLATRIX Desktop test automation framework for .NET. You generate complete, production-ready system tests for Windows applications using the Page Object Model pattern. You use bellatrix desktop CLI commands to analyze live application windows before generating code.
+
+**YOU MUST USE THE `bellatrix desktop` CLI** (`bellatrix desktop` CLI) to analyze windows before generating code.
+
+### Driver Backend Is Not Your Job
+
+# sha256: 3c451227417bd3f3
+# file: .github/instructions/bellatrix.instructions.md
+---
+applyTo: "**"
+---
+
+# BELLATRIX Automation (model-free CLI)
+
+> Scaffolded by `bellatrix init`. This is the single BELLATRIX instruction fragment
+> for this repo, loaded by your AI agent from its own instructions location. Edit your
+> own automation notes elsewhere — re-running `bellatrix init` may refresh this file
+> (it skips files you have edited; use `--regenerate` to force a refresh).
+
+Drive UI automation with the **`bellatrix <domain> <verb>`** CLI. It runs no model and
+holds no credentials — all inference is yours. The driver, browser server, or device
+is the user's to run; never start, stop, or probe it (if a command returns a
+# sha256: adcb8b0b7f9ff5c3
+# file: .github/skills/bellatrix-desktop-components/SKILL.md
+---
+name: bellatrix-desktop-components
+description: Reference skill for BELLATRIX desktop component types, methods, properties, and creation patterns.
+---
+
+# BELLATRIX Desktop Components Reference
+
+## Component Hierarchy
+
+All desktop components inherit from the base `Component` class in `Bellatrix.Desktop` namespace.
+
+## Desktop Components
+
+| Component | WinAppDriver ControlType | Key Methods | Key Properties |
+# sha256: 4cd08c4b6c0f74a3

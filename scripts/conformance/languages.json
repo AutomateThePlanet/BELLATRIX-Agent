@@ -1,0 +1,31 @@
+{
+  "$comment": "Language table for scripts/agent-conformance.ps1: the project marker that makes `bellatrix init` auto-detect the language, and the domains it supports (TypeScript = web only). Fixtures: tests/fixtures/snapshots/<fixture>.json + .answers.json.",
+  "domains": [
+    { "id": "desktop", "fixture": "desktop-calculator", "app": "Windows Calculator" },
+    { "id": "web", "fixture": "web-demo-shop", "app": "the demo shop at https://demos.bellatrix.solutions/" },
+    { "id": "mobile", "fixture": "android-apidemos", "app": "the Android ApiDemos app" }
+  ],
+  "languages": [
+    {
+      "id": "csharp",
+      "name": "C#",
+      "domains": ["desktop", "web", "mobile"],
+      "markerFiles": { "Demo.Tests.csproj": "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><TargetFramework>net8.0</TargetFramework></PropertyGroup></Project>\n" }
+    },
+    {
+      "id": "java",
+      "name": "Java",
+      "domains": ["desktop", "web", "mobile"],
+      "markerFiles": { "pom.xml": "<project xmlns=\"http://maven.apache.org/POM/4.0.0\"><modelVersion>4.0.0</modelVersion><groupId>demo</groupId><artifactId>demo-tests</artifactId><version>1.0</version></project>\n" }
+    },
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "domains": ["web"],
+      "markerFiles": {
+        "package.json": "{ \"name\": \"demo-tests\", \"private\": true }\n",
+        "tsconfig.json": "{ \"compilerOptions\": { \"strict\": true } }\n"
+      }
+    }
+  ]
+}

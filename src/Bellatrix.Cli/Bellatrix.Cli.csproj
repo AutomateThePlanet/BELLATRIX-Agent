@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Bellatrix.Cli</RootNamespace>
+    <AssemblyName>bellatrix</AssemblyName>
+
+    <!-- Global tool: `bellatrix <domain> <verb>` (model-free; holds no credentials). -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>bellatrix</ToolCommandName>
+    <IsPackable>true</IsPackable>
+    <PackageId>Bellatrix.Cli</PackageId>
+    <Version>3.1.2</Version>
+
+    <!-- NuGet.org metadata. Authors, copyright and the repository URL come from Directory.Build.props. -->
+    <Product>BELLATRIX</Product>
+    <Description>Model-free automation CLI for AI coding agents. Drives desktop (WinAppDriver), web (Selenium) and mobile (Appium) automation one JSON command at a time, and scaffolds BELLATRIX skills and subagents for Claude Code, GitHub Copilot, Cursor, Devin, Codex CLI, Gemini CLI, Antigravity CLI, Kiro CLI and OpenCode (C#, Java, TypeScript).</Description>
+    <PackageTags>bellatrix;test-automation;ai-agents;cli;dotnet-tool;selenium;appium;winappdriver;claude-code;copilot;cursor;codex;gemini;kiro;opencode</PackageTags>
+    <PackageProjectUrl>https://bellatrix.solutions/agent/</PackageProjectUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>bellatrix_icon.png</PackageIcon>
+
+    <!-- Cold-start budget: ReadyToRun on win-x64 in Release. -->
+    <PublishReadyToRun Condition="'$(Configuration)' == 'Release' AND '$(RuntimeIdentifier)' == 'win-x64'">true</PublishReadyToRun>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Bellatrix.Cli.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Package\README.md" Pack="true" PackagePath="\" />
+    <None Include="Package\bellatrix_icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bellatrix.Execution\Bellatrix.Execution.csproj" />
+  </ItemGroup>
+
+  <!-- Provider-neutral BELLATRIX templates scaffolded by `bellatrix init`, embedded by repo-relative path:
+       tmpl/bellatrix-instructions.md (fragment), tmpl/core/<domain>/[agents/]<topic>.md (language-agnostic part),
+       tmpl/lang/<language>/<domain>/[agents/]<topic>.md (language part, included at a {{> lang}} marker).
+       RecursiveDir uses the OS separator; TemplateCatalog normalizes it to '/'. -->
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\**\*.md">
+      <LogicalName>tmpl/%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <!-- Custom template folders (`bellatrix init` with a template-source folder and a prefix) are NOT embedded: they
+       are read from disk and rendered at runtime — see Scaffolding/CustomTemplateSource.cs. -->
+</Project>

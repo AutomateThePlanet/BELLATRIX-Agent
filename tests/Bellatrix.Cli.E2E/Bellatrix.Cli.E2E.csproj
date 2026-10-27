@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Live E2E suite. Every test is SKIPPED unless BELLATRIX_E2E=1 and the domain's own gate
+       (BELLATRIX_E2E_DESKTOP / _WEB / _WEB_REMOTE / _MOBILE) is 1. Each step runs the INSTALLED `bellatrix`
+       (or BELLATRIX_E2E_EXE) as a separate process. Bellatrix.Execution is referenced only to read the
+       session store and seed stale rows — never to drive the app in-process. Run via scripts/run-e2e.ps1. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <PackageReference Include="Xunit.SkippableFact" Version="1.4.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Bellatrix.Execution\Bellatrix.Execution.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,12 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <!-- Shipped projects only: SourceLink to the public repository and reproducible builds. ContinuousIntegrationBuild
+       maps local paths to /_/ in PDBs; it is on in GitHub Actions and for release packs (-p:ContinuousIntegrationBuild=true).
+       Tests are not under src/, so their [CallerFilePath]-based repo lookups keep real paths. -->
+  <PropertyGroup>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+</Project>

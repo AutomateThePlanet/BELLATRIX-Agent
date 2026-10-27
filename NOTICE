@@ -1,0 +1,7 @@
+BELLATRIX Agent
+Copyright 2026 Automate The Planet Ltd.
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It depends on third-party NuGet packages (Appium.WebDriver, Selenium.Support, WebDriverManager, HtmlAgilityPack,
+Microsoft.Data.Sqlite and others) that are distributed under their own licenses.
