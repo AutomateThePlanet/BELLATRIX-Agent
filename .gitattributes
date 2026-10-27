@@ -1,0 +1,14 @@
+# Normalize text to LF in the repository and the working tree, so content hashes (golden files, scaffold manifests)
+# are the same on every OS.
+* text=auto eol=lf
+
+# Windows-only scripts keep CRLF.
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Binaries.
+*.png binary
+*.jpg binary
+*.ico binary
+*.nupkg binary
+*.snk binary

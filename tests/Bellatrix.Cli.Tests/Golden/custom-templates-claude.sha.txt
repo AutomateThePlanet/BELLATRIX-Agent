@@ -1,0 +1,7 @@
+43ef4e595c593b2f  .bellatrix/acme.instructions.md
+f6f82200828fe15c  .claude/agents/acme-desktop-locator-specialist.md
+f0ceb9155819e418  .claude/agents/acme-desktop-system-tests-generator.md
+7071b9120a2efda0  .claude/skills/acme-desktop-components/SKILL.md
+dca3f7dd23db0973  .claude/skills/acme-desktop-locators/SKILL.md
+32c3954cb4902457  .claude/skills/acme-web-checkout/SKILL.md
+6e0e08cbb12e0747  CLAUDE.md

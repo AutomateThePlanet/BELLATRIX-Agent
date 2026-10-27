@@ -1,0 +1,79 @@
+{
+  "fixture": "desktop-calculator.json",
+  "domain": "desktop",
+  "synthetic": true,
+  "source": "desktop-calculator.page-source.xml",
+  "parser": "Bellatrix.Execution.DesktopService.ParsePageSource (production parser; regenerate: BELLATRIX_UPDATE_FIXTURES=1)",
+  "recordedWith": null,
+  "note": "Synthetic WinAppDriver page source for Windows Calculator (Standard mode) with the real AutomationIds. Replace with a live recording via scripts/record-fixtures.ps1. Snapshot file = bare node array exactly as `bellatrix <domain> snapshot` writes it, so `find --snapshot` loads it unchanged.",
+  "targets": [
+    {
+      "id": "equals",
+      "description": "the Equals (=) button",
+      "findArgs": [
+        "--automation-id",
+        "equalButton"
+      ],
+      "expected": [
+        "//*[@AutomationId='equalButton']",
+        "//Button[@AutomationId='equalButton']",
+        "//Button[@Name='Equals']",
+        "//*[@Name='Equals']"
+      ]
+    },
+    {
+      "id": "seven",
+      "description": "the digit 7 button",
+      "findArgs": [
+        "--automation-id",
+        "num7Button"
+      ],
+      "expected": [
+        "//*[@AutomationId='num7Button']",
+        "//Button[@AutomationId='num7Button']",
+        "//Button[@Name='Seven']",
+        "//*[@Name='Seven']"
+      ]
+    },
+    {
+      "id": "result",
+      "description": "the result display",
+      "findArgs": [
+        "--automation-id",
+        "CalculatorResults"
+      ],
+      "expected": [
+        "//*[@AutomationId='CalculatorResults']",
+        "//Text[@AutomationId='CalculatorResults']"
+      ]
+    },
+    {
+      "id": "plus",
+      "description": "the Plus (+) button",
+      "findArgs": [
+        "--automation-id",
+        "plusButton"
+      ],
+      "expected": [
+        "//*[@AutomationId='plusButton']",
+        "//Button[@AutomationId='plusButton']",
+        "//Button[@Name='Plus']",
+        "//*[@Name='Plus']"
+      ]
+    },
+    {
+      "id": "clear",
+      "description": "the Clear (C) button",
+      "findArgs": [
+        "--automation-id",
+        "clearButton"
+      ],
+      "expected": [
+        "//*[@AutomationId='clearButton']",
+        "//Button[@AutomationId='clearButton']",
+        "//Button[@Name='Clear']",
+        "//*[@Name='Clear']"
+      ]
+    }
+  ]
+}

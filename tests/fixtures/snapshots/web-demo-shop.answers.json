@@ -1,0 +1,82 @@
+{
+  "fixture": "web-demo-shop.json",
+  "domain": "web",
+  "synthetic": false,
+  "source": "https://demos.bellatrix.solutions/ (shop home), headless Chrome 155, 1366x900",
+  "parser": "Bellatrix.Execution.Web.WebDriverService (in-browser deep scan + ParseSnapshotJson)",
+  "recordedWith": "bellatrix web snapshot (3.0.0 + v.1 fixes), 2026-10-27",
+  "note": "Live recording, committed verbatim. Snapshot file = bare node array exactly as `bellatrix <domain> snapshot` writes it, so `find --snapshot` loads it unchanged.",
+  "targets": [
+    {
+      "id": "search-field",
+      "description": "the product search field",
+      "findArgs": [
+        "--id",
+        "woocommerce-product-search-field-0"
+      ],
+      "expected": [
+        "#woocommerce-product-search-field-0",
+        "input#woocommerce-product-search-field-0",
+        "//input[@id='woocommerce-product-search-field-0']",
+        "//*[@id='woocommerce-product-search-field-0']",
+        "input[type='search']",
+        "//input[@type='search']"
+      ]
+    },
+    {
+      "id": "add-falcon-9",
+      "description": "the Add to cart button for the Falcon 9 product",
+      "findArgs": [
+        "--grep",
+        "Falcon 9. to your cart"
+      ],
+      "expected": [
+        "a[href='?add-to-cart=28']",
+        "//a[@href='?add-to-cart=28']",
+        "//a[@aria-label='Add “Falcon 9” to your cart']",
+        "a[aria-label='Add “Falcon 9” to your cart']"
+      ]
+    },
+    {
+      "id": "falcon-9-title",
+      "description": "the Falcon 9 product title",
+      "findArgs": [
+        "--grep",
+        "^Falcon 9$"
+      ],
+      "expected": [
+        "//h2[normalize-space()='Falcon 9']",
+        "//h2[text()='Falcon 9']",
+        "//h2[normalize-space(.)='Falcon 9']"
+      ]
+    },
+    {
+      "id": "search-button",
+      "description": "the Search submit button",
+      "findArgs": [
+        "--grep",
+        "^button$"
+      ],
+      "expected": [
+        "//button[@type='submit']",
+        "button[type='submit']",
+        "//button[normalize-space()='Search']",
+        "//button[text()='Search']",
+        "//button[@value='Search']"
+      ]
+    },
+    {
+      "id": "cart-contents",
+      "description": "the mini-cart link in the header (shows the cart total and item count)",
+      "findArgs": [
+        "--grep",
+        "^cart-contents$"
+      ],
+      "expected": [
+        "a.cart-contents",
+        ".cart-contents",
+        "//a[@class='cart-contents']"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$comment": "Self-test agent table for scripts/agent-conformance.ps1 -AgentTable (free; no model). The fake agent scaffolds as `claude` (any AgentSelection name works) and is driven by scripts/conformance/fake-agent.ps1; BELLATRIX_FAKE_MODE=good|read-snapshot|heavy selects its behavior.",
+  "verifiedOn": "n/a",
+  "agents": [
+    {
+      "id": "claude",
+      "name": "Self-test fake agent",
+      "binaries": ["powershell"],
+      "versionArgs": ["-NoProfile", "-Command", "$PSVersionTable.PSVersion.ToString()"],
+      "capabilityProbe": null,
+      "auth": { "anyEnv": ["PATH"] },
+      "headless": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "{scripts}/conformance/fake-agent.ps1", "{prompt}"],
+      "setupFiles": {},
+      "transcript": "none",
+      "notes": "Not a real agent.",
+      "docs": []
+    }
+  ]
+}

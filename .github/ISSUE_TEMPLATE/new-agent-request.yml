@@ -1,0 +1,28 @@
+name: New AI agent request
+description: Ask for `bellatrix init --agent <name>` support for another AI coding agent.
+labels: [new-agent]
+body:
+  - type: input
+    id: agent
+    attributes:
+      label: Agent name and product URL
+    validations:
+      required: true
+  - type: textarea
+    id: formats
+    attributes:
+      label: Documented project-level formats
+      description: |
+        Links to the agent's **official** documentation for each of these (leave blank what you could not find):
+        - always-loaded instruction file(s) and any import syntax
+        - skills directory and SKILL.md frontmatter
+        - subagents / custom agents: path, format, how to restrict tools to read-only + shell
+        - how to call a subagent by name
+        - headless / non-interactive command and JSON output flag
+        - project MCP config file
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else (pricing model for headless runs, platform limits)

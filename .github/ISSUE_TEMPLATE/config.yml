@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://bellatrix.solutions/agent/
+    about: Install, CLI reference, support matrix and known limits.
+  - name: BELLATRIX framework questions
+    url: https://github.com/AutomateThePlanet/BELLATRIX/issues
+    about: Questions about the BELLATRIX C# framework itself.

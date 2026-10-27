@@ -1,0 +1,85 @@
+{
+  "fixture": "android-apidemos.json",
+  "domain": "mobile",
+  "synthetic": true,
+  "source": "android-apidemos.page-source.xml",
+  "parser": "Bellatrix.Execution.Mobile.MobileService.ParsePageSource (production parser; regenerate: BELLATRIX_UPDATE_FIXTURES=1)",
+  "recordedWith": null,
+  "note": "Synthetic uiautomator2 page source for the ApiDemos main list. Replace with a live recording via scripts/record-fixtures.ps1. Snapshot file = bare node array exactly as `bellatrix <domain> snapshot` writes it, so `find --snapshot` loads it unchanged.",
+  "targets": [
+    {
+      "id": "views",
+      "description": "the Views list item",
+      "findArgs": [
+        "--content-desc",
+        "Views"
+      ],
+      "expected": [
+        "Views",
+        "//android.widget.TextView[@content-desc='Views']",
+        "//android.widget.TextView[@text='Views']",
+        "//*[@text='Views']",
+        "//*[@content-desc='Views']"
+      ]
+    },
+    {
+      "id": "animation",
+      "description": "the Animation list item",
+      "findArgs": [
+        "--content-desc",
+        "Animation"
+      ],
+      "expected": [
+        "Animation",
+        "//android.widget.TextView[@content-desc='Animation']",
+        "//android.widget.TextView[@text='Animation']",
+        "//*[@text='Animation']",
+        "//*[@content-desc='Animation']"
+      ]
+    },
+    {
+      "id": "app",
+      "description": "the App list item",
+      "findArgs": [
+        "--grep",
+        "^App$"
+      ],
+      "expected": [
+        "App",
+        "//android.widget.TextView[@content-desc='App']",
+        "//android.widget.TextView[@text='App']",
+        "//*[@text='App']",
+        "//*[@content-desc='App']"
+      ]
+    },
+    {
+      "id": "title",
+      "description": "the screen title (API Demos)",
+      "findArgs": [
+        "--resource-id",
+        "android:id/title"
+      ],
+      "expected": [
+        "//android.widget.TextView[@resource-id='android:id/title']",
+        "//*[@resource-id='android:id/title']",
+        "//android.widget.TextView[@text='API Demos']",
+        "//*[@text='API Demos']"
+      ]
+    },
+    {
+      "id": "preference",
+      "description": "the Preference list item",
+      "findArgs": [
+        "--content-desc",
+        "Preference"
+      ],
+      "expected": [
+        "Preference",
+        "//android.widget.TextView[@content-desc='Preference']",
+        "//android.widget.TextView[@text='Preference']",
+        "//*[@text='Preference']",
+        "//*[@content-desc='Preference']"
+      ]
+    }
+  ]
+}

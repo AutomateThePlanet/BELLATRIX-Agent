@@ -426,3 +426,11 @@ FodyWeavers.xsd
 
 # Official VS Code C# Dev Kit Extension exclusion
 #*.lscache
+
+# BELLATRIX Agent
+artifacts/
+.bellatrix/
+*.trace.jsonl
+
+# The E2E test project folder matches the "*.e2e" pattern above on case-insensitive file systems.
+!tests/Bellatrix.Cli.E2E/

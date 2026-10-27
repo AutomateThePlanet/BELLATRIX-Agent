@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: dotnet restore BELLATRIX-Agent.sln
+
+      - name: Build
+        run: dotnet build BELLATRIX-Agent.sln --configuration Release --no-restore
+
+      # Unit tests include the help/flag drift tests, the README support-matrix test and the public-safety guard.
+      # The live E2E suite (tests/Bellatrix.Cli.E2E) needs real drivers and is not run in CI.
+      - name: Unit tests
+        run: dotnet test tests/Bellatrix.Cli.Tests --configuration Release --no-build --logger "trx;LogFileName=unit.trx" --results-directory artifacts/test-results
+
+      - name: README matrices are up to date
+        shell: pwsh
+        run: ./scripts/gen-readme-matrix.ps1 -Check
+
+      - name: Pack
+        run: dotnet pack src/Bellatrix.Cli/Bellatrix.Cli.csproj --configuration Release --no-build --output artifacts/nuget
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bellatrix-cli
+          path: |
+            artifacts/nuget/*.nupkg
+            artifacts/test-results/*.trx
