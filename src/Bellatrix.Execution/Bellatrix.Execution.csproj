@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <!-- Protocol-agnostic driver engine: shared by the CLI and the retained MCP shim. -->
-    <PackageReference Include="Appium.WebDriver" Version="5.1.0" />
+    <PackageReference Include="Appium.WebDriver" Version="9.0.0" />
     <!-- Web domain (Selenium). Pinned to the Selenium version Appium 5.1.0 already resolves (4.23.0)
          so desktop/mobile are not disturbed; WebDriverManager fetches local browser-driver binaries. -->
     <PackageReference Include="Selenium.Support" Version="4.23.0" />
