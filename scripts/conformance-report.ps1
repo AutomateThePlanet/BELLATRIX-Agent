@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  Aggregates agent-conformance results (Level 2) into docs/conformance-report.md, and optionally writes the
+  Aggregates agent-conformance results (Level 2) into docs/contributing/conformance-report.md, and optionally writes the
   evidence into docs/support-matrix.json.
 
 .DESCRIPTION
@@ -16,9 +16,9 @@
   Label when both pass: "READY candidate"; "READY (synthetic fixtures)" when any delegation probe of that domain ran on
   a fixture marked synthetic - never plain READY on synthetic evidence.
 
-  -UpdateMatrix writes { discovery, delegation, conformanceLabel } into each cell's evidence in docs/support-matrix.json.
-  It never changes a cell's status: promoting a cell stays a reviewed edit (scripts/gen-readme-matrix.ps1 then
-  regenerates the README).
+  -UpdateMatrix writes { discovery, delegation, conformanceLabel } into each cell's evidence in docs/support-matrix.json
+  (internal.cells). It never changes a cell's status: promoting a cell stays a reviewed edit. Statuses and evidence are
+  internal tracking; the README and the website never show them.
 
 .EXAMPLE
   powershell -File scripts/conformance-report.ps1
@@ -33,7 +33,7 @@ param(
 $ErrorActionPreference = "Stop"
 $repo = Split-Path -Parent $PSScriptRoot
 if (-not $InDir) { $InDir = Join-Path $repo "artifacts\conformance" }
-if (-not $OutFile) { $OutFile = Join-Path $repo "docs\conformance-report.md" }
+if (-not $OutFile) { $OutFile = Join-Path $repo "docs\contributing\conformance-report.md" }
 if (-not $AgentTable) { $AgentTable = Join-Path $PSScriptRoot "conformance\agents.json" }
 $agentRows = @((Get-Content $AgentTable -Raw | ConvertFrom-Json).agents)
 $langTable = Get-Content (Join-Path $PSScriptRoot "conformance\languages.json") -Raw | ConvertFrom-Json
@@ -61,39 +61,7 @@ function Get-Cell($result, $domainId) {
     return $cell
 }
 
-# docs/support-matrix.json is written with 2-space indentation (the layout of Python's json.dumps(indent=2,
-# ensure_ascii=False)), so an evidence update changes only the evidence lines. PS 5.1 ConvertTo-Json would reformat it.
-function ConvertTo-MatrixJson($value, [int]$level = 0) {
-    if ($null -eq $value) { return "null" }
-    if ($value -is [bool]) { return $(if ($value) { "true" } else { "false" }) }
-    if ($value -is [string]) {
-        $sb = New-Object System.Text.StringBuilder
-        [void]$sb.Append([char]34)
-        foreach ($ch in $value.ToCharArray()) {
-            $code = [int]$ch
-            if ($code -eq 34 -or $code -eq 92) { [void]$sb.Append([char]92).Append($ch) }
-            elseif ($code -eq 10) { [void]$sb.Append([char]92).Append('n') }
-            elseif ($code -eq 13) { [void]$sb.Append([char]92).Append('r') }
-            elseif ($code -eq 9) { [void]$sb.Append([char]92).Append('t') }
-            elseif ($code -lt 32) { [void]$sb.Append([char]92).Append('u').Append($code.ToString("x4")) }
-            else { [void]$sb.Append($ch) }
-        }
-        [void]$sb.Append([char]34)
-        return $sb.ToString()
-    }
-    if ($value -is [ValueType]) { return ([IFormattable]$value).ToString($null, [Globalization.CultureInfo]::InvariantCulture) }
-    $pad = "  " * ($level + 1); $close = "  " * $level
-    if ($value -is [Management.Automation.PSCustomObject]) {
-        $props = @($value.PSObject.Properties)
-        if (-not $props.Count) { return "{}" }
-        $items = foreach ($p in $props) { $pad + (ConvertTo-MatrixJson $p.Name) + ": " + (ConvertTo-MatrixJson $p.Value ($level + 1)) }
-        return "{`n" + ($items -join ",`n") + "`n$close}"
-    }
-    $array = @($value)
-    if (-not $array.Count) { return "[]" }
-    $items = foreach ($v in $array) { $pad + (ConvertTo-MatrixJson $v ($level + 1)) }
-    return "[`n" + ($items -join ",`n") + "`n$close]"
-}
+. (Join-Path $PSScriptRoot "matrix-json.ps1")
 
 $results = @{}
 foreach ($ag in $agentRows) { foreach ($lang in $langTable.languages) { $results["$($ag.id)|$($lang.id)"] = Read-Result $ag.id $lang.id } }
@@ -151,7 +119,7 @@ if ($UpdateMatrix) {
     $matrix = [IO.File]::ReadAllText($matrixPath, $utf8) | ConvertFrom-Json
     $updated = 0
     foreach ($c in $cells) {
-        $m = @($matrix.cells | Where-Object { $_.language -eq $c.language -and $_.domain -eq $c.domain -and $_.agent -eq $c.agent })
+        $m = @($matrix.internal.cells | Where-Object { $_.language -eq $c.language -and $_.domain -eq $c.domain -and $_.agent -eq $c.agent })
         if ($m.Count -ne 1) { continue }
         $ev = $m[0].evidence
         foreach ($pair in @(@("discovery", $c.cell.discovery), @("delegation", $c.cell.delegation), @("conformanceLabel", $c.cell.label))) {
@@ -160,5 +128,5 @@ if ($UpdateMatrix) {
         $updated++
     }
     [IO.File]::WriteAllText($matrixPath, (ConvertTo-MatrixJson $matrix) + "`n", $utf8)
-    Write-Host "Updated evidence for $updated cells in docs/support-matrix.json (statuses unchanged; review, then run scripts/gen-readme-matrix.ps1)."
+    Write-Host "Updated evidence for $updated cells in docs/support-matrix.json (internal.cells; statuses unchanged)."
 }

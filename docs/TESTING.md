@@ -62,8 +62,8 @@ Without `--language`, `init` uses the language recorded in `.bellatrix/manifest.
 repo root (`*.csproj`/`*.sln` → csharp, `pom.xml`/`build.gradle*` → java, `package.json` + `tsconfig.json` →
 typescript), else falls back to csharp with a notice. Several detected → exit 2. **TypeScript is web only:** for
 `--domains desktop|mobile` it scaffolds just `execute-scenario`, `execute-spectra-test` and the locator specialist and
-prints a warning. To check the generated code compiles in your own Maven/npm project, see
-[LANGUAGE-VERIFICATION-CHECKLIST.md](LANGUAGE-VERIFICATION-CHECKLIST.md).
+prints a warning. To set up the Maven or npm project the generated code builds in, see
+https://bellatrix.solutions/agent/languages/.
 
 ---
 
@@ -178,7 +178,7 @@ bellatrix web list-sessions --json   # only web sessions (desktop/mobile likewis
 Since 2.1.0, sessions are stored per domain. The same `--session` name can be used in web and desktop at the same
 time, and pruning one domain never removes another domain's sessions.
 
-### Reference, tracing and the verification scripts
+### Reference and tracing
 
 ```powershell
 bellatrix help                       # every command, flag, default and output shape
@@ -187,19 +187,6 @@ $env:BELLATRIX_TRACE = "$PWD\trace.jsonl"   # one JSON line per invocation (--te
 bellatrix web list-sessions --json; Get-Content .\trace.jsonl; Remove-Item Env:\BELLATRIX_TRACE
 ```
 
-From a clone of this repository (no AI model involved unless stated):
-
-```powershell
-powershell -File scripts\run-e2e.ps1                                  # live CLI E2E; skips what is not running
-powershell -File scripts\agent-conformance.ps1 -Agent all -Language all -DryRun   # preview the agent probes
-powershell -File scripts\agent-conformance.ps1 -Agent claude -Language csharp -Confirm  # PAID: runs your agent
-powershell -File scripts\conformance-report.ps1                       # -> docs\conformance-report.md
-```
-
-`run-e2e.ps1` never starts or stops WinAppDriver, Appium or an emulator: a domain whose driver is not reachable is
-reported as SKIPPED. The conformance harness refuses a real run without `-Confirm` because it invokes your AI agent's
-model, which may consume paid or metered usage.
-
 ---
 
 ## 6. Known limits
@@ -207,11 +194,10 @@ model, which may consume paid or metered usage.
 | Limit | Workaround |
 |---|---|
 | Desktop (WinAppDriver) and mobile (Appium) both default to port 4723. | Run one at a time, or move one of them with `McpSettings__ServerUrl` or `--appium-url`. |
-| Agent layouts are verified against each provider's docs and by golden-file tests, not yet live in every IDE. The Copilot **cloud** agent and Devin may not read `.claude/agents`; with Claude + Codex/Gemini/Antigravity, Copilot, Cursor and OpenCode may list each skill twice. Antigravity's file-creating tool name is undocumented (its generator lists only documented tools); Kiro agents need Kiro CLI 3.x (Markdown agents). Gemini CLI works only with Gemini Code Assist licences or API keys. | Run the per-agent checks in [LIVE-VERIFICATION-CHECKLIST.md](LIVE-VERIFICATION-CHECKLIST.md) §A and report results. |
-| Skills compile-verified for C# and Java × desktop/web/mobile and TypeScript × web; nothing was run live. **TypeScript has no desktop/mobile skills** (BELLATRIX-JavaScript has no component/page layer there) — use C# or Java. The skills document several BELLATRIX framework bugs found in the source (C# mobile `GetText()` recursion, Java desktop `byXPath`, Java lifecycle `equals()`), with workarounds. | Ask the generator agent for one SPECTRA test case per language × domain and report whether the code builds ([LANGUAGE-VERIFICATION-CHECKLIST.md](LANGUAGE-VERIFICATION-CHECKLIST.md)) and runs ([LIVE-VERIFICATION-CHECKLIST.md](LIVE-VERIFICATION-CHECKLIST.md) §C). |
+| The Copilot **cloud** agent and Devin may not read `.claude/agents`; with Claude + Codex/Gemini/Antigravity, Copilot, Cursor and OpenCode may list each skill twice. Antigravity's file-creating tool name is undocumented (its generator lists only documented tools); Kiro agents need Kiro CLI 3.x (Markdown agents). Gemini CLI works only with Gemini Code Assist licences or API keys. | See [Known limits](../README.md#known-limits) in the README for each agent. |
+| **TypeScript has no desktop/mobile skills** (BELLATRIX-JavaScript has no component/page layer there) — use C# or Java. The skills document several BELLATRIX framework bugs found in the source (C# mobile `GetText()` recursion, Java desktop `byXPath`, Java lifecycle `equals()`), with workarounds. | Use C# or Java for desktop and mobile. For a framework bug, follow the workaround in the skill. |
 | `init` **removes** `bellatrix-desktop-mcp`, `bellatrix-web-mcp` and `bellatrix-mobile-mcp` entries from `.mcp.json`, `.vscode/mcp.json`, `.claude/settings.json` and the selected agents' own MCP files (`.cursor/mcp.json`, `.devin/mcp_config.json`, `.codex/config.toml`, `.gemini/settings.json`, `.github/mcp.json`, `.agents/mcp_config.json`, `.kiro/settings/mcp.json`, `opencode.json(c)`). Other servers' entries are kept. | Don't run `init` in a repo that still depends on a BELLATRIX MCP server until it has moved to the CLI. |
 | The first 2.1.0+ command converts an existing `.bellatrix/sessions.db` to the per-domain format. Older `bellatrix` versions can no longer write sessions to it. | Upgrade everyone to ≥ 2.1.0, or delete `.bellatrix/sessions.db`. |
-| Only the local web flow and web re-attach have passed live (3.0.1 E2E, Chrome). Desktop, mobile and remote-web flows have no recorded live run yet. | Your results are the live gate ([LIVE-VERIFICATION-CHECKLIST.md](LIVE-VERIFICATION-CHECKLIST.md) §B). Please report each step's JSON, especially any `error`. |
 | A 2.2 re-run renames `.bellatrix/manifest.json` to `manifest.claude.json`. Older `bellatrix` versions will then treat every scaffolded file as unmanaged. | Upgrade everyone to ≥ 2.2.0. |
 
 **Found a problem?** Open an issue at https://github.com/AutomateThePlanet/BELLATRIX-Agent/issues with the commands

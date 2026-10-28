@@ -8,7 +8,7 @@
 - [ ] `dotnet test tests/Bellatrix.Cli.Tests` — all green
 - [ ] Golden files regenerated (`BELLATRIX_UPDATE_GOLDEN=1`) only for intended changes, and the diff is explained below
 - [ ] `scripts/gen-readme-matrix.ps1 -Check` passes (if `docs/support-matrix.json` changed)
-- [ ] Live checks run, if any (which `docs/LIVE-VERIFICATION-CHECKLIST.md` items, with `bellatrix --version`)
+- [ ] Live checks run, if any (which `docs/contributing/LIVE-VERIFICATION-CHECKLIST.md` items, with `bellatrix --version`)
 
 ## Checklist
 

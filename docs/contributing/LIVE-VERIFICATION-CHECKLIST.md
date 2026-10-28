@@ -1,7 +1,7 @@
 # BELLATRIX — Live Verification Checklist
 
 > Everything here needs a human: a real IDE or agent, browser, device or driver. Builds, unit tests and golden files
-> are automated (see [CONTRIBUTING.md](../CONTRIBUTING.md)). Tick a box only after you see the stated result. Record
+> are automated (see [CONTRIBUTING.md](../../CONTRIBUTING.md)). Tick a box only after you see the stated result. Record
 > failures with the version (`bellatrix --version`) and date, and open an issue with the JSON output.
 >
 > Sections: **A. per AI agent**, **B. per domain** (automated by `scripts/run-e2e.ps1` where the drivers are
@@ -158,7 +158,7 @@ test. After every command, record the JSON. **Pass** means each command exits 0 
 
 Each run is one whole user journey: scaffold → the agent automates a test case live through the CLI → the generated
 code builds → **you** run the generated test. A run passes only when every row of its results table is ✅. These
-four runs are the Level-3 evidence for a matrix cell (`docs/support-matrix.json` → `evidence.goldenPath`). Every
+four runs are the Level-3 evidence for a matrix cell (`docs/support-matrix.json` → `internal.cells[].evidence.goldenPath`). Every
 other cell relies on L1 (E2E) + L2 (conformance) only.
 
 **Common setup (all runs)**

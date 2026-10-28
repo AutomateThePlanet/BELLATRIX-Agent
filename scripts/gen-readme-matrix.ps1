@@ -1,17 +1,19 @@
 <#
 .SYNOPSIS
-  Regenerates the README provider and support matrices from docs/support-matrix.json.
+  Regenerates the README agent and support tables from the public fields of docs/support-matrix.json.
 
 .DESCRIPTION
-  docs/support-matrix.json is the single source of the language x domain x agent matrix and of each agent's file
-  layout. This script rewrites two blocks of README.md:
-    <!-- provider-matrix:begin/end -->  one row per agents[] entry: instructions, skills, subagents, delegation
-    <!-- support-matrix:begin/end -->   one row per rows[] entry, one column per agents[] entry (the cells' status),
-                                        then the legend/notes bullets
-  Everything is data-driven: adding an agent or a language is a JSON change. A row whose cells are all the same
-  MISSING status prints it once and arrows in the remaining columns.
+  docs/support-matrix.json is the single source of what BELLATRIX Agent supports. This script reads only its public
+  fields (languages, domains, agents, support, footnotes), never `internal` (the maintainers' verification tracking),
+  and rewrites:
+    README.md                         <!-- provider-matrix:begin/end -->  one row per agents[] entry: what
+                                                                           `bellatrix init --agent <id>` sets up
+                                      <!-- support-matrix:begin/end -->   language x domain, one row per language,
+                                                                           then the footnotes
+    src/Bellatrix.Cli/Package/README.md   the "## What is supported" section (the NuGet README; no HTML markers)
+  Everything is data-driven: adding an agent or a language is a JSON change.
 
-  -Check exits 1 (and writes nothing) when README.md is out of date; SupportMatrixReadmeTests enforces the same in CI.
+  -Check exits 1 (and writes nothing) when a README is out of date; SupportMatrixReadmeTests enforces the same in CI.
 
 .EXAMPLE
   powershell -File scripts/gen-readme-matrix.ps1
@@ -22,38 +24,35 @@ $ErrorActionPreference = "Stop"
 $repo = Split-Path -Parent $PSScriptRoot
 $utf8 = New-Object System.Text.UTF8Encoding($false)
 $readmePath = Join-Path $repo "README.md"
+$packagePath = Join-Path $repo "src\Bellatrix.Cli\Package\README.md"
 $matrix = [IO.File]::ReadAllText((Join-Path $repo "docs\support-matrix.json"), $utf8) | ConvertFrom-Json
-$times = [string][char]0x00D7
-$arrow = [string][char]0x2190
+$yes = [string][char]0x2713
+$no = [string][char]0x2014
 
-$lines = New-Object System.Collections.Generic.List[string]
-$lines.Add("| Language $times domain | " + (($matrix.agents | ForEach-Object { $_.name }) -join " | ") + " | Evidence |")
-$lines.Add("|---|" + ("---|" * @($matrix.agents).Count) + "---|")
-foreach ($row in $matrix.rows) {
-    $statuses = @(foreach ($agent in $matrix.agents) {
-        $cell = @($matrix.cells | Where-Object { $_.language -eq $row.language -and $_.domain -eq $row.domain -and $_.agent -eq $agent.id })
-        if ($cell.Count -ne 1) { throw "docs/support-matrix.json: expected exactly one cell for $($row.language)/$($row.domain)/$($agent.id), found $($cell.Count)." }
-        $cell[0].status
+$support = New-Object System.Collections.Generic.List[string]
+$support.Add("| Language | " + (($matrix.domains | ForEach-Object { $_.name + $(if ($_.detail) { " ($($_.detail))" } else { "" }) }) -join " | ") + " |")
+$support.Add("|---|" + ("---|" * @($matrix.domains).Count))
+foreach ($language in $matrix.languages) {
+    $marks = @(foreach ($domain in $matrix.domains) {
+        $entry = @($matrix.support | Where-Object { $_.language -eq $language.id -and $_.domain -eq $domain.id })
+        if ($entry.Count -ne 1) { throw "docs/support-matrix.json: expected exactly one support entry for $($language.id)/$($domain.id), found $($entry.Count)." }
+        $(if ($entry[0].supported) { $yes } else { $no })
     })
-    $uniform = @($statuses | Sort-Object -Unique).Count -eq 1 -and $statuses[0] -like "MISSING*"
-    $shown = $(if ($uniform) { @($statuses[0]) + @($arrow) * ($statuses.Count - 1) } else { $statuses })
-    $lines.Add("| $($row.label) | " + ($shown -join " | ") + " | $($row.evidence) |")
+    $support.Add("| $($language.name) | " + ($marks -join " | ") + " |")
 }
-$lines.Add("")
-foreach ($entry in $matrix.legend) { $lines.Add("- **$($entry.status):** $($entry.meaning)") }
-foreach ($note in $matrix.notes) { $lines.Add("- $note") }
+foreach ($note in $matrix.footnotes) { $support.Add(""); $support.Add($note) }
 
-$provider = New-Object System.Collections.Generic.List[string]
-$provider.Add("| Agent | Instructions fragment | Skills | Subagents (locator specialist + generator) | Delegation mode |")
-$provider.Add("|---|---|---|---|---|")
+$agents = New-Object System.Collections.Generic.List[string]
+$agents.Add("| Agent | ``--agent`` | Instructions | Skills | Subagents (locator specialist + generator) |")
+$agents.Add("|---|---|---|---|---|")
 foreach ($agent in $matrix.agents) {
     $name = "**$($agent.fullName)**" + $(if ($agent.aka) { " ($($agent.aka))" } else { "" })
-    $provider.Add("| $name | $($agent.instructions) | $($agent.skills) | $($agent.subagents) | $($agent.delegation) |")
+    $agents.Add("| $name | ``$($agent.id)`` | $($agent.instructions) | $($agent.skills) | $($agent.subagents) |")
 }
 
-$readme = [IO.File]::ReadAllText($readmePath, $utf8)
-$nl = $(if ($readme.Contains("`r`n")) { "`r`n" } else { "`n" })
+function Get-NewLine([string]$text) { $(if ($text.Contains("`r`n")) { "`r`n" } else { "`n" }) }
 function Set-Block([string]$text, [string]$name, $body) {
+    $nl = Get-NewLine $text
     $begin = "<!-- $($name):begin -->"
     $end = "<!-- $($name):end -->"
     $b = $text.IndexOf($begin); $e = $text.IndexOf($end)
@@ -61,9 +60,23 @@ function Set-Block([string]$text, [string]$name, $body) {
     $block = $begin + $nl + "<!-- generated from docs/support-matrix.json by scripts/gen-readme-matrix.ps1; do not edit by hand -->" + $nl + ($body -join $nl) + $nl
     return $text.Substring(0, $b) + $block + $text.Substring($e)
 }
-$updated = Set-Block (Set-Block $readme "provider-matrix" $provider) "support-matrix" $lines
+# The NuGet README gets no HTML markers: the section runs from its heading to the next "## " heading.
+function Set-Section([string]$text, [string]$heading, $body) {
+    $nl = Get-NewLine $text
+    $b = $text.IndexOf($heading + $nl)
+    if ($b -lt 0) { throw "src/Bellatrix.Cli/Package/README.md has no '$heading' section." }
+    $e = $text.IndexOf($nl + "## ", $b + $heading.Length)
+    if ($e -lt 0) { throw "src/Bellatrix.Cli/Package/README.md: '$heading' must be followed by another '## ' section." }
+    return $text.Substring(0, $b) + $heading + $nl + $nl + ($body -join $nl) + $nl + $text.Substring($e)
+}
 
-if ($updated -eq $readme) { Write-Host "README.md support matrix is up to date."; exit 0 }
-if ($Check) { Write-Host "README.md support matrix is out of date: run scripts/gen-readme-matrix.ps1"; exit 1 }
-[IO.File]::WriteAllText($readmePath, $updated, $utf8)
-Write-Host "README.md support matrix regenerated from docs/support-matrix.json."
+$readme = [IO.File]::ReadAllText($readmePath, $utf8)
+$package = [IO.File]::ReadAllText($packagePath, $utf8)
+$updatedReadme = Set-Block (Set-Block $readme "provider-matrix" $agents) "support-matrix" $support
+$updatedPackage = Set-Section $package "## What is supported" $support
+
+if ($updatedReadme -eq $readme -and $updatedPackage -eq $package) { Write-Host "README support tables are up to date."; exit 0 }
+if ($Check) { Write-Host "README support tables are out of date: run scripts/gen-readme-matrix.ps1"; exit 1 }
+[IO.File]::WriteAllText($readmePath, $updatedReadme, $utf8)
+[IO.File]::WriteAllText($packagePath, $updatedPackage, $utf8)
+Write-Host "README.md and the package README regenerated from docs/support-matrix.json."

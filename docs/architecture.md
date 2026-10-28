@@ -92,5 +92,5 @@ Everything else — the agent list in help, the conformance harness, the support
 |---|---|---|
 | Unit | routing, help drift, emitters + golden files, session store, snapshot queries, fixtures, public-safety guard | `tests/Bellatrix.Cli.Tests` (CI) |
 | L1 | the installed CLI against real drivers, every step a separate process | `tests/Bellatrix.Cli.E2E`, `scripts/run-e2e.ps1` |
-| L2 | each agent headless: discovers the skills and delegates locator work on recorded snapshots | `scripts/agent-conformance.ps1` → `docs/conformance-report.md` |
-| L3 | a human runs a full golden path per language × domain × agent | [LIVE-VERIFICATION-CHECKLIST.md](LIVE-VERIFICATION-CHECKLIST.md) §C |
+| L2 | each agent headless: discovers the skills and delegates locator work on recorded snapshots | `scripts/agent-conformance.ps1` → `docs/contributing/conformance-report.md` |
+| L3 | a human runs a full golden path per language × domain × agent | `docs/contributing/LIVE-VERIFICATION-CHECKLIST.md` §C (see [CONTRIBUTING.md](../CONTRIBUTING.md)) |

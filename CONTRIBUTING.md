@@ -44,6 +44,32 @@ It never starts or stops WinAppDriver, Appium or an emulator. Enable it per doma
 
 `scripts/run-e2e.ps1` probes what is reachable, sets the matching variables and writes a report to `artifacts/e2e/`.
 
+## Verification tracking
+
+What BELLATRIX Agent supports is public; how far each combination has been verified is maintainer tracking and stays
+out of the README, the NuGet README and the website.
+
+- `docs/support-matrix.json`: the public fields (`languages`, `domains`, `agents`, `support`, `footnotes`) feed the
+  README tables (`scripts/gen-readme-matrix.ps1`) and the website (`scripts/export-website-data.ps1`). The `internal`
+  block holds a status and evidence per language × domain × agent cell (`READY`, `PARTIAL` until verified live in that
+  agent, `MISSING (framework)`). Neither generator reads it, and the website export strips it.
+- [docs/contributing/LIVE-VERIFICATION-CHECKLIST.md](docs/contributing/LIVE-VERIFICATION-CHECKLIST.md): manual live
+  checks per agent (§A), per domain (§B) and the golden paths (§C).
+- [docs/contributing/LANGUAGE-VERIFICATION-CHECKLIST.md](docs/contributing/LANGUAGE-VERIFICATION-CHECKLIST.md): checks
+  that the code generated for each language compiles.
+- [docs/contributing/conformance-report.md](docs/contributing/conformance-report.md): headless agent conformance results.
+
+```powershell
+powershell -File scripts\run-e2e.ps1                                  # live CLI E2E; skips what is not running
+powershell -File scripts\agent-conformance.ps1 -Agent all -Language all -DryRun   # preview the agent probes
+powershell -File scripts\agent-conformance.ps1 -Agent claude -Language csharp -Confirm  # PAID: runs your agent
+powershell -File scripts\conformance-report.ps1                       # -> docs\contributing\conformance-report.md
+```
+
+`run-e2e.ps1` never starts or stops WinAppDriver, Appium or an emulator: a domain whose driver is not reachable is
+reported as SKIPPED. The conformance harness refuses a real run without `-Confirm` because it invokes your AI agent's
+model, which may consume paid or metered usage.
+
 ## Guard and drift tests
 
 - **`PublicSafetyGuardTests`** fail when any tracked file contains a local machine path, a secret-shaped string, a link
@@ -54,7 +80,8 @@ It never starts or stops WinAppDriver, Appium or an emulator. Enable it per doma
 - **`HelpDriftTests`** keep the router, `bellatrix help --json`, the flags each handler reads, and every
   `bellatrix …` command shown in the templates and the README in sync. Add or change a verb or flag in its
   `CommandSpec` (`src/Bellatrix.Cli/Commands/*Commands.cs`), never only in a handler.
-- **`SupportMatrixReadmeTests`** keep the README matrices equal to `docs/support-matrix.json`. Edit the JSON, then run
+- **`SupportMatrixReadmeTests`** keep the README and NuGet README support tables equal to the public fields of
+  `docs/support-matrix.json`, and keep verification-status wording out of the public docs. Edit the JSON, then run
   `powershell -File scripts/gen-readme-matrix.ps1` (`-Check` verifies without writing).
 - **`ConformanceConfigTests`** keep `scripts/conformance/agents.json` and `languages.json` equal to the CLI's own
   agent and language lists.
@@ -70,10 +97,10 @@ The agent list is data-driven: never hard-code a list of agents elsewhere.
    frontmatter only — content stays provider-neutral in `Templates/`) and register it in
    `AgentSelection.All` (`src/Bellatrix.Cli/Scaffolding/AgentSelection.cs`).
 3. Add the agent to `scripts/conformance/agents.json` (verified headless invocation, docs URLs, the paid-usage `cost` note) and to
-   `docs/support-matrix.json` (`agents[]` plus one cell per language × domain, `PARTIAL` until verified live), then
-   regenerate the README matrices.
+   `docs/support-matrix.json` (`agents[]`, plus one `internal.cells` entry per language × domain, `PARTIAL` until
+   verified live), then regenerate the README tables.
 4. Add a golden-file case (`ScaffoldTargetTests.Golden_PerAgentDesktopLayout`), auto-detect markers, and a section in
-   `docs/LIVE-VERIFICATION-CHECKLIST.md` §A.
+   `docs/contributing/LIVE-VERIFICATION-CHECKLIST.md` §A.
 5. Respect the `init` contract (see [docs/architecture.md](docs/architecture.md)): never rewrite a human-owned file
    beyond one line or one marked block, one manifest per agent, no MCP server registration.
 
@@ -83,10 +110,11 @@ The agent list is data-driven: never hard-code a list of agents elsewhere.
    `Templates/core/<domain>/…` parts. A core template includes the whole language file at a `{{> lang}}` line, or one
    `<!-- lang:<section> -->` section at each `{{> lang:<section>}}` line (see `TemplateCatalog`).
 2. Add the language to `LanguageSelection.Known` (and to `Limits` for any domain the framework does not cover), to
-   `scripts/conformance/languages.json`, and to `docs/support-matrix.json`.
+   `scripts/conformance/languages.json`, and to `docs/support-matrix.json` (`languages[]`, `support[]` and the
+   `internal` rows and cells).
 3. Every framework API a template mentions must exist in that framework's current source. Generate a sample project
    from the templates and make sure it **compiles**; see
-   [docs/LANGUAGE-VERIFICATION-CHECKLIST.md](docs/LANGUAGE-VERIFICATION-CHECKLIST.md).
+   [docs/contributing/LANGUAGE-VERIFICATION-CHECKLIST.md](docs/contributing/LANGUAGE-VERIFICATION-CHECKLIST.md).
 
 ## Pull requests
 

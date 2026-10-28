@@ -7,6 +7,18 @@ All notable changes to `Bellatrix.Cli` (the `bellatrix` command) are documented 
 Versions before 3.1.2 were distributed as packages outside NuGet.org; 3.1.2 is the first NuGet.org release and the
 first release from this repository.
 
+## [Unreleased]
+
+### Changed
+- The README, the NuGet README and the website show what is supported: a language × domain table (✓ / —) and the
+  nine agents with the files `bellatrix init --agent <name>` writes. Verification status (READY/PARTIAL, live-check
+  notes) is no longer shown there.
+- `docs/support-matrix.json` (schema 2): public fields `languages`, `domains`, `agents`, `support`, `footnotes`, plus an
+  `internal` block with the per-cell status and evidence. `scripts/gen-readme-matrix.ps1` and
+  `scripts/export-website-data.ps1` read only the public fields; the website export no longer copies `internal`.
+- The live and language verification checklists and the conformance report moved to `docs/contributing/` and are
+  linked from CONTRIBUTING.md only.
+
 ## [3.1.3] - 2026-10-28
 
 ### Fixed

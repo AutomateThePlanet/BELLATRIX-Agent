@@ -37,13 +37,23 @@ from your build files when omitted). Add `--dry-run` to preview the files.
 | Cursor | `cursor` |
 | Devin Desktop (formerly Windsurf) | `devin` |
 | Codex CLI | `codex` |
-| Gemini CLI (enterprise: Gemini Code Assist) | `gemini` |
+| Gemini CLI (enterprise) | `gemini` |
 | Antigravity CLI | `antigravity` (or `agy`) |
 | Kiro CLI | `kiro` |
 | OpenCode | `opencode` |
 
 Re-running `bellatrix init` refreshes what is already scaffolded and never overwrites a file you edited unless you
 pass `--regenerate`.
+
+## What is supported
+
+| Language | Desktop | Web | Mobile (Android + iOS) |
+|---|---|---|---|
+| C# | ✓ | ✓ | ✓ |
+| Java | ✓ | ✓ | ✓ |
+| TypeScript | — | ✓ | — |
+
+TypeScript: web only (the BELLATRIX TypeScript framework has no desktop or mobile component layer).
 
 ## Drive the CLI
 
@@ -64,6 +74,6 @@ output.
 
 ## Learn more
 
-- Guide, CLI reference and support matrix: https://bellatrix.solutions/agent/
+- Guide, CLI reference and what is supported: https://bellatrix.solutions/agent/
 - Source code, issues and contributing: https://github.com/AutomateThePlanet/BELLATRIX-Agent
 - BELLATRIX framework documentation: https://docs.bellatrix.solutions/
