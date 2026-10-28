@@ -38,7 +38,7 @@ More: [docs/architecture.md](docs/architecture.md).
 
 You need the **.NET 8 SDK** (also for Java and TypeScript projects: the CLI is a .NET tool).
 
-The current release, 3.1.4, is a preview on
+The current release, 3.1.4, is on
 [GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.4): download the `.nupkg`
 into a folder and install the tool from it (needs the [GitHub CLI](https://cli.github.com/), or download the file in
 the browser).

@@ -14,7 +14,7 @@ The CLI runs no AI model and starts no driver. **You start the driver, browser s
 
 ## 1. Install
 
-You need the .NET 8 SDK. The current release is a preview on GitHub Releases; download, update, uninstall and
+You need the .NET 8 SDK. The current release is on GitHub Releases; download, update, uninstall and
 troubleshooting are in [INSTALL-PREVIEW.md](INSTALL-PREVIEW.md).
 
 ```powershell

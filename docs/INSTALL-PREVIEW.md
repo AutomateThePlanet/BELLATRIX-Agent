@@ -1,6 +1,6 @@
-# Install the preview release (3.1.4)
+# Install Bellatrix.Cli 3.1.4 from GitHub Releases
 
-`Bellatrix.Cli` 3.1.4 is published as a pre-release on
+`Bellatrix.Cli` 3.1.4 is published on
 [GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.4): you download the
 `.nupkg` into a folder and install the `bellatrix` .NET tool from that folder. NuGet.org package coming soon.
 

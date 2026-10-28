@@ -1,8 +1,8 @@
 name: Release
 
 # Pushing a tag `v<version>` (the <Version> in src/Bellatrix.Cli/Bellatrix.Cli.csproj) builds, tests and packs
-# Bellatrix.Cli and creates a GitHub pre-release with the .nupkg, its .sha256 file and release notes made of the
-# CHANGELOG.md section for that version plus docs/INSTALL-PREVIEW.md. Nothing is pushed to NuGet.org.
+# Bellatrix.Cli and creates a GitHub release, marked Latest, with the .nupkg, its .sha256 file and release notes made
+# of the CHANGELOG.md section for that version plus docs/INSTALL-PREVIEW.md. Nothing is pushed to NuGet.org.
 
 on:
   push:
@@ -72,8 +72,8 @@ jobs:
           [IO.File]::WriteAllText("artifacts/release-notes.md", $notes)
           "PACKAGE=$package" >> $env:GITHUB_ENV
 
-      - name: Create the GitHub pre-release
+      - name: Create the GitHub release
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create $env:TAG $env:PACKAGE "$env:PACKAGE.sha256" --verify-tag --prerelease --title "Bellatrix.Cli $env:VERSION (preview)" --notes-file artifacts/release-notes.md
+        run: gh release create $env:TAG $env:PACKAGE "$env:PACKAGE.sha256" --verify-tag --latest --title "Bellatrix.Cli $env:VERSION" --notes-file artifacts/release-notes.md
