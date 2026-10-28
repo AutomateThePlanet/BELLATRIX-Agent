@@ -1,29 +1,7 @@
 {
-  "$comment": "Single source of the language × domain × agent support matrix. README.md's table is generated from this file by scripts/gen-readme-matrix.ps1 (SupportMatrixReadmeTests keeps them equal); the website copies it. Status changes are reviewed edits; scripts/conformance-report.ps1 -UpdateMatrix only writes evidence.",
-  "schemaVersion": 1,
-  "updated": "2026-10-27",
-  "legend": [
-    {
-      "status": "READY",
-      "meaning": "a project generated from the scaffolded skills compiles. Every framework API claim in those skills was checked against the current framework source, and the agent's layout is the one already in live use (Claude Code)."
-    },
-    {
-      "status": "READY (synthetic fixtures)",
-      "meaning": "READY evidence plus agent conformance (discovery + delegation) passed, but delegation was only exercised on synthetic snapshot fixtures (desktop, mobile) — not yet on a live recording."
-    },
-    {
-      "status": "PARTIAL",
-      "meaning": "the same skills, placed in the agent's documented native layout. The layout is pinned by golden-file tests but has not yet been confirmed live in that IDE/CLI (`docs/LIVE-VERIFICATION-CHECKLIST.md` §A)."
-    },
-    {
-      "status": "MISSING (framework)",
-      "meaning": "the BELLATRIX flavor itself has no layer to generate code against."
-    }
-  ],
-  "notes": [
-    "No cell is BLOCKED-TOOLCHAIN: .NET, Maven/JDK 19 and Node were available for every compile check.",
-    "In no cell have the generated tests been *run* against a live app yet (§C of the live checklist)."
-  ],
+  "$comment": "Single source of what BELLATRIX Agent supports. The public fields (languages, domains, agents, support, footnotes) are all that README.md (scripts/gen-readme-matrix.ps1) and the website (scripts/export-website-data.ps1) show; SupportMatrixReadmeTests keeps the README equal to them. `internal` is verification tracking for maintainers (a status and evidence per language × domain × agent cell): neither generator reads it, and the website export strips it. Status changes are reviewed edits; scripts/conformance-report.ps1 -UpdateMatrix only writes evidence.",
+  "schemaVersion": 2,
+  "updated": "2026-10-28",
   "languages": [
     {
       "id": "csharp",
@@ -44,15 +22,15 @@
   "domains": [
     {
       "id": "desktop",
-      "name": "desktop"
+      "name": "Desktop"
     },
     {
       "id": "web",
-      "name": "web"
+      "name": "Web"
     },
     {
       "id": "mobile",
-      "name": "mobile",
+      "name": "Mobile",
       "detail": "Android + iOS"
     }
   ],
@@ -111,7 +89,7 @@
       "skills": "`.agents/skills/`",
       "subagents": "`.gemini/agents/*.md` (`kind: local`, Gemini tool names)",
       "delegation": "Isolated subagent (`@name`)",
-      "aka": "enterprise — Gemini Code Assist"
+      "aka": "enterprise"
     },
     {
       "id": "antigravity",
@@ -142,1358 +120,1432 @@
       "delegation": "Subagent (`@name`)"
     }
   ],
-  "rows": [
+  "support": [
     {
       "language": "csharp",
       "domain": "desktop",
-      "label": "C# × desktop",
-      "evidence": "generated project builds against BELLATRIX `master`"
+      "supported": true
     },
     {
       "language": "csharp",
       "domain": "web",
-      "label": "C# × web",
-      "evidence": "same"
+      "supported": true
     },
     {
       "language": "csharp",
       "domain": "mobile",
-      "label": "C# × mobile (Android + iOS)",
-      "evidence": "same"
+      "supported": true
     },
     {
       "language": "java",
       "domain": "desktop",
-      "label": "Java × desktop",
-      "evidence": "`mvn test-compile` against BELLATRIX-Java source"
+      "supported": true
     },
     {
       "language": "java",
       "domain": "web",
-      "label": "Java × web",
-      "evidence": "same"
+      "supported": true
     },
     {
       "language": "java",
       "domain": "mobile",
-      "label": "Java × mobile (Android + iOS)",
-      "evidence": "same"
-    },
-    {
-      "language": "typescript",
-      "domain": "web",
-      "label": "TypeScript × web",
-      "evidence": "`tsc --noEmit` against BELLATRIX-JavaScript source"
+      "supported": true
     },
     {
       "language": "typescript",
       "domain": "desktop",
-      "label": "TypeScript × desktop",
-      "evidence": "BELLATRIX-JavaScript has no desktop component/page layer; only the CLI skills are scaffolded"
+      "supported": false
+    },
+    {
+      "language": "typescript",
+      "domain": "web",
+      "supported": true
     },
     {
       "language": "typescript",
       "domain": "mobile",
-      "label": "TypeScript × mobile",
-      "evidence": "raw Android driver only, no iOS; only the CLI skills are scaffolded"
+      "supported": false
     }
   ],
-  "cells": [
-    {
-      "language": "csharp",
-      "domain": "desktop",
-      "agent": "claude",
-      "status": "READY",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "live use (this repo and the SPECTRA consumer)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "desktop",
-      "agent": "copilot",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "desktop",
-      "agent": "cursor",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "desktop",
-      "agent": "devin",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "desktop",
-      "agent": "codex",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "desktop",
-      "agent": "gemini",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "desktop",
-      "agent": "antigravity",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "desktop",
-      "agent": "kiro",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "desktop",
-      "agent": "opencode",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "web",
-      "agent": "claude",
-      "status": "READY",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "live use (this repo and the SPECTRA consumer)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "web",
-      "agent": "copilot",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "web",
-      "agent": "cursor",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "web",
-      "agent": "devin",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "web",
-      "agent": "codex",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "web",
-      "agent": "gemini",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "web",
-      "agent": "antigravity",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "web",
-      "agent": "kiro",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "web",
-      "agent": "opencode",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "mobile",
-      "agent": "claude",
-      "status": "READY",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "live use (this repo and the SPECTRA consumer)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "mobile",
-      "agent": "copilot",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "mobile",
-      "agent": "cursor",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "mobile",
-      "agent": "devin",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "mobile",
-      "agent": "codex",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "mobile",
-      "agent": "gemini",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "mobile",
-      "agent": "antigravity",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "mobile",
-      "agent": "kiro",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "csharp",
-      "domain": "mobile",
-      "agent": "opencode",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "desktop",
-      "agent": "claude",
-      "status": "READY",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "live use (this repo and the SPECTRA consumer)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "desktop",
-      "agent": "copilot",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "desktop",
-      "agent": "cursor",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "desktop",
-      "agent": "devin",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "desktop",
-      "agent": "codex",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "desktop",
-      "agent": "gemini",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "desktop",
-      "agent": "antigravity",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "desktop",
-      "agent": "kiro",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "desktop",
-      "agent": "opencode",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "web",
-      "agent": "claude",
-      "status": "READY",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "live use (this repo and the SPECTRA consumer)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "web",
-      "agent": "copilot",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "web",
-      "agent": "cursor",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "web",
-      "agent": "devin",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "web",
-      "agent": "codex",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "web",
-      "agent": "gemini",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "web",
-      "agent": "antigravity",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "web",
-      "agent": "kiro",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "web",
-      "agent": "opencode",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "mobile",
-      "agent": "claude",
-      "status": "READY",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "live use (this repo and the SPECTRA consumer)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "mobile",
-      "agent": "copilot",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "mobile",
-      "agent": "cursor",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "mobile",
-      "agent": "devin",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "mobile",
-      "agent": "codex",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "mobile",
-      "agent": "gemini",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "mobile",
-      "agent": "antigravity",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "mobile",
-      "agent": "kiro",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "java",
-      "domain": "mobile",
-      "agent": "opencode",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "desktop",
-      "agent": "claude",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "live use (this repo and the SPECTRA consumer)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "desktop",
-      "agent": "copilot",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "desktop",
-      "agent": "cursor",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "desktop",
-      "agent": "devin",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "desktop",
-      "agent": "codex",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "desktop",
-      "agent": "gemini",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "desktop",
-      "agent": "antigravity",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "desktop",
-      "agent": "kiro",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "desktop",
-      "agent": "opencode",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "web",
-      "agent": "claude",
-      "status": "READY",
-      "evidence": {
-        "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
-        "layout": "live use (this repo and the SPECTRA consumer)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "web",
-      "agent": "copilot",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "web",
-      "agent": "cursor",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "web",
-      "agent": "devin",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "web",
-      "agent": "codex",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "web",
-      "agent": "gemini",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "web",
-      "agent": "antigravity",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "web",
-      "agent": "kiro",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "web",
-      "agent": "opencode",
-      "status": "PARTIAL",
-      "evidence": {
-        "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "mobile",
-      "agent": "claude",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "live use (this repo and the SPECTRA consumer)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "mobile",
-      "agent": "copilot",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "mobile",
-      "agent": "cursor",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "mobile",
-      "agent": "devin",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "mobile",
-      "agent": "codex",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "mobile",
-      "agent": "gemini",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "mobile",
-      "agent": "antigravity",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "mobile",
-      "agent": "kiro",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    },
-    {
-      "language": "typescript",
-      "domain": "mobile",
-      "agent": "opencode",
-      "status": "MISSING (framework)",
-      "evidence": {
-        "compile": null,
-        "layout": "golden-file pinned native layout; not confirmed live (docs/LIVE-VERIFICATION-CHECKLIST.md §A)",
-        "discovery": "NOT RUN",
-        "delegation": "NOT RUN",
-        "conformanceLabel": null,
-        "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
-        "goldenPath": "NOT RUN",
-        "note": null
-      }
-    }
-  ]
+  "footnotes": [
+    "TypeScript: web only (the BELLATRIX TypeScript framework has no desktop or mobile component layer)."
+  ],
+  "internal": {
+    "legend": [
+      {
+        "status": "READY",
+        "meaning": "a project generated from the scaffolded skills compiles. Every framework API claim in those skills was checked against the current framework source, and the agent's layout is the one already in live use (Claude Code)."
+      },
+      {
+        "status": "READY (synthetic fixtures)",
+        "meaning": "READY evidence plus agent conformance (discovery + delegation) passed, but delegation was only exercised on synthetic snapshot fixtures (desktop, mobile) — not yet on a live recording."
+      },
+      {
+        "status": "PARTIAL",
+        "meaning": "the same skills, placed in the agent's documented native layout. The layout is pinned by golden-file tests but has not yet been confirmed live in that IDE/CLI (`docs/contributing/LIVE-VERIFICATION-CHECKLIST.md` §A)."
+      },
+      {
+        "status": "MISSING (framework)",
+        "meaning": "the BELLATRIX flavor itself has no layer to generate code against."
+      }
+    ],
+    "notes": [
+      "No cell is BLOCKED-TOOLCHAIN: .NET, Maven/JDK 19 and Node were available for every compile check.",
+      "In no cell have the generated tests been *run* against a live app yet (§C of the live checklist)."
+    ],
+    "rows": [
+      {
+        "language": "csharp",
+        "domain": "desktop",
+        "label": "C# × desktop",
+        "evidence": "generated project builds against BELLATRIX `master`"
+      },
+      {
+        "language": "csharp",
+        "domain": "web",
+        "label": "C# × web",
+        "evidence": "same"
+      },
+      {
+        "language": "csharp",
+        "domain": "mobile",
+        "label": "C# × mobile (Android + iOS)",
+        "evidence": "same"
+      },
+      {
+        "language": "java",
+        "domain": "desktop",
+        "label": "Java × desktop",
+        "evidence": "`mvn test-compile` against BELLATRIX-Java source"
+      },
+      {
+        "language": "java",
+        "domain": "web",
+        "label": "Java × web",
+        "evidence": "same"
+      },
+      {
+        "language": "java",
+        "domain": "mobile",
+        "label": "Java × mobile (Android + iOS)",
+        "evidence": "same"
+      },
+      {
+        "language": "typescript",
+        "domain": "web",
+        "label": "TypeScript × web",
+        "evidence": "`tsc --noEmit` against BELLATRIX-JavaScript source"
+      },
+      {
+        "language": "typescript",
+        "domain": "desktop",
+        "label": "TypeScript × desktop",
+        "evidence": "BELLATRIX-JavaScript has no desktop component/page layer; only the CLI skills are scaffolded"
+      },
+      {
+        "language": "typescript",
+        "domain": "mobile",
+        "label": "TypeScript × mobile",
+        "evidence": "raw Android driver only, no iOS; only the CLI skills are scaffolded"
+      }
+    ],
+    "cells": [
+      {
+        "language": "csharp",
+        "domain": "desktop",
+        "agent": "claude",
+        "status": "READY",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "live use (this repo and the SPECTRA consumer)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "desktop",
+        "agent": "copilot",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "desktop",
+        "agent": "cursor",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "desktop",
+        "agent": "devin",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "desktop",
+        "agent": "codex",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "desktop",
+        "agent": "gemini",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "desktop",
+        "agent": "antigravity",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "desktop",
+        "agent": "kiro",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "desktop",
+        "agent": "opencode",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "web",
+        "agent": "claude",
+        "status": "READY",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "live use (this repo and the SPECTRA consumer)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "web",
+        "agent": "copilot",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "web",
+        "agent": "cursor",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "web",
+        "agent": "devin",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "web",
+        "agent": "codex",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "web",
+        "agent": "gemini",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "web",
+        "agent": "antigravity",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "web",
+        "agent": "kiro",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "web",
+        "agent": "opencode",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "mobile",
+        "agent": "claude",
+        "status": "READY",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "live use (this repo and the SPECTRA consumer)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "mobile",
+        "agent": "copilot",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "mobile",
+        "agent": "cursor",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "mobile",
+        "agent": "devin",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "mobile",
+        "agent": "codex",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "mobile",
+        "agent": "gemini",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "mobile",
+        "agent": "antigravity",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "mobile",
+        "agent": "kiro",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "csharp",
+        "domain": "mobile",
+        "agent": "opencode",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "dotnet build of a generated test + page object against BELLATRIX `master`",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "desktop",
+        "agent": "claude",
+        "status": "READY",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "live use (this repo and the SPECTRA consumer)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "desktop",
+        "agent": "copilot",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "desktop",
+        "agent": "cursor",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "desktop",
+        "agent": "devin",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "desktop",
+        "agent": "codex",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "desktop",
+        "agent": "gemini",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "desktop",
+        "agent": "antigravity",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "desktop",
+        "agent": "kiro",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "desktop",
+        "agent": "opencode",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "web",
+        "agent": "claude",
+        "status": "READY",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "live use (this repo and the SPECTRA consumer)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "web",
+        "agent": "copilot",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "web",
+        "agent": "cursor",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "web",
+        "agent": "devin",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "web",
+        "agent": "codex",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "web",
+        "agent": "gemini",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "web",
+        "agent": "antigravity",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "web",
+        "agent": "kiro",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "web",
+        "agent": "opencode",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "mobile",
+        "agent": "claude",
+        "status": "READY",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "live use (this repo and the SPECTRA consumer)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "mobile",
+        "agent": "copilot",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "mobile",
+        "agent": "cursor",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "mobile",
+        "agent": "devin",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "mobile",
+        "agent": "codex",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "mobile",
+        "agent": "gemini",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "mobile",
+        "agent": "antigravity",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "mobile",
+        "agent": "kiro",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "java",
+        "domain": "mobile",
+        "agent": "opencode",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`mvn test-compile` of a generated test + page object against BELLATRIX-Java source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "desktop",
+        "agent": "claude",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "live use (this repo and the SPECTRA consumer)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "desktop",
+        "agent": "copilot",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "desktop",
+        "agent": "cursor",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "desktop",
+        "agent": "devin",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "desktop",
+        "agent": "codex",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "desktop",
+        "agent": "gemini",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "desktop",
+        "agent": "antigravity",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "desktop",
+        "agent": "kiro",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "desktop",
+        "agent": "opencode",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no WinAppDriver reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "web",
+        "agent": "claude",
+        "status": "READY",
+        "evidence": {
+          "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
+          "layout": "live use (this repo and the SPECTRA consumer)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "web",
+        "agent": "copilot",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "web",
+        "agent": "cursor",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "web",
+        "agent": "devin",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "web",
+        "agent": "codex",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "web",
+        "agent": "gemini",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "web",
+        "agent": "antigravity",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "web",
+        "agent": "kiro",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "web",
+        "agent": "opencode",
+        "status": "PARTIAL",
+        "evidence": {
+          "compile": "`tsc --noEmit` of a generated test + page object against BELLATRIX-JavaScript source",
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "PASS 2026-10-27: local driver flow + reattach (Chrome 155); remote not run",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "mobile",
+        "agent": "claude",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "live use (this repo and the SPECTRA consumer)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "mobile",
+        "agent": "copilot",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "mobile",
+        "agent": "cursor",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "mobile",
+        "agent": "devin",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "mobile",
+        "agent": "codex",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "mobile",
+        "agent": "gemini",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "mobile",
+        "agent": "antigravity",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "mobile",
+        "agent": "kiro",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      },
+      {
+        "language": "typescript",
+        "domain": "mobile",
+        "agent": "opencode",
+        "status": "MISSING (framework)",
+        "evidence": {
+          "compile": null,
+          "layout": "golden-file pinned native layout; not confirmed live (docs/contributing/LIVE-VERIFICATION-CHECKLIST.md §A)",
+          "discovery": "NOT RUN",
+          "delegation": "NOT RUN",
+          "conformanceLabel": null,
+          "cliE2E": "NOT RUN (no Appium/emulator reachable during v.1)",
+          "goldenPath": "NOT RUN",
+          "note": null
+        }
+      }
+    ]
+  }
 }

@@ -5,8 +5,9 @@
 .DESCRIPTION
   Writes, into <Website>/src/data/:
     bellatrix-cli-help.json  = the output of `bellatrix help --json` of the installed (released) CLI
-    support-matrix.json      = docs/support-matrix.json of this repo
-  The website's /agent/ pages render the CLI reference, the per-agent init layouts and the support matrix from these
+    support-matrix.json      = the public fields of docs/support-matrix.json (languages, domains, agents, support,
+                               footnotes). The `internal` verification tracking is not exported.
+  The website's /agent/ pages render the CLI reference, the per-agent init layouts and what is supported from these
   two files. Run it after each release (the CLI version must match this repo's csproj), then rebuild the site.
 
 .EXAMPLE
@@ -31,5 +32,18 @@ $version = ($help | ConvertFrom-Json).version
 if ($version -ne $expected) { throw "'$Exe' is $version but this repo is ${expected}: install the released CLI first (dotnet tool update -g Bellatrix.Cli)." }
 
 [IO.File]::WriteAllText((Join-Path $dataDir "bellatrix-cli-help.json"), $help.Trim() + "`n", $utf8)
-Copy-Item (Join-Path $repo "docs\support-matrix.json") (Join-Path $dataDir "support-matrix.json") -Force
+
+. (Join-Path $PSScriptRoot "matrix-json.ps1")
+$matrix = [IO.File]::ReadAllText((Join-Path $repo "docs\support-matrix.json"), $utf8) | ConvertFrom-Json
+$public = [pscustomobject][ordered]@{
+    '$comment'    = "Public fields of BELLATRIX-Agent docs/support-matrix.json, written by its scripts/export-website-data.ps1. Never hand-edit."
+    schemaVersion = $matrix.schemaVersion
+    updated       = $matrix.updated
+    languages     = $matrix.languages
+    domains       = $matrix.domains
+    agents        = $matrix.agents
+    support       = $matrix.support
+    footnotes     = $matrix.footnotes
+}
+[IO.File]::WriteAllText((Join-Path $dataDir "support-matrix.json"), (ConvertTo-MatrixJson $public) + "`n", $utf8)
 Write-Host "Exported bellatrix $version help + support matrix to $dataDir"

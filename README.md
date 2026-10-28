@@ -109,21 +109,23 @@ The same contract, applied to a template folder that you own:
 
 `--prefix` defaults to the common first segment of the folder's skill and agent names. `bellatrix` is reserved.
 
-## Provider matrix — where each agent's files go
+## Supported agents
+
+What `bellatrix init --agent <name>` writes for each of the nine supported agents:
 
 <!-- provider-matrix:begin -->
 <!-- generated from docs/support-matrix.json by scripts/gen-readme-matrix.ps1; do not edit by hand -->
-| Agent | Instructions fragment | Skills | Subagents (locator specialist + generator) | Delegation mode |
+| Agent | `--agent` | Instructions | Skills | Subagents (locator specialist + generator) |
 |---|---|---|---|---|
-| **Claude Code** | `.bellatrix/bellatrix.instructions.md` + one `@import` line in `CLAUDE.md` | `.claude/skills/` | `.claude/agents/*.md` | Isolated subagent (`@agent-<name>`) |
-| **GitHub Copilot** | `.github/instructions/bellatrix.instructions.md` (`applyTo: "**"`) | `.github/skills/` (or reuses `.claude/skills/`) | `.github/agents/*.agent.md`, with `agents:` allow-list on generators. Reuses `.claude/agents/` when Claude is scaffolded | Subagent (VS Code `runSubagent`, CLI). Cloud agent: see limits |
-| **Cursor** | `.cursor/rules/bellatrix.mdc` (`alwaysApply: true`) | `.cursor/skills/` (or reuses `.claude/skills/`) | `.cursor/agents/*.md` (`readonly: true` on specialists) | Isolated subagent (`/name`) |
-| **Devin Desktop** (formerly Windsurf) | `.devin/rules/bellatrix.md` (`trigger: always_on`) | `.devin/skills/` (or reuses `.claude/skills/`) | `.devin/agents/*.md` (`allowed-tools`) | Subagent (experimental). Fallback: `bellatrix <domain> find` |
-| **Codex CLI** | One marker block in `AGENTS.md` pointing at `.bellatrix/bellatrix.instructions.md` | `.agents/skills/` | `.codex/agents/*.toml` | Name the subagent in the prompt. Fallback: `find` |
-| **Gemini CLI** (enterprise — Gemini Code Assist) | One marker block in `GEMINI.md` importing `@./.bellatrix/bellatrix.instructions.md` | `.agents/skills/` | `.gemini/agents/*.md` (`kind: local`, Gemini tool names) | Isolated subagent (`@name`) |
-| **Antigravity CLI** (agy) | `.agents/rules/bellatrix.md` (`trigger: always_on`) | `.agents/skills/` | `.agents/agents/<name>/agent.md` (documented tool names; `mainAgent`/`subagent`) | Subagent chosen by the main agent (no `@name` syntax). Fallback: `bellatrix <domain> find` |
-| **Kiro CLI** | `.kiro/steering/bellatrix.md` (`inclusion: always`) | `.kiro/skills/` | `.kiro/agents/*.md` (v3 Markdown; `resources` list the steering file and skills) | Subagent named in plain language. Fallback: `find` |
-| **OpenCode** | One marker block in `AGENTS.md` pointing at `.bellatrix/bellatrix.instructions.md` (shared with Codex) | `.opencode/skills/` (or reuses `.claude/skills/` / `.agents/skills/`) | `.opencode/agents/*.md` (`mode: subagent`, `edit: deny` on specialists) | Subagent (`@name`) |
+| **Claude Code** | `claude` | `.bellatrix/bellatrix.instructions.md` + one `@import` line in `CLAUDE.md` | `.claude/skills/` | `.claude/agents/*.md` |
+| **GitHub Copilot** | `copilot` | `.github/instructions/bellatrix.instructions.md` (`applyTo: "**"`) | `.github/skills/` (or reuses `.claude/skills/`) | `.github/agents/*.agent.md`, with `agents:` allow-list on generators. Reuses `.claude/agents/` when Claude is scaffolded |
+| **Cursor** | `cursor` | `.cursor/rules/bellatrix.mdc` (`alwaysApply: true`) | `.cursor/skills/` (or reuses `.claude/skills/`) | `.cursor/agents/*.md` (`readonly: true` on specialists) |
+| **Devin Desktop** (formerly Windsurf) | `devin` | `.devin/rules/bellatrix.md` (`trigger: always_on`) | `.devin/skills/` (or reuses `.claude/skills/`) | `.devin/agents/*.md` (`allowed-tools`) |
+| **Codex CLI** | `codex` | One marker block in `AGENTS.md` pointing at `.bellatrix/bellatrix.instructions.md` | `.agents/skills/` | `.codex/agents/*.toml` |
+| **Gemini CLI** (enterprise) | `gemini` | One marker block in `GEMINI.md` importing `@./.bellatrix/bellatrix.instructions.md` | `.agents/skills/` | `.gemini/agents/*.md` (`kind: local`, Gemini tool names) |
+| **Antigravity CLI** (agy) | `antigravity` | `.agents/rules/bellatrix.md` (`trigger: always_on`) | `.agents/skills/` | `.agents/agents/<name>/agent.md` (documented tool names; `mainAgent`/`subagent`) |
+| **Kiro CLI** | `kiro` | `.kiro/steering/bellatrix.md` (`inclusion: always`) | `.kiro/skills/` | `.kiro/agents/*.md` (v3 Markdown; `resources` list the steering file and skills) |
+| **OpenCode** | `opencode` | One marker block in `AGENTS.md` pointing at `.bellatrix/bellatrix.instructions.md` (shared with Codex) | `.opencode/skills/` (or reuses `.claude/skills/` / `.agents/skills/`) | `.opencode/agents/*.md` (`mode: subagent`, `edit: deny` on specialists) |
 <!-- provider-matrix:end -->
 
 Rules every agent gets:
@@ -140,34 +142,25 @@ Rules every agent gets:
   a snapshot file or `get-page-source` into its main context.
 - **No MCP registration.** `init` only removes BELLATRIX's own stale MCP keys. Foreign keys are kept.
 
-## Support matrix — language × domain × agent
+## Supported languages and domains
+
+Every supported agent gets the same skills for each language and domain below.
 
 <!-- support-matrix:begin -->
 <!-- generated from docs/support-matrix.json by scripts/gen-readme-matrix.ps1; do not edit by hand -->
-| Language × domain | Claude Code | GitHub Copilot | Cursor | Devin | Codex CLI | Gemini CLI (enterprise) | Antigravity CLI | Kiro CLI | OpenCode | Evidence |
-|---|---|---|---|---|---|---|---|---|---|---|
-| C# × desktop | READY | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | generated project builds against BELLATRIX `master` |
-| C# × web | READY | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | same |
-| C# × mobile (Android + iOS) | READY | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | same |
-| Java × desktop | READY | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | `mvn test-compile` against BELLATRIX-Java source |
-| Java × web | READY | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | same |
-| Java × mobile (Android + iOS) | READY | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | same |
-| TypeScript × web | READY | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | PARTIAL | `tsc --noEmit` against BELLATRIX-JavaScript source |
-| TypeScript × desktop | MISSING (framework) | ← | ← | ← | ← | ← | ← | ← | ← | BELLATRIX-JavaScript has no desktop component/page layer; only the CLI skills are scaffolded |
-| TypeScript × mobile | MISSING (framework) | ← | ← | ← | ← | ← | ← | ← | ← | raw Android driver only, no iOS; only the CLI skills are scaffolded |
+| Language | Desktop | Web | Mobile (Android + iOS) |
+|---|---|---|---|
+| C# | ✓ | ✓ | ✓ |
+| Java | ✓ | ✓ | ✓ |
+| TypeScript | — | ✓ | — |
 
-- **READY:** a project generated from the scaffolded skills compiles. Every framework API claim in those skills was checked against the current framework source, and the agent's layout is the one already in live use (Claude Code).
-- **READY (synthetic fixtures):** READY evidence plus agent conformance (discovery + delegation) passed, but delegation was only exercised on synthetic snapshot fixtures (desktop, mobile) — not yet on a live recording.
-- **PARTIAL:** the same skills, placed in the agent's documented native layout. The layout is pinned by golden-file tests but has not yet been confirmed live in that IDE/CLI (`docs/LIVE-VERIFICATION-CHECKLIST.md` §A).
-- **MISSING (framework):** the BELLATRIX flavor itself has no layer to generate code against.
-- No cell is BLOCKED-TOOLCHAIN: .NET, Maven/JDK 19 and Node were available for every compile check.
-- In no cell have the generated tests been *run* against a live app yet (§C of the live checklist).
+TypeScript: web only (the BELLATRIX TypeScript framework has no desktop or mobile component layer).
 <!-- support-matrix:end -->
 
 ## Known limits
 
 - **Copilot cloud agent:** reading `.claude/agents` is undocumented. To give the cloud agent native agents, scaffold
-  Copilot without Claude, or verify it live.
+  Copilot without Claude.
 - **Devin:** subagents are experimental, and `.claude/agents` import is undocumented, so Devin always gets native
   copies.
 - **Codex:** has no per-agent read-only setting. The specialist's read-only rule is instruction-only.
@@ -178,7 +171,7 @@ Rules every agent gets:
   Code Assist subscriptions since 2026-10-09 (renewals end in 2027).
 - **Antigravity CLI:** subagents have no `@name` syntax (the main agent picks them), and the name of its file-creating
   tool is undocumented, so the generator lists only the documented `view_file`, `grep_search`, `replace_file_content`
-  and `run_command`. Check it live ([checklist §A.8](docs/LIVE-VERIFICATION-CHECKLIST.md)).
+  and `run_command`.
 - **Kiro CLI:** the agents use the v3 Markdown format (Kiro CLI 3.0); Kiro CLI 2.x reads only JSON agents.
 - **OpenCode:** it ignores `@` imports, so like Codex it reads the fragment through a one-line pointer in `AGENTS.md`.
 - **TypeScript is web only.** BELLATRIX-JavaScript has no desktop/mobile component or page-object layer, so
@@ -187,7 +180,6 @@ Rules every agent gets:
 - **Framework bugs found in the source** (documented in the skills, with workarounds; to be fixed upstream): C# mobile
   `GetText()` is self-recursive on most components; Java desktop `byXPath` uses `By.tagName`; Java `AppConfiguration`
   lacks `equals()` (lifecycle restarts every test); BELLATRIX-JavaScript `WebComponent.ts` TS2313 depends on check order.
-- Live checks per agent are tracked in [docs/LIVE-VERIFICATION-CHECKLIST.md](docs/LIVE-VERIFICATION-CHECKLIST.md).
 
 ## Drive the CLI
 
@@ -213,12 +205,9 @@ invalid `--agent`/`--language` selection. Set `BELLATRIX_TRACE=<file>` to append
 
 ## Documentation
 
-- Guide, CLI reference and support matrix: https://bellatrix.solutions/agent/
+- Guide, CLI reference and what is supported: https://bellatrix.solutions/agent/
 - [docs/TESTING.md](docs/TESTING.md) — install and one copy-paste flow per domain
 - [docs/architecture.md](docs/architecture.md) — sessions, context economy, the `init` contract, provider emitters
-- [docs/LIVE-VERIFICATION-CHECKLIST.md](docs/LIVE-VERIFICATION-CHECKLIST.md) and
-  [docs/LANGUAGE-VERIFICATION-CHECKLIST.md](docs/LANGUAGE-VERIFICATION-CHECKLIST.md) — manual live checks
-- [docs/conformance-report.md](docs/conformance-report.md) — headless agent conformance results
 - [CHANGELOG.md](CHANGELOG.md)
 
 ## Related projects

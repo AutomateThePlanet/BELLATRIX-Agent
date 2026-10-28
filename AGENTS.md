@@ -11,7 +11,8 @@ These instructions are for AI agents (and people) **changing this repository**. 
 - `tests/Bellatrix.Cli.Tests` — unit tests (no driver or AI model); `tests/Bellatrix.Cli.E2E` — live tests, skipped
   unless enabled; `tests/fixtures` — recorded and synthetic snapshots, a custom-template fixture.
 - `scripts/` — E2E runner, fixture recorder, agent conformance harness, README matrix generator.
-- `docs/` — testing guide, verification checklists, architecture, `support-matrix.json`.
+- `docs/` — testing guide, architecture, `support-matrix.json`; `docs/contributing/` — verification checklists and
+  the conformance report (linked from CONTRIBUTING.md only).
 
 Read [docs/architecture.md](docs/architecture.md) before changing scaffolding or the session model.
 
@@ -20,7 +21,7 @@ Read [docs/architecture.md](docs/architecture.md) before changing scaffolding or
 1. **Build and unit-test only.** Run `dotnet build BELLATRIX-Agent.sln` and `dotnet test tests/Bellatrix.Cli.Tests`.
    Do **not** run live E2E tests, start or stop WinAppDriver, Appium, emulators or browsers, or run
    `scripts/agent-conformance.ps1` without `-DryRun` (it invokes paid AI models). Live checks are for humans:
-   `docs/LIVE-VERIFICATION-CHECKLIST.md`.
+   `docs/contributing/LIVE-VERIFICATION-CHECKLIST.md`.
 2. **Golden files are intentional.** If a template or emitter change alters scaffold output, regenerate with
    `BELLATRIX_UPDATE_GOLDEN=1`, then read the golden diff and explain it in the pull request. Never regenerate to make
    an unexplained failure go away.
@@ -40,6 +41,9 @@ Read [docs/architecture.md](docs/architecture.md) before changing scaffolding or
 8. **The `init` contract (R1–R8) is not negotiable:** never rewrite a human-owned file beyond one line or one marked
    block, one manifest per agent, skip user-edited files, register no MCP server.
 9. Use file-scoped namespaces and match the surrounding code's style; `.editorconfig` applies.
+10. **Public docs show what is supported, not verification status.** README, the NuGet README and the website never
+    say READY/PARTIAL or "not yet verified live"; that tracking lives only in `docs/support-matrix.json` `internal` and
+    `docs/contributing/` (linked from CONTRIBUTING.md). `SupportMatrixReadmeTests` enforces it.
 
 ## Useful commands
 

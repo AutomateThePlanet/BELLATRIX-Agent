@@ -24,7 +24,7 @@
     3. DELEGATION probe per domain (BELLATRIX_TRACE set): "find the locator for <target>, reply with the locator only".
        Pass = reply matches the answer key AND the trace shows `find --snapshot` (or the transcript shows the locator
        specialist subagent) AND no context-heavy call AND (where a transcript exists) no direct read of the snapshot.
-    4. artifacts/conformance/<agent>-<language>.json  (aggregate: scripts/conformance-report.ps1)
+    4. artifacts/conformance/<agent>-<language>.json  (aggregate: scripts/conformance-report.ps1 -> docs/contributing/conformance-report.md)
 
   COST: a real run invokes the agents' models and MAY CONSUME PAID / METERED USAGE. Use -DryRun first; a real run
   prints the number of agent calls and refuses to start without -Confirm. The harness never writes to your home
