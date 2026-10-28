@@ -1,0 +1,79 @@
+name: Release
+
+# Pushing a tag `v<version>` (the <Version> in src/Bellatrix.Cli/Bellatrix.Cli.csproj) builds, tests and packs
+# Bellatrix.Cli and creates a GitHub pre-release with the .nupkg, its .sha256 file and release notes made of the
+# CHANGELOG.md section for that version plus docs/INSTALL-PREVIEW.md. Nothing is pushed to NuGet.org.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Tag matches the package version
+        shell: pwsh
+        run: |
+          $version = $env:TAG -replace '^v', ''
+          $csproj = Get-Content src/Bellatrix.Cli/Bellatrix.Cli.csproj -Raw
+          $packageVersion = [regex]::Match($csproj, '<Version>([^<]+)</Version>').Groups[1].Value
+          if ($packageVersion -ne $version) { throw "Tag $env:TAG does not match the csproj version $packageVersion." }
+          "VERSION=$version" >> $env:GITHUB_ENV
+
+      - name: Restore
+        run: dotnet restore BELLATRIX-Agent.sln
+
+      - name: Build
+        run: dotnet build BELLATRIX-Agent.sln --configuration Release --no-restore
+
+      # The live E2E suite (tests/Bellatrix.Cli.E2E) needs real drivers and is not run here.
+      - name: Unit tests
+        run: dotnet test tests/Bellatrix.Cli.Tests --configuration Release --no-build --logger "trx;LogFileName=unit.trx" --results-directory artifacts/test-results
+
+      - name: README matrices are up to date
+        shell: pwsh
+        run: ./scripts/gen-readme-matrix.ps1 -Check
+
+      - name: Pack
+        run: dotnet pack src/Bellatrix.Cli/Bellatrix.Cli.csproj --configuration Release --no-build --output artifacts/nuget
+
+      - name: SHA-256 and release notes
+        shell: pwsh
+        run: |
+          $name = "Bellatrix.Cli.$env:VERSION.nupkg"
+          $package = "artifacts/nuget/$name"
+          if (-not (Test-Path $package)) { throw "$package was not produced." }
+          $hash = (Get-FileHash $package -Algorithm SHA256).Hash.ToLowerInvariant()
+          # sha256sum format, so `sha256sum -c` works on the downloaded pair.
+          [IO.File]::WriteAllText("$package.sha256", "$hash  $name`n")
+
+          $changelog = Get-Content CHANGELOG.md -Raw -Encoding utf8
+          $section = [regex]::Match($changelog, "(?ms)^## \[$([regex]::Escape($env:VERSION))\][^\r\n]*\r?\n(.*?)(?=^## \[|^\[[^\]]+\]: )").Groups[1].Value.Trim()
+          if (-not $section) { throw "CHANGELOG.md has no section for $env:VERSION." }
+          $install = Get-Content docs/INSTALL-PREVIEW.md -Raw -Encoding utf8
+          if (-not $install.Contains("--version $env:VERSION")) { throw "docs/INSTALL-PREVIEW.md does not describe $env:VERSION." }
+          $install = ($install -replace '\A# [^\r\n]*\r?\n', '').Trim()
+
+          $notes = "## What's new in $env:VERSION`n`n$section`n`n---`n`n## Install`n`n$install`n`n**SHA-256** of ``$name``: ``$hash```n"
+          [IO.File]::WriteAllText("artifacts/release-notes.md", $notes)
+          "PACKAGE=$package" >> $env:GITHUB_ENV
+
+      - name: Create the GitHub pre-release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create $env:TAG $env:PACKAGE "$env:PACKAGE.sha256" --verify-tag --prerelease --title "Bellatrix.Cli $env:VERSION (preview)" --notes-file artifacts/release-notes.md
