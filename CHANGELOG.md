@@ -9,6 +9,17 @@ first release from this repository.
 
 ## [Unreleased]
 
+## [3.1.4] - 2026-10-28
+
+A preview release on GitHub Releases (not on NuGet.org). Install it with
+[docs/INSTALL-PREVIEW.md](https://github.com/AutomateThePlanet/BELLATRIX-Agent/blob/main/docs/INSTALL-PREVIEW.md).
+
+### Added
+- `docs/INSTALL-PREVIEW.md`: download, integrity check, install, update, uninstall and troubleshooting for the preview
+  package.
+- Release workflow (`.github/workflows/release.yml`): pushing a `v*` tag builds, runs the unit tests, packs, and
+  creates a GitHub pre-release with the `.nupkg`, its `.sha256` file and the release notes from this changelog.
+
 ### Changed
 - The README, the NuGet README and the website show what is supported: a language × domain table (✓ / —) and the
   nine agents with the files `bellatrix init --agent <name>` writes. Verification status (READY/PARTIAL, live-check
@@ -85,5 +96,6 @@ first release from this repository.
   compile-verified against the framework source.
 - Support matrix (language × domain × agent) in the README.
 
+[3.1.4]: https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.4
 [3.1.3]: https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.3
 [3.1.2]: https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.2

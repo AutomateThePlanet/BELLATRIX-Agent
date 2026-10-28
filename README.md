@@ -38,11 +38,20 @@ More: [docs/architecture.md](docs/architecture.md).
 
 You need the **.NET 8 SDK** (also for Java and TypeScript projects: the CLI is a .NET tool).
 
+The current release, 3.1.4, is a preview on
+[GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.4): download the `.nupkg`
+into a folder and install the tool from it (needs the [GitHub CLI](https://cli.github.com/), or download the file in
+the browser).
+
 ```bash
-dotnet tool install -g Bellatrix.Cli   # or: dotnet tool update -g Bellatrix.Cli
+gh release download v3.1.4 -R AutomateThePlanet/BELLATRIX-Agent -p "*.nupkg" -D ./bellatrix-pkg
+dotnet tool install -g Bellatrix.Cli --add-source ./bellatrix-pkg --version 3.1.4   # or: dotnet tool update -g …
 bellatrix --version
 bellatrix help
 ```
+
+Update, uninstall, integrity check and troubleshooting: [docs/INSTALL-PREVIEW.md](docs/INSTALL-PREVIEW.md).
+NuGet.org package coming soon.
 
 What each domain needs (you run it; the CLI never starts or stops it):
 
