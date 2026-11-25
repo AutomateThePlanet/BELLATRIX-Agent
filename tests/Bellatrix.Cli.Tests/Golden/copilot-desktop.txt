@@ -46,7 +46,7 @@ agents: ['bellatrix-desktop-locator-specialist']
 
 # BELLATRIX Desktop System Tests Generator
 
-# sha256: cba9e40ffa3ff9bc
+# sha256: c6b059e8b49bd9e3
 # file: .github/instructions/bellatrix.instructions.md
 ---
 applyTo: "**"

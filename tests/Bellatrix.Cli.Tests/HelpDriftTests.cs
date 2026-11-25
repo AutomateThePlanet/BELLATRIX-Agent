@@ -236,7 +236,7 @@ public class HelpDriftTests
     // ---------- 3. templates use only routed verbs and declared flags ----------
 
     private static readonly Regex CommandUse = new(
-        @"bellatrix\s+(?:(?<domain>desktop|web|mobile)\s+(?<verb>[a-z][a-z-]*)|(?<verb>init|update-skills|sessions|version|help))\b(?<rest>[^`\n]*)",
+        @"bellatrix\s+(?:(?<domain>desktop|web|mobile|config)\s+(?<verb>[a-z][a-z-]*)|(?<verb>init|update-skills|sessions|version|help))\b(?<rest>[^`\n]*)",
         RegexOptions.Compiled);
 
     public static TheoryData<string> ScannedFiles()
@@ -289,6 +289,13 @@ public class HelpDriftTests
                     continue;
                 }
 
+                // A legacy spelling is fine only where the line says it is one ("legacy", "still works", "deprecated", "alias").
+                var explainsLegacy = Regex.IsMatch(lines[i], @"legacy|still works|deprecated|alias", RegexOptions.IgnoreCase);
+                if (spec.DeprecatedUse is not null && !explainsLegacy)
+                {
+                    problems.Add($"{relativePath}:{i + 1}: 'bellatrix {domain} {verb}' is deprecated; use {spec.DeprecatedUse}".Replace("  ", " "));
+                }
+
                 // Flags up to the next command on the same line; skip <placeholders> and quoted values.
                 var rest = m.Groups["rest"].Value;
                 var next = rest.IndexOf("bellatrix ", StringComparison.Ordinal);
@@ -301,10 +308,39 @@ public class HelpDriftTests
                 foreach (Match f in Regex.Matches(rest, @"(?<![\w-])--([a-z][a-z-]*)"))
                 {
                     var flag = f.Groups[1].Value;
-                    if (!GlobalFlagNames.Contains(flag) && spec.Flags.All(x => x.Name != flag))
+                    var declared = spec.Flags.FirstOrDefault(x => x.Name == flag);
+                    if (!GlobalFlagNames.Contains(flag) && declared is null)
                     {
                         problems.Add($"{relativePath}:{i + 1}: 'bellatrix {domain} {verb}' has no --{flag}".Replace("  ", " "));
                     }
+                    else if (declared?.DeprecatedAliasOf is { } canonical && !explainsLegacy)
+                    {
+                        problems.Add($"{relativePath}:{i + 1}: --{flag} is a legacy spelling; use --{canonical}");
+                    }
+                }
+
+                // The parser reads only `--key value`: `--key=value` and bare `key=value` words are silently dropped.
+                var expectsValue = false;
+                foreach (var token in rest.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (token.StartsWith("--", StringComparison.Ordinal))
+                    {
+                        if (token.Contains('='))
+                        {
+                            problems.Add($"{relativePath}:{i + 1}: '{token}': the CLI reads only '--flag value', not '--flag=value'");
+                        }
+
+                        var name = token[2..].Split('=')[0];
+                        expectsValue = spec.Flags.Concat(Flags.Global).FirstOrDefault(x => x.Name == name) is { IsSwitch: false };
+                        continue;
+                    }
+
+                    if (!expectsValue && Regex.IsMatch(token, @"^[A-Za-z][\w.-]*="))
+                    {
+                        problems.Add($"{relativePath}:{i + 1}: bare '{token}': the CLI ignores key=value words; use '--flag value'");
+                    }
+
+                    expectsValue = false;
                 }
             }
         }

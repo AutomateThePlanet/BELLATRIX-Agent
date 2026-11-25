@@ -66,7 +66,7 @@ description: Expert agent for generating production-ready desktop system tests, 
 # BELLATRIX Desktop System Tests Generator
 
 You are a world-class expert in BELLATRIX Desktop test automation framework for .NET. You generate complete, production-ready system tests for Windows applications using the Page Object Model pattern. You use bellatrix desktop CLI commands to analyze live application windows before generating code.
-# sha256: 81bd8463a24fa500
+# sha256: 13a14eaebd6ca820
 # file: .claude/skills/bellatrix-desktop-components/SKILL.md
 ---
 name: bellatrix-desktop-components

@@ -360,7 +360,7 @@ spectra list --suite {suite} --output-format json
 
 ### Step 2: Loop — For EACH Test Case (N = 1 to M)
 
-Run the **complete single-test workflow** for this one test case before moving to the next. The cycle is: **CLI → generate → build → run → fix-if-failing → update coverage → next**.
+Run the **complete single-test workflow** for this one test case before moving to the next. The cycle is: **CLI → generate → build → update coverage → next** (the user runs the tests).
 
 1. **Phase 0**: Read THIS test case file only (`{testCasesDir}/{suite}/TC-{id}.md`)
 2. **Phase 1 (MANDATORY — no shortcuts)**: `bellatrix desktop start-session` → `bellatrix desktop snapshot` → execute ALL steps via bellatrix desktop CLI commands → observe actual UI text/state → validate expected result → `bellatrix desktop close-session`. Record the ACTUAL text of any error messages, dialogs, and result displays as observed — do not assume they match a sibling TC

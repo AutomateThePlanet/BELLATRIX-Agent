@@ -33,6 +33,15 @@ from the downloaded `.nupkg` with `--add-source` ([docs/INSTALL-PREVIEW.md](docs
   `tests/{suite}/…` and others `test-cases/{suite}/…`. The folder is recorded in `.bellatrix/config.json`
   (default: SPECTRA's `tests.dir`, else `test-cases`).
 
+- Skill wording that predates the CLI: the desktop skills no longer say a "driver server" or the CLI manages the
+  driver (the user runs it; the CLI reports `driver_unreachable`), `reattach-session` is described correctly (a new
+  driver session id under the same `--session` name), and garbled sentences in the desktop SPECTRA skill are fixed.
+- The C# desktop batch flow no longer says "build → run → fix-if-failing"; like the rest of the skills it is build
+  only and the user runs the tests.
+- The desktop generator agent's frontmatter no longer lists made-up tool ids (and no test-running tools).
+- TypeScript skills call the BELLATRIX-JavaScript test runner as `npx bellatrix ./tests …`, so it is not confused
+  with the .NET `bellatrix` CLI.
+
 ### Changed
 - `--no-interaction` now has an effect: `init` is the one command that may prompt, and only in a terminal.
 - `init` contract rule R9: re-running `init` / `update-skills` never overwrites `.bellatrix/config.json` without

@@ -37,7 +37,7 @@ This file is the authoritative as-is snapshot of what exists in the web test pro
 - **Page base class:** `WebPage<Map, Asserts>` + `@Page(Map, Asserts)`; **section:** url-less `WebPage`; **test base class:** `WebTest` (`@bellatrix/web/infrastructure`) with `@TestClass` / `@Test` from `@bellatrix/web/test`
 - **Locator preference:** `data-testid` → static id → name → aria-label → label/placeholder → tag+text → structural CSS → positional XPath
 - **Build check:** `{project.buildCommand}` (no emit; the runner executes `.ts` directly)
-- **Run (the user, not the agent):** `npx bellatrix ./tests filter --testName <method>` / `--manualTestCase TC-XXX` / `--category Smoke`; Node ≥ 20.9
+- **Run (the user, not the agent):** `npx bellatrix ./tests filter --testName <method>` / `--manualTestCase TC-XXX` / `--category Smoke`; Node ≥ 20.9. `npx bellatrix` is the BELLATRIX-JavaScript test runner from `node_modules`, not the .NET `bellatrix` CLI that drives the browser
 
 ### Required project wiring
 
@@ -136,7 +136,7 @@ const manualTestCaseKey = 'manualTestCase';
 /**
  * Links an automated test to a SPECTRA manual test case for traceability.
  * Unlike BELLATRIX's @TestCase (data-driven parameterization), this decorator only stores
- * the ID in the test's metadata — enabling `bellatrix ./tests filter --manualTestCase TC-XXX`
+ * the ID in the test's metadata — enabling `npx bellatrix ./tests filter --manualTestCase TC-XXX`
  * and SPECTRA coverage scanning of `@ManualTestCase('TC-XXX')`.
  */
 export function ManualTestCase<

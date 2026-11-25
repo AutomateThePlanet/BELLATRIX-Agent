@@ -46,7 +46,7 @@ resources:
 > `{project.path}`; `{project.rootPath}` = `{project.rootNamespace}` with `/` instead of `.`), and `{testCasesDir}` is
 > `domains.desktop.testCasesDir`, else `testCasesDir`. If the file is missing or invalid, or has no desktop project,
 > **stop and ask the user**, record the answer there and validate again. Never guess a project name or path.
-# sha256: 8b16f62c2815415a
+# sha256: 656b057fd27f059e
 # file: .kiro/skills/bellatrix-desktop-components/SKILL.md
 ---
 name: bellatrix-desktop-components

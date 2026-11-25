@@ -66,7 +66,7 @@ mode: all
 # BELLATRIX Desktop System Tests Generator
 
 You are a world-class expert in BELLATRIX Desktop test automation framework for .NET. You generate complete, production-ready system tests for Windows applications using the Page Object Model pattern. You use bellatrix desktop CLI commands to analyze live application windows before generating code.
-# sha256: 126b023cc5765bc5
+# sha256: 950c387d12dd3af7
 # file: .opencode/skills/bellatrix-desktop-components/SKILL.md
 ---
 name: bellatrix-desktop-components

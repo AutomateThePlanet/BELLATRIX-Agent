@@ -8,9 +8,9 @@ description: Execute SPECTRA manual test cases automatically via the bellatrix d
 Automatically execute SPECTRA manual test cases by driving the desktop
 application through the bellatrix desktop CLI. Each test step is performed via UI
 automation and the expected result is validated. Results are reported back
-to SPECTRA the CLI for tracking.
+to SPECTRA for tracking.
 
-**Two driver servers used:**
+**Two surfaces are used:**
 - `bellatrix desktop` CLI — UI interaction (click, type, read, snapshot)
 - `spectra/*` — test execution state (start run, advance test, finalize)
 
@@ -99,7 +99,7 @@ to confirm the app is in the expected state.
 #### 4c. Execute Each Step
 
 For each step, interpret the natural language instruction and map to
-BELLATRIX bellatrix desktop CLI calls:
+`bellatrix desktop` CLI calls:
 
 | Step pattern | bellatrix desktop CLI command | Example |
 |-------------|----------|---------|

@@ -14,9 +14,9 @@ Use the bellatrix desktop CLI (`bellatrix desktop` CLI) to interact with a live 
 
 ## Phase 1: Session Setup
 
-### Driver Backend — Managed by the driver server, NOT by You
+### Driver Backend — the User's Job, NOT Yours
 
-The `bellatrix desktop` CLI manages the underlying driver process (Appium, which brokers WinAppDriver / NovaWindows based on the `McpSettings__DriverType` environment variable). **You do NOT start, stop, or probe any driver process yourself.**
+The user runs the driver (WinAppDriver, or Appium with NovaWindows) at `http://127.0.0.1:4723` (or the `McpSettings__ServerUrl` environment variable); `McpSettings__DriverType` tells the CLI which one it is. The `bellatrix desktop` CLI only connects to it — it never starts or stops a driver, and **neither do you**: do NOT start, stop, or probe any driver process yourself.
 
 **FORBIDDEN actions:**
 - Running `Get-Process -Name "WinAppDriver"` / `Get-Process -Name "Appium"` to check state
@@ -24,9 +24,9 @@ The `bellatrix desktop` CLI manages the underlying driver process (Appium, which
 - Launching any driver executable via `run_in_terminal`, `execute/runInTerminal`, or any shell tool
 - "Warming up" the driver before calling `bellatrix desktop start-session`
 
-**Correct behavior:** Call `bellatrix desktop start-session` / `bellatrix desktop attach-window` directly. If the CLI returns a connection error (e.g., "could not reach driver at 127.0.0.1:4723"), the driver backend (Appium) is not running — **ask the user to start Appium**. Do not try to start it yourself. Example message:
+**Correct behavior:** Call `bellatrix desktop start-session` / `bellatrix desktop attach-window` directly. If the CLI returns the error code `driver_unreachable` ("Could not reach the desktop driver. Start your driver at http://127.0.0.1:4723 and try again."), the driver is not running — **ask the user to start it**. Do not try to start it yourself. Example message:
 
-> "bellatrix cannot reach the driver at 127.0.0.1:4723. Please start WinAppDriver (or Appium with NovaWindows, per `McpSettings__DriverType`) and let me know when it's up."
+> "bellatrix cannot reach the desktop driver at 127.0.0.1:4723. Please start WinAppDriver (or Appium with NovaWindows, per `McpSettings__DriverType`) and let me know when it's up."
 
 Then retry `bellatrix desktop start-session` once the user confirms.
 
@@ -58,9 +58,9 @@ bellatrix desktop attach-window --window-title "<title>" --session calc --json
 
 The session is addressed by the `--session <name>` you chose, not by the real driver `sessionId` the JSON response also reports. Every later CLI invocation is a **separate process** — no daemon — so pass that same `--session <name>` again; the CLI resolves it back to the live driver session for you. You never need to copy the real `sessionId` around yourself.
 
-**Multiple sessions in parallel.** The driver server runs one session per app. To work with several apps in the same scenario, call `bellatrix desktop start-session --app <name> --session <yourName>` once per app, each under its own `--session` name, and route later calls by that name. There is no "switch app" verb — switching is just routing the next call to the right `--session`.
+**Multiple sessions in parallel.** Each `--session` name is one app session. To work with several apps in the same scenario, call `bellatrix desktop start-session --app <name> --session <yourName>` once per app, each under its own `--session` name, and route later calls by that name. There is no "switch app" verb — switching is just routing the next call to the right `--session`.
 
-If either call returns a driver/connection error, follow the rule above — ask the user to start Appium; never start it yourself.
+If either call returns `driver_unreachable`, follow the rule above — ask the user to start the driver; never start it yourself.
 
 ### Handle Splash Screens / Loading Windows
 

@@ -1,6 +1,6 @@
 e25850a6dde0bed8  .bellatrix/bellatrix.instructions.md
 7c13ffcef0fcd209  .claude/agents/bellatrix-desktop-locator-specialist.md
-49f0263f3b678f95  .claude/agents/bellatrix-desktop-system-tests-generator.md
+19cfbe600898005b  .claude/agents/bellatrix-desktop-system-tests-generator.md
 f823c3281267930f  .claude/agents/bellatrix-mobile-locator-specialist.md
 c54ffd2d45b6913d  .claude/agents/bellatrix-mobile-system-tests-generator.md
 9a0d731decca484e  .claude/agents/bellatrix-web-locator-specialist.md
@@ -8,8 +8,8 @@ d994ce1b30eb4b98  .claude/agents/bellatrix-web-system-tests-generator.md
 5f6f95bb0635bed9  .claude/skills/bellatrix-desktop-app-services/SKILL.md
 3cf938cd0d4b1ff8  .claude/skills/bellatrix-desktop-automate-spectra-test/SKILL.md
 4b3550ea88f27f42  .claude/skills/bellatrix-desktop-components/SKILL.md
-486b7a43a5ac2e74  .claude/skills/bellatrix-desktop-execute-scenario/SKILL.md
-d652402a031866ff  .claude/skills/bellatrix-desktop-execute-spectra-test/SKILL.md
+975b4b6eec257338  .claude/skills/bellatrix-desktop-execute-scenario/SKILL.md
+77b47533992913b9  .claude/skills/bellatrix-desktop-execute-spectra-test/SKILL.md
 bfba1b349ac81f6a  .claude/skills/bellatrix-desktop-generate-code/SKILL.md
 778f8df4c74c63f3  .claude/skills/bellatrix-desktop-locators-and-waits/SKILL.md
 11ad4fc91e7e2210  .claude/skills/bellatrix-desktop-page-objects-and-patterns/SKILL.md

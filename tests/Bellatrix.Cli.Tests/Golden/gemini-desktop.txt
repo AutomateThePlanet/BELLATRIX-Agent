@@ -82,4 +82,4 @@ kind: local
 
 # BELLATRIX Desktop System Tests Generator
 
-# sha256: 87b7d8d059cf5d28
+# sha256: 51d9b966b0349005

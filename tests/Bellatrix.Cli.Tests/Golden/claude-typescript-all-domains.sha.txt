@@ -2,9 +2,9 @@ e25850a6dde0bed8  .bellatrix/bellatrix.instructions.md
 7c13ffcef0fcd209  .claude/agents/bellatrix-desktop-locator-specialist.md
 f823c3281267930f  .claude/agents/bellatrix-mobile-locator-specialist.md
 9a0d731decca484e  .claude/agents/bellatrix-web-locator-specialist.md
-f8497d56b53d462b  .claude/agents/bellatrix-web-system-tests-generator.md
-1c66f33cea824e5c  .claude/skills/bellatrix-desktop-execute-scenario/SKILL.md
-d652402a031866ff  .claude/skills/bellatrix-desktop-execute-spectra-test/SKILL.md
+bafd0f400904caba  .claude/agents/bellatrix-web-system-tests-generator.md
+504d7310397eb223  .claude/skills/bellatrix-desktop-execute-scenario/SKILL.md
+77b47533992913b9  .claude/skills/bellatrix-desktop-execute-spectra-test/SKILL.md
 d1b7db81d3704a74  .claude/skills/bellatrix-mobile-execute-scenario/SKILL.md
 34fa185749b37269  .claude/skills/bellatrix-mobile-execute-spectra-test/SKILL.md
 610fe68b3d405242  .claude/skills/bellatrix-web-app-services/SKILL.md
@@ -15,7 +15,7 @@ d1b7db81d3704a74  .claude/skills/bellatrix-mobile-execute-scenario/SKILL.md
 e13eaf97d7c4b254  .claude/skills/bellatrix-web-generate-code/SKILL.md
 aedf6b3f970ea43b  .claude/skills/bellatrix-web-locators-and-waits/SKILL.md
 9e1827bfd7483f6f  .claude/skills/bellatrix-web-page-objects-and-patterns/SKILL.md
-7b782babaf57533c  .claude/skills/bellatrix-web-project-structure/SKILL.md
+63a09fcd846eb004  .claude/skills/bellatrix-web-project-structure/SKILL.md
 11182f525da6ca86  .claude/skills/bellatrix-web-system-tests-recipes/SKILL.md
 d81e06e8a1d31e5f  .claude/skills/bellatrix-web-test-structure-and-lifecycle/SKILL.md
 7585b145cc4c4bd8  .claude/skills/bellatrix-web-validations-and-assertions/SKILL.md

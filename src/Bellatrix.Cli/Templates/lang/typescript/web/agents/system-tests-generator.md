@@ -48,7 +48,7 @@ const manualTestCaseKey = 'manualTestCase';
  * Links an automated test to a SPECTRA manual test case for traceability.
  * Unlike @TestCase (data-driven parameterization) this is a metadata-only marker,
  * found by SPECTRA's `@ManualTestCase('{id}')` scan pattern and by
- * `bellatrix ./tests filter --manualTestCase TC-XXX`.
+ * `npx bellatrix ./tests filter --manualTestCase TC-XXX` (the BELLATRIX-JavaScript test runner, not the .NET `bellatrix` CLI).
  */
 export function ManualTestCase<
     This extends BellatrixTest = BellatrixTest,

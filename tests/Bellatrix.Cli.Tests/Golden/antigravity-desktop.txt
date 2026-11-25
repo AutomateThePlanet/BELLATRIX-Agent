@@ -46,7 +46,7 @@ mainAgent: true
 
 > **Project settings:** run `bellatrix config validate --json` and read `.bellatrix/config.json` before anything else.
 > `{project.*}` below are the values of `domains.desktop.project` there (`{project.dir}` = the folder of
-# sha256: a0b380e6f9e1a266
+# sha256: 46f065eef9508287
 # file: .agents/rules/bellatrix.md
 ---
 trigger: always_on
