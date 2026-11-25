@@ -2,7 +2,6 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Bellatrix.Cli.Config;
-using Json.Schema;
 using Xunit;
 
 namespace Bellatrix.Cli.Tests;
@@ -38,11 +37,12 @@ public class BellatrixConfigTests : IDisposable
     private static string RepoRoot([CallerFilePath] string thisFile = "")
         => Path.GetFullPath(Path.Combine(Path.GetDirectoryName(thisFile)!, "..", ".."));
 
-    // Parsed once: JsonSchema.Net registers a schema's $id globally and refuses to register it twice.
-    private static readonly Lazy<JsonSchema> ParsedSchema = new(
-        () => JsonSchema.FromText(File.ReadAllText(Path.Combine(RepoRoot(), "schemas", "bellatrix-config.v1.schema.json"))));
+    // Parsed once (the validator compiles the schema). Corvus.Json.Validator: Apache-2.0, test project only.
+    private static readonly Lazy<Corvus.Json.Validator.JsonSchema> ParsedSchema = new(
+        () => Corvus.Json.Validator.JsonSchema.FromText(
+            File.ReadAllText(Path.Combine(RepoRoot(), "schemas", "bellatrix-config.v1.schema.json")), BellatrixConfig.SchemaUrl));
 
-    private static JsonSchema Schema() => ParsedSchema.Value;
+    private static bool SchemaAccepts(string json) => ParsedSchema.Value.Validate(JsonDocument.Parse(json).RootElement).IsValid;
 
     private const string Valid = """
         { "$schema": "x", "version": 1, "testCasesDir": "test-cases",
@@ -80,7 +80,7 @@ public class BellatrixConfigTests : IDisposable
     public void Schema_AndCliValidator_Agree(string json, bool expected)
     {
         var node = JsonNode.Parse(json);
-        var bySchema = Schema().Evaluate(JsonDocument.Parse(json).RootElement).IsValid;
+        var bySchema = SchemaAccepts(json);
         var byCli = BellatrixConfig.Validate(node).Count == 0;
 
         Assert.Equal(expected, bySchema);
@@ -94,6 +94,36 @@ public class BellatrixConfigTests : IDisposable
         Assert.Equal(repo, BellatrixConfig.SchemaText().Replace("\r\n", "\n"));
         Assert.Equal(BellatrixConfig.SchemaUrl, JsonNode.Parse(repo)!["$id"]!.GetValue<string>());
         Assert.Equal(BellatrixConfig.SchemaUrl, BellatrixConfig.Create("test-cases")["$schema"]!.GetValue<string>());
+    }
+
+    [Fact]
+    public void TheSchemaValidator_IsATestOnlyDependency()
+    {
+        // The CLI validates with its own BellatrixConfig.Validate; the schema library only cross-checks it here.
+        var cli = File.ReadAllText(Path.Combine(RepoRoot(), "src", "Bellatrix.Cli", "Bellatrix.Cli.csproj"));
+        Assert.DoesNotMatch(new System.Text.RegularExpressions.Regex("Corvus|JsonSchema", System.Text.RegularExpressions.RegexOptions.IgnoreCase), cli);
+        Assert.Contains("Corvus.Json.Validator", File.ReadAllText(Path.Combine(RepoRoot(), "tests", "Bellatrix.Cli.Tests", "Bellatrix.Cli.Tests.csproj")));
+    }
+
+    [Fact]
+    public void GeneratedConfig_SchemaUrl_IsTheReleaseTagOfThePackageVersion()
+    {
+        var csproj = File.ReadAllText(Path.Combine(RepoRoot(), "src", "Bellatrix.Cli", "Bellatrix.Cli.csproj"));
+        var version = System.Text.RegularExpressions.Regex.Match(csproj, "<Version>([^<]+)</Version>").Groups[1].Value;
+        Assert.Equal(version, CliRunner.Version);
+
+        using var repo = new TempRepo();
+        repo.Write("src/Acme.UiTests/Acme.UiTests.csproj", Csproj("Bellatrix.Desktop"));
+        Assert.Equal(0, CliHarness.Run(repo.Root, "init", "--agent", "claude", "--language", "csharp", "--domains", "desktop", "--no-interaction").Exit);
+
+        var url = BellatrixConfig.Load(repo.Root).Document!["$schema"]!.GetValue<string>();
+        Assert.Equal($"https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-Agent/v{version}/schemas/bellatrix-config.v1.schema.json", url);
+        Assert.Contains($"/v{version}/", url);
+        Assert.DoesNotContain("/main/", url);
+
+        // The schema file names the same tag, and so do the README example and the release checklist.
+        Assert.Equal(url, JsonNode.Parse(File.ReadAllText(Path.Combine(RepoRoot(), "schemas", "bellatrix-config.v1.schema.json")))!["$id"]!.GetValue<string>());
+        Assert.Contains(url, File.ReadAllText(Path.Combine(RepoRoot(), "README.md")));
     }
 
     // ---------------------------------------------------------------- discovery
@@ -324,6 +354,18 @@ public class BellatrixConfigTests : IDisposable
 
         var skip = new ScriptedPrompter("-");
         Assert.Null(BellatrixConfig.ProjectOf(Prepare(repo, interactive: true, prompter: skip, domains: "desktop").Document!, "desktop"));
+    }
+
+    [Fact]
+    public void Prepare_Interactive_EndOfInput_CancelsWithExit130()
+    {
+        using var repo = new TempRepo();
+        repo.Write("Acme.UiTests/Acme.UiTests.csproj", Csproj("Bellatrix.Desktop"));
+
+        var ex = Assert.Throws<CliException>(() => Prepare(repo, interactive: true, prompter: new ScriptedPrompter(), domains: "desktop"));
+
+        Assert.Equal(("cancelled", 130), (ex.Code, ex.ExitCode));
+        Assert.False(repo.Exists(".bellatrix/config.json"));
     }
 
     [Fact]

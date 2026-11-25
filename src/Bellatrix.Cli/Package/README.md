@@ -15,8 +15,8 @@ You need the .NET 8 SDK. The package is published on
 `.nupkg` into a folder and install the tool from it.
 
 ```
-gh release download v3.1.4 -R AutomateThePlanet/BELLATRIX-Agent -p "*.nupkg" -D ./bellatrix-pkg
-dotnet tool install -g Bellatrix.Cli --add-source ./bellatrix-pkg --version 3.1.4
+gh release download v3.2.0 -R AutomateThePlanet/BELLATRIX-Agent -p "*.nupkg" -D ./bellatrix-pkg
+dotnet tool install -g Bellatrix.Cli --add-source ./bellatrix-pkg --version 3.2.0
 bellatrix --version
 bellatrix help
 ```

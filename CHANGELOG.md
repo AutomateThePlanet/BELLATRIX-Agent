@@ -11,10 +11,15 @@ from the downloaded `.nupkg` with `--add-source` ([docs/INSTALL-PREVIEW.md](docs
 
 ## [Unreleased]
 
+## [3.2.0]
+
+Not released yet (no tag, no package). Install the current release, 3.1.4, from GitHub Releases.
+
 ### Added
 - `.bellatrix/config.json`: the project settings for your repository (the test project per domain: path, name, root
   namespace or base package, build command; and the test-case folder), with a JSON schema
-  (`schemas/bellatrix-config.v1.schema.json`, `"version": 1`). Commit it.
+  (`schemas/bellatrix-config.v1.schema.json`, `"version": 1`). Commit it. Its `$schema` points at the schema in the
+  release tag (`…/BELLATRIX-Agent/v<version>/schemas/…`), so it never changes under you.
 - `bellatrix init` finds the BELLATRIX test project per domain (C# `*.csproj`, Java `pom.xml` / `build.gradle`,
   TypeScript `package.json` that reference BELLATRIX; the framework's own projects are skipped), proposes it and, in
   a terminal, asks you to confirm. New flags `--project <path>` / `--project desktop=<path>,web=<path>` and
@@ -22,6 +27,8 @@ from the downloaded `.nupkg` with `--add-source` ([docs/INSTALL-PREVIEW.md](docs
   candidates are a usage error (exit 2) and nothing is written.
 - `bellatrix config show` and `bellatrix config validate`.
 - The init JSON has a `config` field (path, status, values, commit, warnings).
+- `docs/contributing/RELEASE-CHECKLIST.md`; the release workflow checks that the tag serves the config schema before
+  it creates the release.
 
 ### Fixed
 - The README, the NuGet README and this changelog no longer say the package is on NuGet.org. It is not published
@@ -43,7 +50,8 @@ from the downloaded `.nupkg` with `--add-source` ([docs/INSTALL-PREVIEW.md](docs
   with the .NET `bellatrix` CLI.
 
 ### Changed
-- `--no-interaction` now has an effect: `init` is the one command that may prompt, and only in a terminal.
+- `--no-interaction` now has an effect: `init` is the one command that may prompt, and only in a terminal. Ending input at
+  the prompt (Ctrl+C, Ctrl+Z, a closed terminal) cancels `init` with nothing written.
 - `init` contract rule R9: re-running `init` / `update-skills` never overwrites `.bellatrix/config.json` without
   `--regenerate`; missing values are merged in, an invalid file is left untouched.
 
@@ -134,6 +142,7 @@ Released on GitHub Releases (NuGet.org package coming soon). Install it with
   compile-verified against the framework source.
 - Support matrix (language × domain × agent) in the README.
 
+[3.2.0]: https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.2.0
 [3.1.4]: https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.4
 [3.1.3]: https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.3
 [3.1.2]: https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.2

@@ -34,6 +34,21 @@ jobs:
           if ($packageVersion -ne $version) { throw "Tag $env:TAG does not match the csproj version $packageVersion." }
           "VERSION=$version" >> $env:GITHUB_ENV
 
+      # Every .bellatrix/config.json that `bellatrix init` writes has "$schema" pointing at the schema in this tag
+      # (docs/contributing/RELEASE-CHECKLIST.md step 7). Stop before the release exists if the tag does not serve it.
+      - name: Config schema is served at this tag
+        shell: pwsh
+        run: |
+          $url = "https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-Agent/$env:TAG/schemas/bellatrix-config.v1.schema.json"
+          $local = Get-Content schemas/bellatrix-config.v1.schema.json -Raw -Encoding utf8 | ConvertFrom-Json
+          if ($local.'$id' -ne $url) { throw "schemas/bellatrix-config.v1.schema.json `$id is '$($local.'$id')', expected '$url'." }
+          $remote = $null
+          for ($i = 1; $i -le 10 -and -not $remote; $i++) {
+            try { $remote = Invoke-RestMethod -Uri $url -ErrorAction Stop } catch { Start-Sleep -Seconds 15 }
+          }
+          if (-not $remote) { throw "$url is not reachable; is the tag $env:TAG pushed?" }
+          if ($remote.'$id' -ne $url) { throw "$url serves a schema whose `$id is '$($remote.'$id')'." }
+
       - name: Restore
         run: dotnet restore BELLATRIX-Agent.sln
 

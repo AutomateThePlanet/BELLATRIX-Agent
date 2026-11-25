@@ -58,6 +58,8 @@ out of the README, the NuGet README and the website.
 - [docs/contributing/LANGUAGE-VERIFICATION-CHECKLIST.md](docs/contributing/LANGUAGE-VERIFICATION-CHECKLIST.md): checks
   that the code generated for each language compiles.
 - [docs/contributing/conformance-report.md](docs/contributing/conformance-report.md): headless agent conformance results.
+- [docs/contributing/RELEASE-CHECKLIST.md](docs/contributing/RELEASE-CHECKLIST.md): steps to cut a release, including
+  the check that the tag serves the config schema before the release is published.
 
 ```powershell
 powershell -File scripts\run-e2e.ps1                                  # live CLI E2E; skips what is not running

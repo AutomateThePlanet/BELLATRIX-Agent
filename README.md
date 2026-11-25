@@ -111,7 +111,7 @@ bellatrix update-skills                              # refresh what is already s
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-Agent/main/schemas/bellatrix-config.v1.schema.json",
+  "$schema": "https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-Agent/v3.2.0/schemas/bellatrix-config.v1.schema.json",
   "version": 1,
   "testCasesDir": "test-cases",
   "domains": {

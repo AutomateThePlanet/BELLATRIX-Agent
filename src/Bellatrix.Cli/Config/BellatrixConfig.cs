@@ -48,8 +48,13 @@ internal static class BellatrixConfig
 
     public const string DefaultTestCasesDir = "test-cases";
 
-    public const string SchemaUrl =
-        "https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-Agent/main/schemas/bellatrix-config.v1.schema.json";
+    /// <summary>
+    /// The schema in this package's release tag (<c>v&lt;version&gt;</c>), so a committed config keeps pointing at the
+    /// schema it was written against. The schema file's <c>$id</c> carries the same URL (a test keeps them equal), and
+    /// the release checklist verifies that the tag serves it before a release is published.
+    /// </summary>
+    public static string SchemaUrl =>
+        $"https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-Agent/v{CliRunner.Version}/schemas/bellatrix-config.v1.schema.json";
 
     /// <summary>The embedded copy of <c>schemas/bellatrix-config.v1.schema.json</c>.</summary>
     public const string SchemaResource = "schemas/bellatrix-config.v1.schema.json";
