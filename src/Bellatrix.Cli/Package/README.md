@@ -10,18 +10,15 @@ how to resolve stable locators without reading whole UI trees into its context.
 
 ## Install
 
-You need the .NET 8 SDK. The package is published on
-[GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/releases) (not on NuGet.org yet): download the
-`.nupkg` into a folder and install the tool from it.
+You need the .NET 8 SDK (also for Java and TypeScript projects).
 
 ```
-gh release download v3.2.0 -R AutomateThePlanet/BELLATRIX-AI-Agents -p "*.nupkg" -D ./bellatrix-pkg
-dotnet tool install -g Bellatrix.Cli --add-source ./bellatrix-pkg --version 3.2.0
+dotnet tool install -g Bellatrix.Cli      # update: dotnet tool update -g Bellatrix.Cli
 bellatrix --version
 bellatrix help
 ```
 
-Update, integrity check and troubleshooting:
+To install from the `.nupkg` attached to each GitHub release instead (pinned or offline):
 [INSTALL-PREVIEW.md](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/blob/main/docs/INSTALL-PREVIEW.md).
 
 ## Scaffold your AI agent
@@ -29,8 +26,10 @@ Update, integrity check and troubleshooting:
 Run this in the root of your test repository:
 
 ```
-bellatrix init --agent claude --domains desktop,web,mobile
+bellatrix init --agent claude --language csharp --domains desktop
 ```
+
+Then open the repository in your agent and ask it, for example, *"Automate TC-1006"*.
 
 `--agent` takes one or more of `claude`, `copilot`, `cursor`, `devin`, `codex`, `gemini`, `antigravity`, `kiro`
 and `opencode`, comma-separated. `--language csharp|java|typescript` picks the BELLATRIX flavor (it is detected
@@ -86,3 +85,6 @@ output.
 - Guide, CLI reference and what is supported: https://bellatrix.solutions/agent/
 - Source code, issues and contributing: https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents
 - BELLATRIX framework documentation: https://docs.bellatrix.solutions/
+- Release notes: https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/blob/main/CHANGELOG.md
+- Related: SPECTRA (AI test case generation, https://github.com/AutomateThePlanet/Spectra) and Testimize (test data
+  optimization, https://github.com/AutomateThePlanet/Testimize)

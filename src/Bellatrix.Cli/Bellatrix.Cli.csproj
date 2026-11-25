@@ -14,14 +14,19 @@
     <PackageId>Bellatrix.Cli</PackageId>
     <Version>3.2.0</Version>
 
-    <!-- NuGet.org metadata. Authors, copyright and the repository URL come from Directory.Build.props. -->
+    <!-- NuGet.org metadata. Authors, Company, Copyright, RepositoryUrl and RepositoryType come from
+         Directory.Build.props (shared by every project); check the packed .nuspec after changing either file. -->
     <Product>BELLATRIX</Product>
+    <Title>BELLATRIX Agent CLI</Title>
     <Description>Model-free automation CLI for AI coding agents. Drives desktop (WinAppDriver), web (Selenium) and mobile (Appium) automation one JSON command at a time, and scaffolds BELLATRIX skills and subagents for Claude Code, GitHub Copilot, Cursor, Devin, Codex CLI, Gemini CLI, Antigravity CLI, Kiro CLI and OpenCode (C#, Java, TypeScript).</Description>
     <PackageTags>bellatrix;test-automation;ai-agents;cli;dotnet-tool;selenium;appium;winappdriver;claude-code;copilot;cursor;codex;gemini;kiro;opencode</PackageTags>
     <PackageProjectUrl>https://bellatrix.solutions/agent/</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>bellatrix_icon.png</PackageIcon>
+    <PackageReleaseNotes>What's new in each version: https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <!-- Repository url + commit in the .nuspec (Source Link, built into the .NET 8 SDK, supplies the commit). -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
 
     <!-- Cold-start budget: ReadyToRun on win-x64 in Release. -->
     <PublishReadyToRun Condition="'$(Configuration)' == 'Release' AND '$(RuntimeIdentifier)' == 'win-x64'">true</PublishReadyToRun>
