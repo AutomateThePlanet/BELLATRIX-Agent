@@ -17,9 +17,9 @@
 ## Login Flow Recipe
 
 ```java
-package demo.desktoptests.tests.login;
+package {project.rootNamespace}.tests.login;
 
-import demo.desktoptests.common.Constants;
+import {project.rootNamespace}.common.Constants;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.desktop.components.Button;
@@ -208,11 +208,11 @@ public void login_WithDifferentRoles_ShowsCorrectWelcome(String username, String
 ## Page Objects End-to-End Recipe
 
 ```java
-package demo.desktoptests.tests.endtoend;
+package {project.rootNamespace}.tests.endtoend;
 
-import demo.desktoptests.common.Constants;
-import demo.desktoptests.pages.loginwindow.LoginWindow;
-import demo.desktoptests.pages.mainwindow.MainWindow;
+import {project.rootNamespace}.common.Constants;
+import {project.rootNamespace}.pages.loginwindow.LoginWindow;
+import {project.rootNamespace}.pages.mainwindow.MainWindow;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.desktop.infrastructure.ExecutionApp;
@@ -277,7 +277,7 @@ import solutions.bellatrix.desktop.infrastructure.ExecutionApp;  // @ExecutionAp
 import solutions.bellatrix.desktop.infrastructure.Lifecycle;     // Lifecycle.RESTART_EVERY_TIME ...
 import solutions.bellatrix.desktop.infrastructure.junit.DesktopTest; // (or ...infrastructure.testng.DesktopTest)
 import org.junit.jupiter.api.Test;                               // @Test, @Tag, Assertions
-import demo.desktoptests.common.UiaXPathFindStrategy;            // XPath locators
-import demo.desktoptests.pages.loginwindow.LoginWindow;          // your page objects
-import demo.desktoptests.models.LoginCredentials;                // your data models (if applicable)
+import {project.rootNamespace}.common.UiaXPathFindStrategy;            // XPath locators
+import {project.rootNamespace}.pages.loginwindow.LoginWindow;          // your page objects
+import {project.rootNamespace}.models.LoginCredentials;                // your data models (if applicable)
 ```

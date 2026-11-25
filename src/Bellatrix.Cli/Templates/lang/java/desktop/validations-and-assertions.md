@@ -92,7 +92,7 @@ not locate elements with the raw driver.)
 ## Usage in a Page Object `Asserts` Class
 
 ```java
-package demo.desktoptests.pages.loginwindow;
+package {project.rootNamespace}.pages.loginwindow;
 
 import solutions.bellatrix.desktop.pages.PageAsserts;
 

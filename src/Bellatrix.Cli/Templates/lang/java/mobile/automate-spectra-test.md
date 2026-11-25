@@ -8,10 +8,10 @@ Convert the SPECTRA title to `action_Condition_ExpectedResult` (lower-camel firs
 
 Every generated test method **MUST** carry a `@ManualTestCase("TC-XXX")` annotation referencing the SPECTRA test
 case ID. BELLATRIX-Java has no built-in string variant: it is a project-local, metadata-only annotation
-(`{rootPackage}.common.ManualTestCase` — create it if missing, see `bellatrix-mobile-project-structure`):
+(`{project.rootNamespace}.common.ManualTestCase` — create it if missing, see `bellatrix-mobile-project-structure`):
 
 ```java
-package com.myproject.mobiletests.common;
+package {project.rootNamespace}.common;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -94,11 +94,11 @@ public void login_WithPassword(String password) { /* ... */ }
 ```
 
 <!-- lang:automated-by -->
-Example value: `src/test/java/com/myproject/mobiletests/android/tests/login/ShopLoginTests.java`.
+Example value: `src/test/java/{project.rootPath}/android/tests/login/ShopLoginTests.java`.
 
 <!-- lang:build -->
 ```bash
-mvn -q test-compile
+{project.buildCommand}
 ```
 
 The command the user can run afterwards (do not run it yourself):
@@ -117,17 +117,17 @@ mvn test -Dtest=ShopLoginTests#login_WithValidCredentials_OpensHome
 | TC-101 | Android | Login with valid credentials opens the home screen | login_WithValidCredentials_OpensHome | android/tests/login/ShopLoginTests.java |
 
 ### Files Created/Modified
-[CREATED] src/test/java/com/myproject/mobiletests/android/pages/login/Map.java
-[CREATED] src/test/java/com/myproject/mobiletests/android/pages/login/LoginPage.java
-[CREATED] src/test/java/com/myproject/mobiletests/android/pages/login/Asserts.java
-[CREATED] src/test/java/com/myproject/mobiletests/android/tests/login/ShopLoginTests.java
+[CREATED] src/test/java/{project.rootPath}/android/pages/login/Map.java
+[CREATED] src/test/java/{project.rootPath}/android/pages/login/LoginPage.java
+[CREATED] src/test/java/{project.rootPath}/android/pages/login/Asserts.java
+[CREATED] src/test/java/{project.rootPath}/android/tests/login/ShopLoginTests.java
 [EDITED]  tests/login/TC-101.md — added automated_by
 
 ### Coverage Impact
 - Automation coverage: 12% → 14% (+1 test automated)
 
 ### Build Status
-mvn -q test-compile succeeded
+{project.buildCommand} succeeded
 ```
 
 <!-- lang:scan-pattern -->
@@ -149,4 +149,4 @@ automatic discovery.
 
 > **Important:** do NOT use JUnit's `@ParameterizedTest` / `@CsvSource` (or TestNG data providers) for
 > traceability — they are for data-driven parameterization. Use the project's `@ManualTestCase("TC-XXX")`
-> (string-based, defined in `{rootPackage}.common.ManualTestCase`), exactly one per test method.
+> (string-based, defined in `{project.rootNamespace}.common.ManualTestCase`), exactly one per test method.

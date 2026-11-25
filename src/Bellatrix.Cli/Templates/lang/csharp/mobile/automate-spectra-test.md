@@ -75,17 +75,17 @@ public void Login_WithPassword(string password) { /* ... */ }
 ```
 
 <!-- lang:automated-by -->
-Example value: `MyProject.MobileTests/Tests/Login/ShopLoginTests.cs`.
+Example value: `{project.dir}/Tests/Login/ShopLoginTests.cs`.
 
 <!-- lang:build -->
 ```bash
-dotnet build MyProject.MobileTests/MyProject.MobileTests.csproj
+{project.buildCommand}
 ```
 
 The command the user can run afterwards (do not run it yourself):
 
 ```bash
-dotnet test MyProject.MobileTests/MyProject.MobileTests.csproj --filter "FullyQualifiedName~Login_WithValidCredentials_OpensHome" --no-build --logger "console;verbosity=detailed"
+dotnet test {project.path} --filter "FullyQualifiedName~Login_WithValidCredentials_OpensHome" --no-build --logger "console;verbosity=detailed"
 ```
 
 <!-- lang:summary -->

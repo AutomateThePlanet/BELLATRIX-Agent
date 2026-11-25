@@ -124,7 +124,7 @@ Bellatrix.Assertions.Assert.Multiple(
 ```csharp
 using Bellatrix.Mobile.Android;
 
-namespace MyProject.MobileTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginPage
 {

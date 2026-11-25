@@ -15,10 +15,10 @@ src/pages/
   index.ts                 — barrel: export * from './{pagename}/{PageName}';
 ```
 <!-- lang:target -->
-**Target project:** the BELLATRIX TypeScript web test project recorded in `bellatrix-web-project-structure` (written below as `my-web-tests/` — substitute the real folder, the one holding `package.json`, `tsconfig.json`, and `bellatrix.config.ts`).
+**Target project:** the BELLATRIX TypeScript web test project named in `.bellatrix/config.json` (`domains.web.project`; `{project.dir}/` = the folder holding its `package.json`, `tsconfig.json`, and `bellatrix.config.ts`).
 - **Path mapping** — where this skill says `Pages/`, `Sections/`, `Components/`, `Models/`, `Tests/{FeatureArea}/{FeatureArea}Tests.*`, the TypeScript project uses `src/pages/{pagename}/`, `src/sections/{sectionname}/`, `src/components/`, `src/models/`, and `tests/{featurearea}/{FeatureArea}Tests.test.ts` (test files MUST end in `.test.ts`)
 - **Imports**: framework subpaths only (`@bellatrix/web/components`, `@bellatrix/web/pages`, `@bellatrix/web/pages/decorators`, `@bellatrix/web/infrastructure`, `@bellatrix/web/test`, `@bellatrix/core/decorators`, `@bellatrix/core/assertions`); project files by relative, extension-less paths (`'../../src/pages'`)
-- **Build command**: `npx tsc --noEmit -p tsconfig.json` (type check — there is no build output)
+- **Build command**: `{project.buildCommand}` (type check — there is no build output)
 - **Language**: TypeScript (strict, TC39 decorators, ES modules); everything async — `await` every framework call
 
 <!-- lang:page-objects -->
@@ -381,10 +381,10 @@ Applies everywhere — maps, pages, asserts, sections, tests, custom components,
 
 <!-- lang:build -->
 ```bash
-npx tsc --noEmit -p tsconfig.json
+{project.buildCommand}
 ```
 
-Run it from the folder that holds `tsconfig.json`, and always through `-p` (`tsc file.ts` ignores the tsconfig and reports spurious framework errors). Exit code 0 = the build succeeds.
+Run it from the repository root; it always goes through `-p <folder>/tsconfig.json` (`tsc file.ts` ignores the tsconfig and reports spurious framework errors). Exit code 0 = the build succeeds.
 
 Common errors:
 - `TS2551 Property 'byXPath' does not exist` → `byXpath`
@@ -422,5 +422,5 @@ npx bellatrix ./tests filter --testName {testMethodName}
 
 ### Build Verification
 ```
-npx tsc --noEmit -p tsconfig.json — 0 errors
+{project.buildCommand} — 0 errors
 ```

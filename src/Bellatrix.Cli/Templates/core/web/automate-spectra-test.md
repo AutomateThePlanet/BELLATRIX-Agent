@@ -5,6 +5,12 @@ description: Skill for automating a SPECTRA manual test case as a BELLATRIX web 
 
 # Automate SPECTRA Test Case (Web)
 
+> **Project settings:** run `bellatrix config validate --json` and read `.bellatrix/config.json` before anything else.
+> `{project.*}` below are the values of `domains.web.project` there (`{project.dir}` = the folder of
+> `{project.path}`; `{project.rootPath}` = `{project.rootNamespace}` with `/` instead of `.`), and `{testCasesDir}` is
+> `domains.web.testCasesDir`, else `testCasesDir`. If the file is missing or invalid, or has no web project,
+> **stop and ask the user**, record the answer there and validate again. Never guess a project name or path.
+
 Bridge between SPECTRA manual test cases and BELLATRIX automated web system tests. Takes a SPECTRA test case (or suite) as input, automates it through the `bellatrix web` CLI workflow, and maintains full traceability via a TC-ID marker on every generated test and the SPECTRA `automated_by` field.
 
 ---

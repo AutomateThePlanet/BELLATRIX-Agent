@@ -3,10 +3,10 @@
 <!-- lang:target-project -->
 ## Target Project (C# / .NET)
 
-All generated web tests, page objects, sections, and models go into the BELLATRIX web test project recorded in `bellatrix-web-project-structure` (written here as `MyProject.WebTests` — use the real name):
+All generated web tests, page objects, sections, and models go into the BELLATRIX web test project named in `.bellatrix/config.json` (`domains.web.project`; `{project.dir}` = the folder of its `path`):
 
 ```
-MyProject.WebTests/
+{project.dir}/
   Pages/{PageName}/
     {PageName}.Map.cs
     {PageName}.Actions.cs
@@ -26,15 +26,15 @@ MyProject.WebTests/
   testFrameworkSettings.Debug.json
 ```
 
-- **Namespaces**: `MyProject.WebTests.Pages`, `.Sections`, `.Components`, `.Models`, `.Tests`
-- **Build command**: `dotnet build MyProject.WebTests/MyProject.WebTests.csproj`
+- **Namespaces**: `{project.rootNamespace}.Pages`, `.Sections`, `.Components`, `.Models`, `.Tests`
+- **Build command**: `{project.buildCommand}`
 - **Base classes**: pages `WebPage` (non-generic, `Bellatrix.Web`), sections `WebSection`, tests `WebTest` (`Bellatrix.Web.NUnit`; `Bellatrix.Web.MSTest` only if the project already uses MSTest)
 - **SPECTRA traceability attribute**: `[ManualTestCase("TC-XXX")]` from `ManualTestCaseAttribute.cs` in the project root namespace. If it does not exist yet, create it:
 
 ```csharp
 using System;
 
-namespace MyProject.WebTests;
+namespace {project.rootNamespace};
 
 /// <summary>
 /// Links an automated test to a SPECTRA manual test case for traceability.
@@ -123,6 +123,6 @@ public class CartTests : WebTest
 - **Tests use page objects only** — no `App.Components` in test methods
 - **File-scoped namespaces** (`namespace X;`), **`partial` classes** for all page/section parts, `using Bellatrix.Web;` in every file
 - **Always brace control flow:** every `if`/`else`/`for`/`foreach`/`while`/`do`/`using` body uses `{ }` on its own lines (Allman), even single statements — no `if (x) continue;`
-- **SPECTRA traceability:** `[ManualTestCase("TC-XXX")]` (NOT NUnit `[TestCase]`) on every automated SPECTRA case, plus `[Category("Smoke")]` for high priority / `[Category("Regression")]` otherwise; update the SPECTRA file's `automated_by` with `MyProject.WebTests/Tests/{FeatureArea}/{FeatureArea}Tests.cs`
-- **Build-only:** `dotnet build MyProject.WebTests/MyProject.WebTests.csproj` until it succeeds. Never run `dotnet test` yourself; give the user `dotnet test MyProject.WebTests/MyProject.WebTests.csproj --filter "FullyQualifiedName~{TestMethodName}"`
+- **SPECTRA traceability:** `[ManualTestCase("TC-XXX")]` (NOT NUnit `[TestCase]`) on every automated SPECTRA case, plus `[Category("Smoke")]` for high priority / `[Category("Regression")]` otherwise; update the SPECTRA file's `automated_by` with `{project.dir}/Tests/{FeatureArea}/{FeatureArea}Tests.cs`
+- **Build-only:** `{project.buildCommand}` until it succeeds. Never run `dotnet test` yourself; give the user `dotnet test {project.path} --filter "FullyQualifiedName~{TestMethodName}"`
 

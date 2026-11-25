@@ -2,11 +2,10 @@
 ## Target Project
 
 All generated mobile tests, page objects, sections, and models go into the BELLATRIX mobile test project
-recorded in `bellatrix-mobile-project-structure` (placeholder `MyProject.MobileTests` — use the real
-name):
+named in `.bellatrix/config.json` (`domains.mobile.project`; `{project.dir}` = the folder of its `path`):
 
 ```
-MyProject.MobileTests/
+{project.dir}/
   Pages/{ScreenName}/
     {ScreenName}.Map.cs
     {ScreenName}.Actions.cs
@@ -22,8 +21,8 @@ MyProject.MobileTests/
   testFrameworkSettings.Debug.json
 ```
 
-- **Namespaces**: `MyProject.MobileTests.Pages`, `.Pages.Shared`, `.Components`, `.Models`, `.Tests`
-- **Build command**: `dotnet build MyProject.MobileTests/MyProject.MobileTests.csproj`
+- **Namespaces**: `{project.rootNamespace}.Pages`, `.Pages.Shared`, `.Components`, `.Models`, `.Tests`
+- **Build command**: `{project.buildCommand}`
 - **Bases**: Android `AndroidPage` / `AndroidTest` / `[Android(...)]`; iOS `IOSPage` / `IOSTest` / `[IOS(...)]`
 - This project references `Bellatrix.Mobile` only (no Desktop reference; Core and Web come in transitively)
 
@@ -99,7 +98,7 @@ public class ShopCartTests : AndroidTest
   `Bellatrix.Data.Attributes`) and update the SPECTRA file's `automated_by`
 - **1 TC = 1 test method** — never stack `[ManualTestCase]` attributes, never merge TCs via `[TestCase]`
 - **Separate test files by feature** — e.g. `Tests/Login/ShopLoginTests.cs`, `Tests/Cart/ShopCartTests.cs`
-- **Build only:** `dotnet build MyProject.MobileTests/MyProject.MobileTests.csproj` until green — never
+- **Build only:** `{project.buildCommand}` until green — never
   `dotnet test` yourself
 <!-- lang:po-step -->
 3. Generate/edit page objects (3-file partial-class pattern per screen, one platform per file)

@@ -40,7 +40,7 @@ public void applyCoupon_WithExpiredCode_ShowsCouponError() { /* ... */ }
 
 **BANNED:** `@ManualTestCase("TC-210") @ManualTestCase("TC-211")` on one method (does not compile — the annotation is deliberately not `@Repeatable`; never make it repeatable); `@ParameterizedTest` / `@CsvSource` / `@MethodSource` merging several TCs.
 
-Imports: `myproject.webtests.common.ManualTestCase`, `org.junit.jupiter.api.Test`, `org.junit.jupiter.api.Tag`. TestNG projects use `@org.testng.annotations.Test(groups = "Smoke")` with the same `@ManualTestCase("TC-XXX")`.
+Imports: `{project.rootNamespace}.common.ManualTestCase`, `org.junit.jupiter.api.Test`, `org.junit.jupiter.api.Tag`. TestNG projects use `@org.testng.annotations.Test(groups = "Smoke")` with the same `@ManualTestCase("TC-XXX")`.
 
 <!-- lang:automated-by -->
 **Before:**
@@ -65,15 +65,15 @@ component: cart
 source_refs: [docs/cart.md]
 criteria: [AC-004]
 automated_by:
-  - my-project-web-tests/src/test/java/myproject/webtests/tests/cart/CartTests.java
+  - {project.dir}/src/test/java/{project.rootPath}/tests/cart/CartTests.java
 ---
 ```
 
 <!-- lang:build -->
-From the folder that holds `pom.xml` (compile only — never `mvn test` / `mvn verify`):
+From the repository root (compile only — never `mvn test` / `mvn verify`):
 
 ```bash
-mvn -q test-compile
+{project.buildCommand}
 ```
 
 Fix any build errors until the build succeeds (missing imports or `ManualTestCase`, `byXpath` → `byXPath`, the `toBeVisible().click()` generic trap, `validate*` on an unsupported component, `package` line not matching the folder). Then give the user — do not run it yourself:
@@ -92,17 +92,17 @@ mvn test -Dtest=CartTests#applyCoupon_WithValidCode_ShowsSuccessAndDiscountedTot
 | TC-210 | Apply a valid coupon in the cart | applyCoupon_WithValidCode_ShowsSuccessAndDiscountedTotal | tests/cart/CartTests.java |
 
 ### Files Created/Modified
-[CREATED] src/test/java/myproject/webtests/pages/cart/CartPage.java
-[CREATED] src/test/java/myproject/webtests/pages/cart/Map.java
-[CREATED] src/test/java/myproject/webtests/pages/cart/Asserts.java
-[CREATED] src/test/java/myproject/webtests/tests/cart/CartTests.java
+[CREATED] src/test/java/{project.rootPath}/pages/cart/CartPage.java
+[CREATED] src/test/java/{project.rootPath}/pages/cart/Map.java
+[CREATED] src/test/java/{project.rootPath}/pages/cart/Asserts.java
+[CREATED] src/test/java/{project.rootPath}/tests/cart/CartTests.java
 [EDITED]  tests/cart/TC-210.md — added automated_by
 
 ### Coverage Impact
 - Automation coverage: 12% → 14% (+1 test automated)
 
 ### Build Status
-mvn -q test-compile succeeded
+{project.buildCommand} succeeded
 
 ### Run It
 mvn test -Dtest=CartTests#applyCoupon_WithValidCode_ShowsSuccessAndDiscountedTotal
@@ -119,4 +119,4 @@ mvn test -Dtest=CartTests#applyCoupon_WithValidCode_ShowsSuccessAndDiscountedTot
 }
 ```
 
-> **Important:** Do NOT use JUnit's `@ParameterizedTest` (or TestNG's `@DataProvider`) for traceability — those parameterize data-driven tests. Use `@ManualTestCase("TC-XXX")`, the metadata-only annotation defined in `src/test/java/myproject/webtests/common/ManualTestCase.java`. If the project does not have it yet, create it first (definition in `bellatrix-web-project-structure`). The C# pattern `[ManualTestCase("{id}")]` does not match Java code.
+> **Important:** Do NOT use JUnit's `@ParameterizedTest` (or TestNG's `@DataProvider`) for traceability — those parameterize data-driven tests. Use `@ManualTestCase("TC-XXX")`, the metadata-only annotation defined in `src/test/java/{project.rootPath}/common/ManualTestCase.java`. If the project does not have it yet, create it first (definition in `bellatrix-web-project-structure`). The C# pattern `[ManualTestCase("{id}")]` does not match Java code.

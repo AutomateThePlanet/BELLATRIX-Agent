@@ -18,7 +18,7 @@ using Bellatrix.Desktop;
 using Bellatrix.Desktop.NUnit;
 using NUnit.Framework;
 
-namespace MyProject.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [App(@"C:\Program Files\MyApp\MyApp.exe", Lifecycle.RestartEveryTime)]
@@ -197,9 +197,9 @@ public void Login_WithDifferentRoles_ShowsCorrectWelcome(string username, string
 using Bellatrix.Desktop;
 using Bellatrix.Desktop.NUnit;
 using NUnit.Framework;
-using MyProject.Pages;
+using {project.rootNamespace}.Pages;
 
-namespace MyProject.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [App(@"C:\Program Files\MyApp\MyApp.exe", Lifecycle.RestartEveryTime)]
@@ -258,6 +258,6 @@ using Bellatrix.Desktop.PageObjects; // DesktopPage (Map files)
 using Bellatrix.Desktop.Untils;    // Wait.To… strategies (namespace is spelled "Untils")
 using Bellatrix.Desktop.NUnit;     // DesktopTest base (or Bellatrix.Desktop.MSTest)
 using NUnit.Framework;              // [TestFixture], [Test], [Category]
-using MyProject.Pages;              // Your page objects
-using MyProject.Models;             // Your data models (if applicable)
+using {project.rootNamespace}.Pages;              // Your page objects
+using {project.rootNamespace}.Models;             // Your data models (if applicable)
 ```

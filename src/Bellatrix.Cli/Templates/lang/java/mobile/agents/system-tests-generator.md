@@ -2,16 +2,15 @@
 ## Target Project
 
 All generated mobile tests, page objects, sections, and models go into the BELLATRIX-Java mobile test project
-recorded in `bellatrix-mobile-project-structure` (Maven; placeholder `my-mobile-tests`, root package
-`com.myproject.mobiletests` — use the real ones):
+named in `.bellatrix/config.json` (`domains.mobile.project`: folder `{project.dir}`, root package `{project.rootNamespace}`):
 
 ```
-my-mobile-tests/
+{project.dir}/
   pom.xml
   src/main/resources/
     application.properties
     testFrameworkSettings.dev.json
-  src/test/java/{rootPath}/
+  src/test/java/{project.rootPath}/
     common/
       Constants.java
       ManualTestCase.java
@@ -29,9 +28,9 @@ my-mobile-tests/
       … same layout
 ```
 
-- **Packages**: `{rootPackage}.android.pages.<screen>`, `.android.pages.shared`, `.android.components`,
-  `.android.tests.<featurearea>` (and `{rootPackage}.ios.…`), plus `{rootPackage}.models`, `{rootPackage}.common`
-- **Build command**: `mvn -q test-compile`
+- **Packages**: `{project.rootNamespace}.android.pages.<screen>`, `.android.pages.shared`, `.android.components`,
+  `.android.tests.<featurearea>` (and `{project.rootNamespace}.ios.…`), plus `{project.rootNamespace}.models`, `{project.rootNamespace}.common`
+- **Build command**: `{project.buildCommand}`
 - **Bases**: Android `AndroidPage<Map, Asserts>` / `AndroidTest` / `@ExecutionApp` (`solutions.bellatrix.android.*`);
   iOS `IOSPage<Map, Asserts>` / `IOSTest` / `@ExecutionApp` (`solutions.bellatrix.ios.*`)
 - This project depends on `solutions.bellatrix:bellatrix.android` and/or `bellatrix.ios` `1.0` (test scope) — no
@@ -108,7 +107,7 @@ public class ShopCartTests extends AndroidTest {
   `app().create().allBy…(…).isEmpty()` with `WebDriverWait` — never `toNotExist().waitToBe()`
 - **Never drop to the raw driver:** no `getWrappedAndroidDriver().findElement(...)`, no `AppiumBy.*` / `By.*` in
   project code — use `create().by…` / `allBy…` or a relative-XPath child factory on a parent component
-- **Custom components** go in `{rootPackage}.android.components` / `.ios.components`: (a) extend the closest built-in
+- **Custom components** go in `{project.rootNamespace}.android.components` / `.ios.components`: (a) extend the closest built-in
   (`Button`, `ComboBox`, …) to add behavior, or (b) override its public methods; use them in `Map` classes via
   `create().byDescription(MyComponent.class, "…")`
 - **Always brace control flow:** never `if (x) return;` or `if (row == null) continue;` without braces
@@ -121,9 +120,9 @@ public class ShopCartTests extends AndroidTest {
 - **Touch:** `app().touch().swipe(...)` executes immediately; queued `tap/press/…` chains need `perform()`
 - **Tests use page objects only** — no `app().create()` in test methods
 - **SPECTRA traceability:** `@ManualTestCase("TC-XXX")` (project-local string annotation in
-  `{rootPackage}.common.ManualTestCase` — create it if missing; NOT `@ParameterizedTest` / `@CsvSource`) and update
+  `{project.rootNamespace}.common.ManualTestCase` — create it if missing; NOT `@ParameterizedTest` / `@CsvSource`) and update
   the SPECTRA file's `automated_by`
 - **1 TC = 1 test method** — `@ManualTestCase` is not repeatable; never merge TCs via parameterized tests
 - **Separate test files by feature** — e.g. `android/tests/login/ShopLoginTests.java`,
   `android/tests/cart/ShopCartTests.java`
-- **Build only:** `mvn -q test-compile` until green — never `mvn test` yourself
+- **Build only:** `{project.buildCommand}` until green — never `mvn test` yourself

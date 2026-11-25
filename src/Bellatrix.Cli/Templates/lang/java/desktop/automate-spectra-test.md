@@ -2,8 +2,8 @@
 
 Bridge between SPECTRA manual test cases and BELLATRIX-Java automated system tests. Takes a SPECTRA test case (or suite) as input, automates it through the BELLATRIX Desktop bellatrix desktop CLI workflow, and maintains full traceability via `@ManualTestCase("TC-XXX")` annotations and SPECTRA `automated_by` fields.
 
-**Target project:** `demo-desktop-tests` (Maven, JUnit 5, `solutions.bellatrix:bellatrix.desktop:1.0`), root package
-`demo.desktoptests`, sources under `src/test/java/demo/desktoptests/`. See `bellatrix-desktop-project-structure`.
+**Target project:** `{project.dir}` (Maven, JUnit 5, `solutions.bellatrix:bellatrix.desktop:1.0`), root package
+`{project.rootNamespace}`, sources under `src/test/java/{project.rootPath}/`. See `bellatrix-desktop-project-structure`.
 
 ---
 
@@ -125,10 +125,10 @@ Convert the SPECTRA title to a Java method name (`action_Condition_ExpectedResul
 Every generated test method **MUST** carry a `@ManualTestCase("TC-XXX")` annotation that references the SPECTRA test case ID. This is a project-defined, metadata-only annotation — BELLATRIX-Java has no built-in string `ManualTestCase`, and it is NOT JUnit's `@Tag` (categories), `@DisplayName` (report text) or `@ParameterizedTest` (data-driven parameterization). It enables SPECTRA's automation coverage scanning.
 
 If the project does not have the annotation yet, create it once in the `common` package
-(`src/test/java/demo/desktoptests/common/ManualTestCase.java`) — it carries metadata only:
+(`src/test/java/{project.rootPath}/common/ManualTestCase.java`) — it carries metadata only:
 
 ```java
-package demo.desktoptests.common;
+package {project.rootNamespace}.common;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -143,11 +143,11 @@ public @interface ManualTestCase {
 ```
 
 ```java
-package demo.desktoptests.tests.arithmetic;
+package {project.rootNamespace}.tests.arithmetic;
 
-import demo.desktoptests.common.Constants;
-import demo.desktoptests.common.ManualTestCase;
-import demo.desktoptests.pages.calculatorwindow.CalculatorWindow;
+import {project.rootNamespace}.common.Constants;
+import {project.rootNamespace}.common.ManualTestCase;
+import {project.rootNamespace}.pages.calculatorwindow.CalculatorWindow;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.desktop.infrastructure.ExecutionApp;
@@ -266,7 +266,7 @@ component: standard-calculator
 source_refs: [docs/standard-calculator.md]
 criteria: [AC-001, AC-003]
 automated_by:
-  - demo-desktop-tests/src/test/java/demo/desktoptests/tests/arithmetic/CalculatorArithmeticTests.java
+  - {project.dir}/src/test/java/{project.rootPath}/tests/arithmetic/CalculatorArithmeticTests.java
 ---
 ```
 
@@ -291,10 +291,10 @@ The automation coverage percentage should increase after linking.
 ## Phase 4: Verify Build
 
 ```bash
-mvn -q -f demo-desktop-tests/pom.xml test-compile
+{project.buildCommand}
 ```
 
-(Equivalent to `mvn -q test-compile` from the folder that holds `pom.xml`.) Compile only — never `mvn test` /
+(Run it from the repository root.) Compile only — never `mvn test` /
 `mvn verify`. Fix any build errors until the build succeeds.
 
 ---
@@ -305,8 +305,8 @@ After the build succeeds, **STOP**. Do NOT run the generated test(s). The user r
 
 ### What to do
 
-1. Verify the build succeeds with `mvn -q -f demo-desktop-tests/pom.xml test-compile`
-2. Post a concise summary: TC-ID(s) automated, files created/edited, command the user can run to execute the test (e.g. `mvn -f demo-desktop-tests/pom.xml test -Dtest=CalculatorArithmeticTests#addition_OfTwoPositiveIntegers_DisplaysCorrectResult`), and any assumptions you made (e.g., locator choices, lifecycle picked, custom components added)
+1. Verify the build succeeds with `{project.buildCommand}`
+2. Post a concise summary: TC-ID(s) automated, files created/edited, command the user can run to execute the test (e.g. `mvn -f {project.path} test -Dtest=CalculatorArithmeticTests#addition_OfTwoPositiveIntegers_DisplaysCorrectResult`), and any assumptions you made (e.g., locator choices, lifecycle picked, custom components added)
 3. Wait for the user to report results
 
 ### What NOT to do
@@ -344,10 +344,10 @@ After completing all phases, report:
 | TC-142 | Addition of two positive integers | addition_OfTwoPositiveIntegers_DisplaysCorrectResult | tests/arithmetic/CalculatorArithmeticTests.java |
 
 ### Files Created/Modified
-[CREATED] src/test/java/demo/desktoptests/pages/calculatorwindow/Map.java
-[CREATED] src/test/java/demo/desktoptests/pages/calculatorwindow/CalculatorWindow.java
-[CREATED] src/test/java/demo/desktoptests/pages/calculatorwindow/Asserts.java
-[CREATED] src/test/java/demo/desktoptests/tests/arithmetic/CalculatorArithmeticTests.java
+[CREATED] src/test/java/{project.rootPath}/pages/calculatorwindow/Map.java
+[CREATED] src/test/java/{project.rootPath}/pages/calculatorwindow/CalculatorWindow.java
+[CREATED] src/test/java/{project.rootPath}/pages/calculatorwindow/Asserts.java
+[CREATED] src/test/java/{project.rootPath}/tests/arithmetic/CalculatorArithmeticTests.java
 [EDITED]  tests/standard/TC-142.md — added automated_by
 
 ### Coverage Impact
@@ -372,7 +372,7 @@ Suite automation = running the single-test workflow (Phase 0 → 1 → 2 → 3 �
 - Writing `Map`/page/`Asserts` classes without having run the CLI for THAT specific test case first
 - Reading all test case files upfront before starting any CLI session
 - Skipping the CLI run for a test case because "we already have the XPaths from another test case" — **different TCs produce different error messages, dialog text, confirmation states, and edge conditions; only live CLI execution reveals them**
-- Running `mvn test` yourself — the USER runs tests and returns with feedback. Build-only verification (`mvn -q test-compile`) is your job
+- Running `mvn test` yourself — the USER runs tests and returns with feedback. Build-only verification (`{project.buildCommand}`) is your job
 - Entering speculative fix loops (locator guess → rerun → new guess → rerun). Fixes happen after the user reports what actually failed
 
 ### Step 1: List and Filter
@@ -394,8 +394,8 @@ Run the **complete single-test workflow** for this one test case before moving t
 
 1. **Phase 0**: Read THIS test case file only (`test-cases/{suite}/TC-{id}.md`)
 2. **Phase 1 (MANDATORY — no shortcuts)**: `bellatrix desktop start-session` → `bellatrix desktop snapshot` → execute ALL steps via bellatrix desktop CLI commands → observe actual UI text/state → validate expected result → `bellatrix desktop close-session`. Record the ACTUAL text of any error messages, dialogs, and result displays as observed — do not assume they match a sibling TC
-3. **Phase 2**: Generate/edit page objects and test code with `@ManualTestCase("TC-XXX")`. Create a new page object package (`pages/{window}/` with `{Window}.java`, `Map.java`, `Asserts.java`) when a new window/view is encountered. Add custom components under `src/test/java/demo/desktoptests/components/` if BELLATRIX built-ins don't fit. Prefer the direct factories `byAutomationId` / `byName` over `by(T.class, new UiaXPathFindStrategy(...))` for single-attribute locators (never `byXPath` — broken in BELLATRIX-Java 1.0)
-4. **Phase 4**: `mvn -q test-compile` and fix any BUILD errors (not test failures — you don't run tests)
+3. **Phase 2**: Generate/edit page objects and test code with `@ManualTestCase("TC-XXX")`. Create a new page object package (`pages/{window}/` with `{Window}.java`, `Map.java`, `Asserts.java`) when a new window/view is encountered. Add custom components under `src/test/java/{project.rootPath}/components/` if BELLATRIX built-ins don't fit. Prefer the direct factories `byAutomationId` / `byName` over `by(T.class, new UiaXPathFindStrategy(...))` for single-attribute locators (never `byXPath` — broken in BELLATRIX-Java 1.0)
+4. **Phase 4**: `{project.buildCommand}` and fix any BUILD errors (not test failures — you don't run tests)
 5. **Phase 3**: Update THIS test case's `automated_by` frontmatter
 6. Continue to the next test case
 
@@ -432,7 +432,7 @@ SPECTRA's automation coverage scanner uses `scan_patterns` from `spectra.config.
 
 This means as long as you write `@ManualTestCase("TC-142")` (exactly that spelling — no `value =`, no extra spaces), SPECTRA will automatically detect the link during `spectra ai analyze --coverage` — even without manually editing `automated_by`. The manual edit in Phase 3 provides an explicit link; the scan pattern provides automatic discovery.
 
-> **Important:** Do NOT use JUnit's `@Tag("TC-XXX")`, `@DisplayName("TC-XXX …")` or a `@ParameterizedTest` argument for traceability — `@Tag` is for categories (Smoke/Regression) and `@ParameterizedTest` for data-driven variation. Use `@ManualTestCase("TC-XXX")` instead, the project-defined metadata-only annotation in `src/test/java/demo/desktoptests/common/ManualTestCase.java`.
+> **Important:** Do NOT use JUnit's `@Tag("TC-XXX")`, `@DisplayName("TC-XXX …")` or a `@ParameterizedTest` argument for traceability — `@Tag` is for categories (Smoke/Regression) and `@ParameterizedTest` for data-driven variation. Use `@ManualTestCase("TC-XXX")` instead, the project-defined metadata-only annotation in `src/test/java/{project.rootPath}/common/ManualTestCase.java`.
 
 ---
 

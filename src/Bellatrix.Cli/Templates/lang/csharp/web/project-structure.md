@@ -1,8 +1,8 @@
-# MyProject.WebTests — Current Project Structure
+# {project.name} — Current Project Structure
 
 This file is the authoritative as-is snapshot of what exists in the web test project. Use it to decide whether to CREATE a new file/folder or EDIT an existing one. It is NOT aspirational — only add an entry after the folder/file is actually on disk.
 
-> **First use:** replace `MyProject.WebTests` with the real project name/path and fill the tables from the actual tree (search `Pages/*/`, `Sections/*/`, `Components/*.cs`, `Models/*.cs`, `Tests/**/*.cs`).
+> **First use:** `{project.*}` are the values of `domains.web.project` in `.bellatrix/config.json`; keep them. Fill the tables from the actual tree of `{project.dir}` (search `Pages/*/`, `Sections/*/`, `Components/*.cs`, `Models/*.cs`, `Tests/**/*.cs`).
 >
 > **Maintenance rule:** whenever you add a page object folder, section, custom component, model, or tests sub-folder during a generation workflow, update the matching table here in the same change. The agent owns keeping this tree accurate.
 
@@ -11,8 +11,8 @@ This file is the authoritative as-is snapshot of what exists in the web test pro
 ## Top-Level Layout
 
 ```
-MyProject.WebTests/
-├─ MyProject.WebTests.csproj
+{project.dir}/
+├─ {project.name}.csproj
 ├─ TestsInitialize.cs                 # NUnit [SetUpFixture] — disposes the BELLATRIX App after the run
 ├─ ManualTestCaseAttribute.cs         # [ManualTestCase("TC-XXX")] for SPECTRA traceability
 ├─ testFrameworkSettings.Debug.json   # webSettings — browser, lifecycle, timeouts, (grid) url
@@ -80,7 +80,7 @@ public class TestsInitialize
 ```csharp
 using System;
 
-namespace MyProject.WebTests;
+namespace {project.rootNamespace};
 
 /// <summary>
 /// Links an automated test to a SPECTRA manual test case for traceability.
@@ -99,7 +99,7 @@ public sealed class ManualTestCaseAttribute : Attribute
 }
 ```
 
-Test classes in `MyProject.WebTests.Tests` (or deeper) see it without a `using`, because it lives in the enclosing namespace.
+Test classes in `{project.rootNamespace}.Tests` (or deeper) see it without a `using`, because it lives in the enclosing namespace.
 
 ---
 
@@ -111,7 +111,7 @@ Each page gets its own folder with `.Map.cs` (locators), `.Actions.cs` (`: WebPa
 |--------|-----|---------|
 | _(none yet — add a row when you create a page)_ | | |
 
-**Namespace:** `MyProject.WebTests.Pages`
+**Namespace:** `{project.rootNamespace}.Pages`
 **Base class:** `WebPage`
 
 ---
@@ -124,7 +124,7 @@ Sections are 3-file partial classes inheriting `WebSection` (NOT `WebPage`) that
 |--------|---------|---------|
 | _(none yet)_ | | |
 
-**Namespace:** `MyProject.WebTests.Sections`
+**Namespace:** `{project.rootNamespace}.Sections`
 **When to CREATE a new section:** when two or more pages expose the same locator set AND the same workflow around it. A single-page duplicate stays on the page as a region.
 
 ---
@@ -137,7 +137,7 @@ Custom BELLATRIX components live here when a built-in lacks behavior or needs an
 |------|---------|-----|
 | _(none yet)_ | | |
 
-**Namespace:** `MyProject.WebTests.Components`
+**Namespace:** `{project.rootNamespace}.Components`
 **Usage in Map files:** `App.Components.CreateByCss<MyComponent>("[data-testid='…']")`.
 
 ---
@@ -150,7 +150,7 @@ Plain data classes and enums shared across page objects. No component or BELLATR
 |------|---------|
 | _(none yet)_ | |
 
-**Namespace:** `MyProject.WebTests.Models`
+**Namespace:** `{project.rootNamespace}.Models`
 
 ---
 
@@ -162,7 +162,7 @@ One file per feature area. One test method per SPECTRA TC. Every traced method c
 |--------|------|--------------|
 | _(none yet)_ | | |
 
-**Namespace:** `MyProject.WebTests.Tests` (or nested by folder — check an existing file before deciding)
+**Namespace:** `{project.rootNamespace}.Tests` (or nested by folder — check an existing file before deciding)
 
 ---
 

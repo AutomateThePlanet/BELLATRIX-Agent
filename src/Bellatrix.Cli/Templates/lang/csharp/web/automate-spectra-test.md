@@ -64,19 +64,19 @@ component: cart
 source_refs: [docs/cart.md]
 criteria: [AC-004]
 automated_by:
-  - MyProject.WebTests/Tests/Cart/CartTests.cs
+  - {project.dir}/Tests/Cart/CartTests.cs
 ---
 ```
 
 <!-- lang:build -->
 ```bash
-dotnet build MyProject.WebTests/MyProject.WebTests.csproj
+{project.buildCommand}
 ```
 
 Fix any build errors until the build succeeds (missing `using Bellatrix.Web;`, `CreateByXPath` → `CreateByXpath`, missing `override`, `Validate*` on an unsupported component). Then give the user — do not run it yourself:
 
 ```bash
-dotnet test MyProject.WebTests/MyProject.WebTests.csproj --filter "FullyQualifiedName~ApplyCoupon_WithValidCode_ShowsSuccessAndDiscountedTotal" --no-build --logger "console;verbosity=detailed"
+dotnet test {project.path} --filter "FullyQualifiedName~ApplyCoupon_WithValidCode_ShowsSuccessAndDiscountedTotal" --no-build --logger "console;verbosity=detailed"
 ```
 
 <!-- lang:summary -->
@@ -102,7 +102,7 @@ dotnet test MyProject.WebTests/MyProject.WebTests.csproj --filter "FullyQualifie
 dotnet build succeeded
 
 ### Run It
-dotnet test MyProject.WebTests/MyProject.WebTests.csproj --filter "FullyQualifiedName~ApplyCoupon_WithValidCode_ShowsSuccessAndDiscountedTotal"
+dotnet test {project.path} --filter "FullyQualifiedName~ApplyCoupon_WithValidCode_ShowsSuccessAndDiscountedTotal"
 ```
 
 <!-- lang:scan-pattern -->
@@ -116,5 +116,5 @@ dotnet test MyProject.WebTests/MyProject.WebTests.csproj --filter "FullyQualifie
 }
 ```
 
-> **Important:** Do NOT use NUnit's `[TestCase("TC-XXX")]` for traceability — that attribute parameterizes data-driven tests. Use `[ManualTestCase("TC-XXX")]`, the metadata-only attribute defined in `MyProject.WebTests/ManualTestCaseAttribute.cs`. If the project does not have it yet, create it first (definition in `bellatrix-web-project-structure`).
+> **Important:** Do NOT use NUnit's `[TestCase("TC-XXX")]` for traceability — that attribute parameterizes data-driven tests. Use `[ManualTestCase("TC-XXX")]`, the metadata-only attribute defined in `{project.dir}/ManualTestCaseAttribute.cs`. If the project does not have it yet, create it first (definition in `bellatrix-web-project-structure`).
 

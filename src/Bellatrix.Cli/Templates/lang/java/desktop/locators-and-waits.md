@@ -16,7 +16,7 @@ Each has an `allBy...` twin returning `java.util.List<T>`. There is **no `byId`*
 **Never `byXPath` / `allByXPath` in BELLATRIX-Java 1.0** — the built-in XPath strategy looks elements up with
 `By.tagName(xpath)` on its final search, so `byXPath` fails after the wait and `allByXPath` returns an empty list.
 Every XPath goes through the project's `UiaXPathFindStrategy` (code in `bellatrix-desktop-components`; create it once
-in `{rootPackage}.common`) via `create().by(...)` / `create().allBy(...)`.
+in `{project.rootNamespace}.common`) via `create().by(...)` / `create().allBy(...)`.
 
 ---
 

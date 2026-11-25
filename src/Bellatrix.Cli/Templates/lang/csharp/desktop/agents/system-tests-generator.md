@@ -48,10 +48,10 @@ Applications with splash screens or loading screens require special handling. Wh
 
 ## Target Project
 
-All generated desktop tests, page objects, and models go into the **`Demo.DesktopTests`** project:
+All generated desktop tests, page objects, and models go into the **`{project.name}`** project:
 
 ```
-Demo.DesktopTests/
+{project.dir}/
   Pages/{WindowName}/
     {WindowName}.Map.cs
     {WindowName}.Actions.cs
@@ -64,8 +64,8 @@ Demo.DesktopTests/
   testFrameworkSettings.Debug.json
 ```
 
-- **Namespace**: `Demo.DesktopTests.Pages`, `Demo.DesktopTests.Models`, `Demo.DesktopTests.Tests`
-- **Build command**: `dotnet build Demo.DesktopTests/Demo.DesktopTests.csproj`
+- **Namespace**: `{project.rootNamespace}.Pages`, `{project.rootNamespace}.Models`, `{project.rootNamespace}.Tests`
+- **Build command**: `{project.buildCommand}`
 - This project references only BELLATRIX Desktop (no Web dependency)
 
 ---
@@ -139,7 +139,7 @@ All BELLATRIX desktop documentation is available as the `bellatrix-desktop-*` sk
 
 | Skill | File | Content |
 |-------|------|---------|
-| **Project Structure (read FIRST)** | `bellatrix-desktop-project-structure` | **As-is tree of `Demo.DesktopTests/`. Ground every CREATE vs EDIT decision here. Update this file when you add a page object folder, component, or tests folder.** |
+| **Project Structure (read FIRST)** | `bellatrix-desktop-project-structure` | **As-is tree of `{project.dir}/`. Ground every CREATE vs EDIT decision here. Update this file when you add a page object folder, component, or tests folder.** |
 | Desktop Components | `bellatrix-desktop-components` | Component types, methods, factory methods |
 | Desktop Locators & Waits | `bellatrix-desktop-locators-and-waits` | Find strategies, XPath patterns, waits |
 | Desktop Validations | `bellatrix-desktop-validations-and-assertions` | Validate* methods, assertions |
@@ -228,7 +228,7 @@ public class CalculatorArithmeticTests : DesktopTest
 - **Prefer direct factory methods over XPath**: When the locator is `//X[@AutomationId='id']`, use `App.Components.CreateByAutomationId<T>("id")` — NOT `CreateByXPath<T>("//X[@AutomationId='id']")`. Same for `@Name` → `CreateByName`, `@ClassName` → `CreateByClass`. Reserve `CreateByXPath` for compound/structural locators only (parent-child, sibling, multiple predicates, dynamic fragments)
 - **Create new page objects when needed**: If the scenario opens a dialog, wizard page, sub-window, or distinct view that doesn't have a page object yet, CREATE a new 3-file page object folder (`Pages/{WindowName}/`) rather than stuffing locators into an unrelated page. One window/view = one page object
 - **Never drop to raw driver for element lookup**: Inside page objects, actions, custom components, or tests, ALWAYS locate elements via BELLATRIX factories (`App.Components.CreateByXPath<T>`, `CreateByAutomationId<T>`, `CreateAllByXPath<T>`, etc.). NEVER call `driver.FindElement(s)(By.XPath(...))`, `WrappedDriver.FindElement(...)`, or any raw Selenium/WinAppDriver `By.*` locator from test-project code. Raw driver lookups bypass waits, validate methods, logging, and healing — they produce brittle tests. Example: replace `driver.FindElements(By.XPath($"//DataItem[@Name='{day}']"))` with `App.Components.CreateAllByXPath<Button>($"//DataItem[@Name='{day}']")`. Inside custom components that don't have `App` in scope, use `new App().Components.Create*` (BELLATRIX resolves the active session). Raw driver access is acceptable ONLY for things BELLATRIX doesn't expose (e.g., window-handle switching) — never for finding or clicking elements
-- **Custom components when BELLATRIX isn't enough**: If an existing BELLATRIX component (`Button`, `Label`, `ComboBox`, etc.) lacks a behavior you need, or behaves incorrectly for a specific control, add a custom component under `Demo.DesktopTests/Components/`. Two options: (a) a **new component** inheriting from `Bellatrix.Desktop.Component` (or a concrete component) exposing the missing methods/properties; (b) a **child component** inheriting from an existing BELLATRIX component and overriding virtual members to change behavior. Use these custom components in the Map files via `App.Components.CreateByAutomationId<CustomComponent>("id")` etc. Do NOT monkey-patch BELLATRIX source — extend in the test project
+- **Custom components when BELLATRIX isn't enough**: If an existing BELLATRIX component (`Button`, `Label`, `ComboBox`, etc.) lacks a behavior you need, or behaves incorrectly for a specific control, add a custom component under `{project.dir}/Components/`. Two options: (a) a **new component** inheriting from `Bellatrix.Desktop.Component` (or a concrete component) exposing the missing methods/properties; (b) a **child component** inheriting from an existing BELLATRIX component and overriding virtual members to change behavior. Use these custom components in the Map files via `App.Components.CreateByAutomationId<CustomComponent>("id")` etc. Do NOT monkey-patch BELLATRIX source — extend in the test project
 - **Always brace control flow**: Every `if`, `else`, `for`, `foreach`, `while`, `do`, and `using` block MUST use `{ }` — even for single-statement bodies. Braces on their own line (Allman style). NEVER write `if (handle == mainHandle) continue;` or `if (x) return;` without braces. This is non-negotiable — applies to page objects, actions, assertions, tests, helpers, and custom components alike.
 - **File-scoped namespaces**: `namespace X;`
 - **Partial classes**: All page object files
@@ -241,6 +241,6 @@ public class CalculatorArithmeticTests : DesktopTest
 - **SPECTRA traceability**: When automating SPECTRA test cases, ALWAYS include `[ManualTestCase("TC-XXX")]` attribute (NOT NUnit's `[TestCase]`) and update the SPECTRA test file's `automated_by` field
 - **1 TC = 1 test method**: Every SPECTRA test case produces exactly one test method. Never combine multiple TCs into one parameterized method. Never stack multiple `[ManualTestCase]` attributes on one method
 - **Separate test files by feature**: Do NOT put all tests into one file. Organize by feature area based on the test case's tags (e.g., `CalculatorArithmeticTests.cs`, `CalculatorMemoryTests.cs`, `CalculatorHistoryTests.cs`). Each file should cover one coherent feature area
-- **Build-only verification + hand off (NO speculative fix loops)**: After generating or editing code, run `dotnet build Demo.DesktopTests/Demo.DesktopTests.csproj` and fix any BUILD errors until the build succeeds. Then STOP. Do NOT run the tests yourself and do NOT enter a fix-and-retry loop. Ping the user with a short summary of what was generated (files created/edited, TC-IDs covered) and ask them to run the tests and report feedback. Only when the user returns with specific failures or guidance do you make targeted fixes. This applies to single-test AND suite-wide automation. Rationale: the user prefers to give guidance on real failures rather than watch multiple speculative iterations. Exception: if the user has explicitly told you "run it and fix until green" in the current conversation, follow that instruction
+- **Build-only verification + hand off (NO speculative fix loops)**: After generating or editing code, run `{project.buildCommand}` and fix any BUILD errors until the build succeeds. Then STOP. Do NOT run the tests yourself and do NOT enter a fix-and-retry loop. Ping the user with a short summary of what was generated (files created/edited, TC-IDs covered) and ask them to run the tests and report feedback. Only when the user returns with specific failures or guidance do you make targeted fixes. This applies to single-test AND suite-wide automation. Rationale: the user prefers to give guidance on real failures rather than watch multiple speculative iterations. Exception: if the user has explicitly told you "run it and fix until green" in the current conversation, follow that instruction
 - **Session cleanup is mandatory**: ALWAYS call `bellatrix desktop close-session` before finishing the task/response, even when execution fails or is interrupted
 - **Splash screen recovery**: If any tool call returns "UI no longer available" or "the parent window has closed", call `bellatrix desktop reattach-session` with the main window title before retrying — do NOT create a new session or give up

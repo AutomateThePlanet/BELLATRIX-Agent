@@ -1,10 +1,11 @@
-# Demo.DesktopTests — Current Project Structure
+# {project.name} — Current Project Structure
 
 This file is the authoritative as-is snapshot of what exists in the test project. Use it to decide whether to CREATE a new file/folder or EDIT an existing one. It is NOT aspirational — only add an entry after the folder/file is actually on disk.
 
-> **Fresh project?** The tree below is the reference layout of the BELLATRIX demo project. If a folder or file listed
-> here does not exist in your repo, treat it as the target layout: CREATE it (do not assume it exists), then replace
-> this tree with what is really on disk.
+> **First use:** `{project.*}` are the values of `domains.desktop.project` in `.bellatrix/config.json`; keep them.
+> The tables below are an example (the Windows Calculator). Scan `{project.dir}` and replace them with what is really
+> on disk. If a folder or file listed here does not exist yet, treat the tree as the target layout: CREATE it (do not
+> assume it exists), then record what is really there.
 
 > **Maintenance rule:** Whenever you add a new page object folder, custom component, model, or tests sub-folder as part of a generation workflow, update the corresponding section of this file in the same commit. The agent owns keeping this tree accurate.
 
@@ -13,8 +14,8 @@ This file is the authoritative as-is snapshot of what exists in the test project
 ## Top-Level Layout
 
 ```
-Demo.DesktopTests/
-├─ Demo.DesktopTests.csproj
+{project.dir}/
+├─ {project.name}.csproj
 ├─ TestsInitialize.cs                 # NUnit [SetUpFixture] — BELLATRIX bootstrap
 ├─ ManualTestCaseAttribute.cs         # [ManualTestCase("TC-XXX")] for SPECTRA traceability
 ├─ testFrameworkSettings.Debug.json   # BELLATRIX config — lifecycle, timeouts, app path
@@ -46,7 +47,7 @@ Each window/view gets its own folder with three partial class files: `.Map.cs` (
 | `Pages/ScientificCalculatorWindow/` | Scientific Calculator mode — DEG button, trig flyout (sin/cos/tan), scientific functions |
 | `Pages/UnitConverterWindow/` | Unit Converter mode — category selector, two value fields, two unit ComboBoxes |
 
-**Namespace:** `Demo.DesktopTests.Pages`
+**Namespace:** `{project.rootNamespace}.Pages`
 **Base class:** `DesktopPage`
 
 ---
@@ -59,7 +60,7 @@ Sections are plain classes (NOT `DesktopPage`) that group locators and workflows
 |------|---------|---------|
 | `Pages/Shared/NumberPadSection.cs` | `CalculatorWindow`, `UnitConverterWindow` | Digits 0–9, decimal separator, and digit-entry helpers (`GetDigitButton`, `TypeCharacter`, `EnterNumber`, `EnterDecimalNumber`) — both windows share the same `numXButton` / `decimalSeparatorButton` AutomationIds |
 
-**Namespace:** `Demo.DesktopTests.Pages.Shared`
+**Namespace:** `{project.rootNamespace}.Pages.Shared`
 **When to CREATE a new section:** when two or more windows expose the same locator set AND the same workflow around it. A single-window duplicate stays on the window.
 
 ---
@@ -72,7 +73,7 @@ Custom BELLATRIX components live here when a built-in is missing behavior or nee
 |------|---------|-----|
 | `Components/WinUiComboBox.cs` | `ComboBox` | Overrides `SelectByText` to click-expand + XPath-lookup for WinUI3 dropdown items (the default `windows:select` ExecuteScript path is unreliable on WinUI3 flyouts) |
 
-**Namespace:** `Demo.DesktopTests.Components`
+**Namespace:** `{project.rootNamespace}.Components`
 **Usage in Map files:** `App.Components.CreateByAutomationId<WinUiComboBox>("...")`.
 
 ---
@@ -98,7 +99,7 @@ Plain data classes and enums shared across page objects. No component or BELLATR
 | `Models/TimeUnit.cs` | Time units |
 | `Models/WeightUnit.cs` | Weight / mass units |
 
-**Namespace:** `Demo.DesktopTests.Models`
+**Namespace:** `{project.rootNamespace}.Models`
 
 ---
 
@@ -121,7 +122,7 @@ One file per feature area. One test method per SPECTRA TC. All methods carry `[M
 | `Tests/UnitConverter/` | `UnitConverterConversionTests.cs` | Unit conversion correctness per category |
 | `Tests/UnitConverter/` | `UnitConverterInteractionTests.cs` | Unit Converter UI interactions (category/unit selection, field focus) |
 
-**Namespace:** `Demo.DesktopTests.Tests` (or nested by folder if preferred — check the file before deciding)
+**Namespace:** `{project.rootNamespace}.Tests` (or nested by folder if preferred — check the file before deciding)
 
 ---
 

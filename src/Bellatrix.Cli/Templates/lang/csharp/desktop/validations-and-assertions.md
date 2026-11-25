@@ -72,7 +72,7 @@ For a `ListItem`, read `InnerText` / `IsDisabled` and assert with NUnit instead.
 ```csharp
 using Bellatrix.Desktop;
 
-namespace Demo.DesktopTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginWindow
 {

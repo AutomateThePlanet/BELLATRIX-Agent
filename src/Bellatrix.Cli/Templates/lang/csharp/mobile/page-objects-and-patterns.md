@@ -8,7 +8,7 @@
 
 ```csharp
 // CORRECT — file-scoped namespace (no braces)
-namespace MyProject.MobileTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginPage : AndroidPage
 {
@@ -16,7 +16,7 @@ public partial class LoginPage : AndroidPage
 }
 
 // WRONG — block-scoped namespace
-namespace MyProject.MobileTests.Pages
+namespace {project.rootNamespace}.Pages
 {
     public partial class LoginPage : AndroidPage { }
 }
@@ -96,7 +96,7 @@ folders (or separate test projects, as the BELLATRIX samples do) — they cannot
 using Bellatrix.Mobile.Android;
 using Bellatrix.Mobile.PageObjects;
 
-namespace MyProject.MobileTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginPage : AndroidPage
 {
@@ -129,9 +129,9 @@ public partial class LoginPage : AndroidPage
 
 ```csharp
 using Bellatrix.Mobile.Android;
-using MyProject.MobileTests.Models;
+using {project.rootNamespace}.Models;
 
-namespace MyProject.MobileTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginPage
 {
@@ -168,7 +168,7 @@ public partial class LoginPage
 ```csharp
 using Bellatrix.Mobile.Android;
 
-namespace MyProject.MobileTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginPage
 {
@@ -201,7 +201,7 @@ public partial class LoginPage
 using Bellatrix.Mobile.IOS;
 using Bellatrix.Mobile.PageObjects;
 
-namespace MyProject.MobileTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginPage : IOSPage
 {
@@ -305,7 +305,7 @@ using Bellatrix;
 using Bellatrix.Mobile;
 using Bellatrix.Mobile.Android;
 
-namespace MyProject.MobileTests.Pages.Shared;
+namespace {project.rootNamespace}.Pages.Shared;
 
 public class BottomNavigationSection
 {
@@ -365,7 +365,7 @@ Usually `App.Keyboard` is simpler — use constructor injection only when you ne
 Plain data in `Models/` — no BELLATRIX types:
 
 ```csharp
-namespace MyProject.MobileTests.Models;
+namespace {project.rootNamespace}.Models;
 
 public class LoginCredentials
 {

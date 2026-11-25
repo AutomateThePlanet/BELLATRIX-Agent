@@ -1,11 +1,11 @@
 ---
 description: As-is snapshot of the BELLATRIX TypeScript web test project tree plus the CREATE-vs-EDIT decision table. Ground every CREATE vs EDIT decision on it and refresh it whenever a src/pages/, src/sections/, src/components/, src/models/, or tests/ entry is added.
 ---
-# my-web-tests — Current Project Structure (TypeScript)
+# {project.dir} — Current Project Structure (TypeScript)
 
 This file is the authoritative as-is snapshot of what exists in the web test project. Use it to decide whether to CREATE a new file/folder or EDIT an existing one. It is NOT aspirational — only add an entry after the folder/file is actually on disk.
 
-> **First use:** replace `my-web-tests` with the real project folder (the one holding `package.json`, `tsconfig.json`, and `bellatrix.config.ts`) and fill the tables from the actual tree (search `src/pages/*/`, `src/sections/*/`, `src/components/*.ts`, `src/models/*.ts`, `tests/**/*.test.ts`).
+> **First use:** `{project.dir}` is the folder of `domains.web.project.path` in `.bellatrix/config.json` (it holds `package.json`, `tsconfig.json`, and `bellatrix.config.ts`); keep the placeholder. Fill the tables from the actual tree (search `src/pages/*/`, `src/sections/*/`, `src/components/*.ts`, `src/models/*.ts`, `tests/**/*.test.ts`).
 >
 > **Maintenance rule:** whenever you add a page object folder, section, custom component, model, or tests sub-folder during a generation workflow, update the matching table here in the same change. The agent owns keeping this tree accurate.
 
@@ -14,7 +14,7 @@ This file is the authoritative as-is snapshot of what exists in the web test pro
 ## Top-Level Layout
 
 ```
-my-web-tests/
+{project.dir}/
 ├─ package.json                      # "type": "module"; scripts.test = "bellatrix ./tests filter --category CI"
 ├─ tsconfig.json                     # strict, TC39 decorators, moduleResolution "bundler" (see below)
 ├─ bellatrix.config.ts               # webSettings — controller, browser, headless, baseUrl, timeouts (ms); first line: import type {} from '@bellatrix/web/test'
@@ -36,7 +36,7 @@ my-web-tests/
 - **Lifecycle:** fixed by the framework — one browser per test class (started before `beforeAll`, closed after `afterAll`); there is no per-class or per-test browser attribute
 - **Page base class:** `WebPage<Map, Asserts>` + `@Page(Map, Asserts)`; **section:** url-less `WebPage`; **test base class:** `WebTest` (`@bellatrix/web/infrastructure`) with `@TestClass` / `@Test` from `@bellatrix/web/test`
 - **Locator preference:** `data-testid` → static id → name → aria-label → label/placeholder → tag+text → structural CSS → positional XPath
-- **Build check:** `npx tsc --noEmit -p tsconfig.json` (no emit; the runner executes `.ts` directly)
+- **Build check:** `{project.buildCommand}` (no emit; the runner executes `.ts` directly)
 - **Run (the user, not the agent):** `npx bellatrix ./tests filter --testName <method>` / `--manualTestCase TC-XXX` / `--category Smoke`; Node ≥ 20.9
 
 ### Required project wiring
@@ -51,7 +51,7 @@ install-links=true
 
 ```json
 {
-  "name": "my-web-tests",
+  "name": "{project.dir}",
   "private": true,
   "type": "module",
   "dependencies": {

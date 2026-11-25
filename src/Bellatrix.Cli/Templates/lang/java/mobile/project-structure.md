@@ -2,16 +2,15 @@
 description: As-is snapshot of the BELLATRIX-Java mobile test project (Maven, Android/iOS). Ground CREATE vs EDIT decisions on this file and refresh it whenever a new pages/, components/, models/, or tests/ package is added.
 ---
 
-# my-mobile-tests — Current Project Structure (Java)
+# {project.dir} — Current Project Structure (Java)
 
 This file is the authoritative as-is snapshot of the mobile test project. Use it to decide whether to CREATE a new
 file/package or EDIT an existing one. It is NOT aspirational — only list a package or file after it actually exists
 on disk.
 
-> **First use:** this skill ships with placeholder names (`my-mobile-tests`, root package `com.myproject.mobiletests`).
-> The first time you generate code, scan the real project (the `pom.xml` that depends on
-> `solutions.bellatrix:bellatrix.android` and/or `bellatrix.ios`), replace the placeholders below with the real
-> artifact, root package, app constants, and packages, and empty the example tables. If a listed file does not exist
+> **First use:** `{project.*}` are the values of `domains.mobile.project` in `.bellatrix/config.json`; the tables below are an
+> example. The first time you generate code, scan `{project.dir}`, replace the example tables (app constants,
+> packages, classes) with what is really there, and keep the placeholders as they are. If a listed file does not exist
 > yet, treat the tree as the target layout: CREATE it, then record what is really on disk.
 >
 > **Maintenance rule:** whenever you add a page object package, section, custom component, model, or tests
@@ -22,14 +21,14 @@ on disk.
 
 ## Top-Level Layout
 
-Root package: `com.myproject.mobiletests` (folders under `src/test/java/com/myproject/mobiletests/`).
+Root package: `{project.rootNamespace}` (folders under `src/test/java/{project.rootPath}/`).
 
 ```
-my-mobile-tests/
+{project.dir}/
 ├─ pom.xml                                           # solutions.bellatrix:bellatrix.android:1.0 and/or bellatrix.ios:1.0 (test scope), JUnit 5
 ├─ src/main/resources/application.properties         # environment=dev
 ├─ src/main/resources/testFrameworkSettings.dev.json # androidSettings / iOSSettings — lifecycle, timeouts, app path, serviceUrl
-└─ src/test/java/com/myproject/mobiletests/
+└─ src/test/java/{project.rootPath}/
    ├─ common/ManualTestCase.java      # @ManualTestCase("TC-XXX") for SPECTRA traceability
    ├─ common/Constants.java           # compile-time constants for @ExecutionApp(appPath = …, appPackage = …)
    ├─ models/                         # Records, enums and data classes (platform-neutral)
@@ -58,7 +57,7 @@ section).
 - **Class-level lifecycle (generated classes default):** `Lifecycle.REUSE_IF_STARTED` — declared speed intent that
   overrides the config per test class (honored on Android; iOS 1.0 still restarts per test — see
   `bellatrix-mobile-test-structure-and-lifecycle`).
-- **Build check:** `mvn -q test-compile` (never `mvn test` — the user runs tests).
+- **Build check:** `{project.buildCommand}` (never `mvn test` — the user runs tests).
 
 ### Required project wiring (`pom.xml`)
 
@@ -104,7 +103,7 @@ later** (`mvn -v`).
 ### `common/Constants.java`
 
 ```java
-package com.myproject.mobiletests.common;
+package {project.rootNamespace}.common;
 
 public final class Constants {
     // Android
@@ -130,7 +129,7 @@ public final class Constants {
 Create it if it does not exist (string-based, metadata only — BELLATRIX-Java has no built-in string variant):
 
 ```java
-package com.myproject.mobiletests.common;
+package {project.rootNamespace}.common;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -163,7 +162,7 @@ Each screen gets its own package with three classes: `Map.java` (component metho
 |---------|----------|---------|
 | `android/pages/login/` *(example — replace)* | Android | Login screen — user name, password, remember me, error message |
 
-**Package:** `com.myproject.mobiletests.android.pages.<screen>` / `com.myproject.mobiletests.ios.pages.<screen>`
+**Package:** `{project.rootNamespace}.android.pages.<screen>` / `{project.rootNamespace}.ios.pages.<screen>`
 **Base classes:** `solutions.bellatrix.android.pages.AndroidPage` / `PageMap` / `PageAsserts`;
 `solutions.bellatrix.ios.pages.IOSPage` / `PageMap` / `PageAsserts`
 
@@ -181,7 +180,7 @@ navigation, toolbar, number pad). Screens expose them via composition — a
 |------|---------|---------|
 | *(none yet)* | | |
 
-**Package:** `com.myproject.mobiletests.android.pages.shared` / `com.myproject.mobiletests.ios.pages.shared`
+**Package:** `{project.rootNamespace}.android.pages.shared` / `{project.rootNamespace}.ios.pages.shared`
 **When to CREATE a new section:** two or more screens expose the same locator set AND the same workflow.
 
 ---
@@ -196,7 +195,7 @@ built-in (`Button`, `ComboBox`, …) of the SAME platform and add or override pu
 |------|---------|-----|
 | *(none yet)* | | |
 
-**Package:** `com.myproject.mobiletests.android.components` / `com.myproject.mobiletests.ios.components`
+**Package:** `{project.rootNamespace}.android.components` / `{project.rootNamespace}.ios.components`
 **Usage in Map classes:** `create().byId(SpinnerComboBox.class, "com.example.shop:id/country")`.
 
 ---
@@ -210,7 +209,7 @@ here — pure data.
 |------|---------|
 | *(none yet)* | |
 
-**Package:** `com.myproject.mobiletests.models`
+**Package:** `{project.rootNamespace}.models`
 
 ---
 
@@ -223,7 +222,7 @@ One file per feature area and platform. One test method per SPECTRA TC. Every me
 |---------|------|--------------|
 | *(none yet)* | | |
 
-**Package:** `com.myproject.mobiletests.android.tests.<featurearea>` / `…ios.tests.<featurearea>` (the `package`
+**Package:** `{project.rootNamespace}.android.tests.<featurearea>` / `…ios.tests.<featurearea>` (the `package`
 line must match the folder)
 
 ---

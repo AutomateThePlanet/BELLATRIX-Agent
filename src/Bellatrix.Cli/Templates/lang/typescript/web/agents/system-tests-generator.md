@@ -3,10 +3,10 @@
 <!-- lang:target-project -->
 ## Target Project (TypeScript / Node)
 
-All generated web tests, page objects, sections, and models go into the BELLATRIX TypeScript web test project recorded in `bellatrix-web-project-structure` (written here as `my-web-tests/` — use the real folder). Where the shared workflow says `Pages/`, `Sections/`, `Components/`, `Models/`, `Tests/`, use the paths below:
+All generated web tests, page objects, sections, and models go into the BELLATRIX TypeScript web test project named in `.bellatrix/config.json` (`domains.web.project`; `{project.dir}/` = the folder of its `package.json`). Where the shared workflow says `Pages/`, `Sections/`, `Components/`, `Models/`, `Tests/`, use the paths below:
 
 ```
-my-web-tests/
+{project.dir}/
   package.json                 # "type": "module"
   tsconfig.json                # strict, experimentalDecorators: false
   bellatrix.config.ts          # browser, controller, timeouts (ms), baseUrl
@@ -32,7 +32,7 @@ my-web-tests/
 ```
 
 - **Imports**: `@bellatrix/web/components`, `@bellatrix/web/pages`, `@bellatrix/web/pages/decorators`, `@bellatrix/web/infrastructure` (`WebTest`, `App`), `@bellatrix/web/test` (`Test`, `TestClass`), `@bellatrix/core/decorators` (`Category`, `TestCase`), `@bellatrix/core/assertions` (`Assert`, `is`); project files by relative, extension-less paths
-- **Build command**: `npx tsc --noEmit -p tsconfig.json` (type check; there is no emit step)
+- **Build command**: `{project.buildCommand}` (type check; there is no emit step)
 - **Base classes**: pages `WebPage<Map, Asserts>` + `@Page(Map, Asserts)`, maps `WebPageMap`, asserts `WebPageAsserts<Map>`, sections a url-less `WebPage`, tests `WebTest` with `@TestClass`
 - **SPECTRA traceability decorator**: `@ManualTestCase('TC-XXX')` from `src/attributes/ManualTestCase.ts`. BELLATRIX TypeScript has no built-in one, and `@TestCase` is data-driven — never use it for traceability. If the file does not exist yet, create it:
 
@@ -142,6 +142,6 @@ export class FirstVisitTests extends WebTest {
 - **Tests use page objects only** — no `this.app.create(...)` in test methods
 - **`override`** on every overridden member (`noImplicitOverride`); TC39 decorators only (`experimentalDecorators: false`); test files end in `.test.ts`
 - **Always brace control flow:** every `if`/`else`/`for`/`while`/`do` body uses `{ }`, even single statements — no `if (x) continue;`
-- **SPECTRA traceability:** `@ManualTestCase('TC-XXX')` (NOT `@TestCase`) on every automated SPECTRA case, plus `@Category(Categories.Smoke)` for high priority / `@Category(Categories.Regression)` otherwise; update the SPECTRA file's `automated_by` with `my-web-tests/tests/{featurearea}/{FeatureArea}Tests.test.ts`; `spectra.config.json` `scan_patterns` include `@ManualTestCase('{id}')` and `@ManualTestCase("{id}")`
-- **Build-only:** `npx tsc --noEmit -p tsconfig.json` until it exits 0. Never run the tests yourself; give the user `npx bellatrix ./tests filter --manualTestCase TC-XXX` (or `--testName {testMethodName}`)
+- **SPECTRA traceability:** `@ManualTestCase('TC-XXX')` (NOT `@TestCase`) on every automated SPECTRA case, plus `@Category(Categories.Smoke)` for high priority / `@Category(Categories.Regression)` otherwise; update the SPECTRA file's `automated_by` with `{project.dir}/tests/{featurearea}/{FeatureArea}Tests.test.ts`; `spectra.config.json` `scan_patterns` include `@ManualTestCase('{id}')` and `@ManualTestCase("{id}")`
+- **Build-only:** `{project.buildCommand}` until it exits 0. Never run the tests yourself; give the user `npx bellatrix ./tests filter --manualTestCase TC-XXX` (or `--testName {testMethodName}`)
 

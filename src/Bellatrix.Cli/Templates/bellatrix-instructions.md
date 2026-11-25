@@ -12,6 +12,28 @@ connection error, ask the user to start it). Output is always JSON — the succe
 is the contract. Sessions persist across invocations by id (no daemon); always
 `close-session` when done.
 
+## Project settings: read `.bellatrix/config.json` first
+
+The skills contain no project names or paths. Before you build, write code or read a test
+case, run `bellatrix config validate --json` and read `.bellatrix/config.json`:
+
+- `domains.<domain>.project`: `path` (the project file), `name`, `rootNamespace` (C#
+  namespace / Java base package; may be null) and `buildCommand` (compiles without running
+  tests, from the repository root).
+- `domains.<domain>.testCasesDir`, else `testCasesDir`: the test-case folder;
+  a test case is `{testCasesDir}/{suite}/TC-{id}.md`.
+
+In the skills, `{project.path}`, `{project.name}`, `{project.rootNamespace}` and
+`{project.buildCommand}` are those values, `{project.dir}` is the folder that holds
+`{project.path}`, `{project.rootPath}` is `{project.rootNamespace}` with `/` instead of `.`
+(Java source folders), and `{testCasesDir}` is the test-case folder. Never guess them.
+
+**If the file is missing or invalid, or the domain has no project: stop and ask the user**
+which test project to use (`bellatrix config show --json` lists what is recorded). Then
+write the answer into `.bellatrix/config.json` (or have the user run
+`bellatrix init --project <domain>=<path>`) and run `bellatrix config validate --json` again.
+The file is the user's and is committed; change only what the user confirmed.
+
 ## MANDATORY: delegate UI-state reads (Context Economy)
 
 Never read a full UI tree (`snapshot --inline`, `get-page-source`, or a snapshot file)

@@ -9,7 +9,7 @@ using Bellatrix.Web;
 using Bellatrix.Web.NUnit;
 using NUnit.Framework;
 
-namespace MyProject.WebTests.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [Browser(BrowserType.Chrome, Lifecycle.RestartEveryTime)]
@@ -31,7 +31,7 @@ using Bellatrix.Web;
 using Bellatrix.Web.MSTest;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace MyProject.WebTests.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestClass]
 [Browser(BrowserType.Chrome, Lifecycle.RestartEveryTime)]
@@ -213,11 +213,11 @@ MSTest: `[TestCategory("Smoke")]`.
 ```csharp
 using Bellatrix.Web;
 using Bellatrix.Web.NUnit;
-using MyProject.WebTests.Models;
-using MyProject.WebTests.Pages;
+using {project.rootNamespace}.Models;
+using {project.rootNamespace}.Pages;
 using NUnit.Framework;
 
-namespace MyProject.WebTests.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [Browser(BrowserType.Chrome, Lifecycle.ReuseIfStarted)]
@@ -277,6 +277,6 @@ using NUnit.Framework;                               // [TestFixture], [Test], [
 using Microsoft.VisualStudio.TestTools.UnitTesting;  // [TestClass], [TestMethod], [TestCategory]
 
 // Project
-using MyProject.WebTests.Pages;
-using MyProject.WebTests.Models;
+using {project.rootNamespace}.Pages;
+using {project.rootNamespace}.Models;
 ```

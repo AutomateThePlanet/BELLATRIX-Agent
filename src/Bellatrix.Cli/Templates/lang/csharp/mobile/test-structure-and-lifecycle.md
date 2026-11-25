@@ -18,7 +18,7 @@ using Bellatrix.Mobile.Android;
 using Bellatrix.Mobile.NUnit;
 using NUnit.Framework;
 
-namespace MyProject.MobileTests.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [Android(Constants.AppPath,
@@ -46,7 +46,7 @@ using Bellatrix.Mobile.IOS;
 using Bellatrix.Mobile.NUnit;
 using NUnit.Framework;
 
-namespace MyProject.MobileTests.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [IOS(Constants.AppPath,
@@ -73,7 +73,7 @@ using Bellatrix.Mobile.Android;
 using Bellatrix.Mobile.MSTest;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace MyProject.MobileTests.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestClass]
 [Android(Constants.AppPath, Constants.AppId, Constants.PlatformVersion, Constants.DeviceName,
@@ -126,7 +126,7 @@ public class LoginTests : AndroidTest
 Attribute arguments must be compile-time constants — keep them in a `Constants` class:
 
 ```csharp
-namespace MyProject.MobileTests;
+namespace {project.rootNamespace};
 
 public static class Constants
 {
@@ -264,10 +264,10 @@ public void VerifyCartWorks()
 using Bellatrix.Mobile;
 using Bellatrix.Mobile.Android;
 using Bellatrix.Mobile.NUnit;
-using MyProject.MobileTests.Pages;
+using {project.rootNamespace}.Pages;
 using NUnit.Framework;
 
-namespace MyProject.MobileTests.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [Android(Constants.AppPath,
@@ -336,7 +336,7 @@ using NUnit.Framework;                                  // [TestFixture], [Test]
 using Microsoft.VisualStudio.TestTools.UnitTesting;     // [TestClass], [TestMethod], [TestCategory]
 
 // Your code
-using MyProject.MobileTests.Pages;
+using {project.rootNamespace}.Pages;
 ```
 
 Do not import `Bellatrix.Data.Attributes` in test files — it contains an `int`-based

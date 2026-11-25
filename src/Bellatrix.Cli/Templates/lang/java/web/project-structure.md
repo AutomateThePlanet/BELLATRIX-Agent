@@ -1,11 +1,11 @@
 ---
 description: As-is snapshot of the BELLATRIX Java web test project (Maven) plus the CREATE-vs-EDIT decision table. Ground every CREATE vs EDIT decision on it and refresh it whenever a pages/, sections/, components/, models/, or tests/ package is added.
 ---
-# my-project-web-tests — Current Project Structure (Java)
+# {project.dir} — Current Project Structure (Java)
 
 This file is the authoritative as-is snapshot of what exists in the web test project. Use it to decide whether to CREATE a new file/package or EDIT an existing one. It is NOT aspirational — only add an entry after the folder/file is actually on disk.
 
-> **First use:** replace `my-project-web-tests` / `myproject.webtests` with the real Maven project folder and root package, and fill the tables from the actual tree (search `src/test/java/**/pages/*/`, `**/sections/*/`, `**/components/*.java`, `**/models/*.java`, `**/tests/**/*.java`).
+> **First use:** `{project.*}` are the values of `domains.web.project` in `.bellatrix/config.json`; keep them. Fill the tables from the actual tree of `{project.dir}` (search `src/test/java/**/pages/*/`, `**/sections/*/`, `**/components/*.java`, `**/models/*.java`, `**/tests/**/*.java`).
 >
 > **Maintenance rule:** whenever you add a page object package, section, custom component, model, or tests sub-package during a generation workflow, update the matching table here in the same change. The agent owns keeping this tree accurate.
 
@@ -13,14 +13,14 @@ This file is the authoritative as-is snapshot of what exists in the web test pro
 
 ## Top-Level Layout
 
-Root package: `myproject.webtests` (folders under `src/test/java/myproject/webtests/`).
+Root package: `{project.rootNamespace}` (folders under `src/test/java/{project.rootPath}/`).
 
 ```
-my-project-web-tests/
+{project.dir}/
 ├─ pom.xml                                            # solutions.bellatrix:bellatrix.web:1.0 (test scope), JUnit 5
 ├─ src/main/resources/application.properties          # environment=dev
 ├─ src/main/resources/testFrameworkSettings.dev.json  # webSettings — browser, lifecycle, timeouts, baseUrl, gridSettings
-└─ src/test/java/myproject/webtests/
+└─ src/test/java/{project.rootPath}/
    ├─ common/ManualTestCase.java      # @ManualTestCase("TC-XXX") for SPECTRA traceability
    ├─ components/                     # Custom BELLATRIX components (overrides / new)
    ├─ models/                         # Records, data classes and enums used by page objects
@@ -36,7 +36,7 @@ my-project-web-tests/
 - **Class-level lifecycle (generated classes default):** `Lifecycle.REUSE_IF_STARTED` — overridden per class/test when state must not leak
 - **Page base class:** `WebPage<Map, Asserts>`; **section base class:** `WebSection<Map, Asserts>`; **test base class:** `solutions.bellatrix.web.infrastructure.junit.WebTest` (TestNG: `…infrastructure.testng.WebTest`)
 - **Locator preference:** `data-testid` → static id → name → aria-label → label/placeholder → tag+text → structural CSS → positional XPath
-- **Build check:** `mvn -q test-compile` (never `mvn test` — the user runs tests)
+- **Build check:** `{project.buildCommand}` (never `mvn test` — the user runs tests)
 
 ### Required project wiring (`pom.xml`)
 
@@ -103,7 +103,7 @@ The full `webSettings` schema is in `bellatrix-web-app-services`. There is no as
 ### `common/ManualTestCase.java`
 
 ```java
-package myproject.webtests.common;
+package {project.rootNamespace}.common;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -122,7 +122,7 @@ public @interface ManualTestCase {
 }
 ```
 
-BELLATRIX-Java has no built-in string `ManualTestCase` (the getting-started sample's `int id()` version cannot hold `TC-210`). Test classes import it: `import myproject.webtests.common.ManualTestCase;`.
+BELLATRIX-Java has no built-in string `ManualTestCase` (the getting-started sample's `int id()` version cannot hold `TC-210`). Test classes import it: `import {project.rootNamespace}.common.ManualTestCase;`.
 
 ---
 
@@ -134,7 +134,7 @@ Each page gets its own package with `{PageName}.java` (`extends WebPage<Map, Ass
 |---------|-----|---------|
 | _(none yet — add a row when you create a page)_ | | |
 
-**Package:** `myproject.webtests.pages.<page>` (lowercase page name without the `Page` suffix — `pages.cart` holds `CartPage`)
+**Package:** `{project.rootNamespace}.pages.<page>` (lowercase page name without the `Page` suffix — `pages.cart` holds `CartPage`)
 **Base classes:** `WebPage<Map, Asserts>`, `PageMap`, `PageAsserts<Map>` (`solutions.bellatrix.web.pages`)
 
 ---
@@ -147,7 +147,7 @@ Sections are 3-class packages whose action class extends `WebSection<Map, Assert
 |---------|---------|---------|
 | _(none yet)_ | | |
 
-**Package:** `myproject.webtests.sections.<section>`
+**Package:** `{project.rootNamespace}.sections.<section>`
 **When to CREATE a new section:** when two or more pages expose the same locator set AND the same workflow around it. A single-page duplicate stays on the page as a region.
 
 ---
@@ -160,7 +160,7 @@ Custom BELLATRIX components live here when a built-in lacks behavior or needs an
 |------|---------|-----|
 | _(none yet)_ | | |
 
-**Package:** `myproject.webtests.components`
+**Package:** `{project.rootNamespace}.components`
 **Usage in Map classes:** `create().byCss(MyComponent.class, "[data-testid='…']")`.
 
 ---
@@ -173,7 +173,7 @@ Records, plain data classes, and enums shared across page objects. No component 
 |------|---------|
 | _(none yet)_ | |
 
-**Package:** `myproject.webtests.models`
+**Package:** `{project.rootNamespace}.models`
 
 ---
 
@@ -185,7 +185,7 @@ One file per feature area. One test method per SPECTRA TC. Every traced method c
 |---------|------|--------------|
 | _(none yet)_ | | |
 
-**Package:** `myproject.webtests.tests.<featurearea>` (the `package` line must match the folder)
+**Package:** `{project.rootNamespace}.tests.<featurearea>` (the `package` line must match the folder)
 
 ---
 

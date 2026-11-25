@@ -16,7 +16,7 @@
 ## Login Flow Recipe
 
 ```java
-package myproject.webtests.tests.login;
+package {project.rootNamespace}.tests.login;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -315,7 +315,7 @@ BELLATRIX Java has no `App.Interactions`. Put the Selenium `Actions` call in a c
 public void search_WithEnterKey_ShowsResults() {
     app().navigate().to("https://example.com/");
 
-    var searchBox = app().create().byCss(SearchBox.class, "[data-testid='search']");   // myproject.webtests.components.SearchBox
+    var searchBox = app().create().byCss(SearchBox.class, "[data-testid='search']");   // {project.rootNamespace}.components.SearchBox
     searchBox.setSearch("falcon");
     searchBox.submitWithEnter();
 
@@ -354,11 +354,11 @@ public void login_WithDifferentRoles_ShowsCorrectWelcome(String email, String pa
 ## Page Objects End-to-End Recipe
 
 ```java
-package myproject.webtests.tests.checkout;
+package {project.rootNamespace}.tests.checkout;
 
-import myproject.webtests.models.BillingInfo;
-import myproject.webtests.models.ProductSort;
-import myproject.webtests.pages.home.HomePage;
+import {project.rootNamespace}.models.BillingInfo;
+import {project.rootNamespace}.models.ProductSort;
+import {project.rootNamespace}.pages.home.HomePage;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.web.infrastructure.Browser;
@@ -440,7 +440,7 @@ import solutions.bellatrix.web.waitstrategies.Wait;              // app().waitFo
 import org.junit.jupiter.api.Test;                               // @Test, @Tag, Assertions
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Assertions;
-import myproject.webtests.common.ManualTestCase;
-import myproject.webtests.pages.login.LoginPage;
-import myproject.webtests.models.BillingInfo;
+import {project.rootNamespace}.common.ManualTestCase;
+import {project.rootNamespace}.pages.login.LoginPage;
+import {project.rootNamespace}.models.BillingInfo;
 ```

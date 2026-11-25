@@ -5,6 +5,12 @@ description: Skill for generating or editing BELLATRIX web test code (page objec
 
 # Generate Web Test Code
 
+> **Project settings:** run `bellatrix config validate --json` and read `.bellatrix/config.json` before anything else.
+> `{project.*}` below are the values of `domains.web.project` there (`{project.dir}` = the folder of
+> `{project.path}`; `{project.rootPath}` = `{project.rootNamespace}` with `/` instead of `.`), and `{testCasesDir}` is
+> `domains.web.testCasesDir`, else `testCasesDir`. If the file is missing or invalid, or has no web project,
+> **stop and ask the user**, record the answer there and validate again. Never guess a project name or path.
+
 Generate production-ready BELLATRIX web test code using the locators validated during scenario execution (`bellatrix-web-execute-scenario`). This skill handles both **creating new files** and **editing/expanding existing ones**.
 
 **Input:** the execution output — validated `{ strategy, selector }` pairs, element → component mapping, page transitions, observed texts, and the waits/obstacles you hit. **Never invent a locator.** Every locator in a Map file must trace to one that resolved against a live snapshot and was exercised with a `bellatrix web` verb. If a needed locator is missing, run a new CLI session for it — do not guess.

@@ -160,7 +160,7 @@ app().cookies().deleteAllCookies();
 BELLATRIX Java has **no** `InteractionsService`. `hover()` and `focus()` exist on every component; for anything else wrap Selenium `Actions` in a custom component method that acts on its own element (this is the pattern the official Java docs use for `ExtendedButton`):
 
 ```java
-package myproject.webtests.components;
+package {project.rootNamespace}.components;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;

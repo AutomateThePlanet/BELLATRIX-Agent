@@ -18,7 +18,7 @@ using Bellatrix.Web;
 using Bellatrix.Web.NUnit;
 using NUnit.Framework;
 
-namespace MyProject.WebTests.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [Browser(BrowserType.Chrome, Lifecycle.RestartEveryTime)]
@@ -328,11 +328,11 @@ public void Login_WithDifferentRoles_ShowsCorrectWelcome(string email, string pa
 ```csharp
 using Bellatrix.Web;
 using Bellatrix.Web.NUnit;
-using MyProject.WebTests.Models;
-using MyProject.WebTests.Pages;
+using {project.rootNamespace}.Models;
+using {project.rootNamespace}.Pages;
 using NUnit.Framework;
 
-namespace MyProject.WebTests.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [Browser(BrowserType.Chrome, Lifecycle.ReuseIfStarted)]
@@ -405,6 +405,6 @@ App.Components.CreateByAttributesContaining<Anchor>("data-product_id", productId
 using Bellatrix.Web;            // components, factories, waits, Validate*, Browser attribute
 using Bellatrix.Web.NUnit;      // WebTest base (or Bellatrix.Web.MSTest)
 using NUnit.Framework;          // [TestFixture], [Test], [Category], Assert.That
-using MyProject.WebTests.Pages;
-using MyProject.WebTests.Models;
+using {project.rootNamespace}.Pages;
+using {project.rootNamespace}.Models;
 ```

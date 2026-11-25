@@ -148,7 +148,7 @@ Assertions.assertAll(
 ## Usage in a Page Object `Asserts` Class
 
 ```java
-package com.myproject.mobiletests.android.pages.login;
+package {project.rootNamespace}.android.pages.login;
 
 import org.junit.jupiter.api.Assertions;
 import solutions.bellatrix.android.pages.PageAsserts;

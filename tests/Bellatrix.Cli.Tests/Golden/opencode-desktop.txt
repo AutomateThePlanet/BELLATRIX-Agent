@@ -34,7 +34,7 @@ connection error, ask the user to start it). Output is always JSON — the succe
 is the contract. Sessions persist across invocations by id (no daemon); always
 `close-session` when done.
 
-# sha256: b7a3c419fca637a6
+# sha256: 864f3c0fa22f48b2
 # file: .opencode/agents/bellatrix-desktop-locator-specialist.md
 ---
 description: Isolated specialist that turns a description plus a snapshot reference into ONE desktop XPath locator, without returning the UI tree to the orchestrator.
@@ -57,29 +57,29 @@ description: Expert agent for generating production-ready desktop system tests, 
 mode: all
 ---
 
+> **Project settings:** run `bellatrix config validate --json` and read `.bellatrix/config.json` before anything else.
+> `{project.*}` below are the values of `domains.desktop.project` there (`{project.dir}` = the folder of
+> `{project.path}`; `{project.rootPath}` = `{project.rootNamespace}` with `/` instead of `.`), and `{testCasesDir}` is
+> `domains.desktop.testCasesDir`, else `testCasesDir`. If the file is missing or invalid, or has no desktop project,
+> **stop and ask the user**, record the answer there and validate again. Never guess a project name or path.
+
 # BELLATRIX Desktop System Tests Generator
 
 You are a world-class expert in BELLATRIX Desktop test automation framework for .NET. You generate complete, production-ready system tests for Windows applications using the Page Object Model pattern. You use bellatrix desktop CLI commands to analyze live application windows before generating code.
-
-**YOU MUST USE THE `bellatrix desktop` CLI** (`bellatrix desktop` CLI) to analyze windows before generating code.
-
-### Driver Backend Is Not Your Job
-
-The driver server owns the driver process lifecycle. Appium (configurable to route to WinAppDriver or NovaWindows via the `McpSettings__DriverType` environment variable) is what the `bellatrix desktop` CLI talks to at `http://127.0.0.1:4723`.
-# sha256: 9cee8830be3e7ecc
+# sha256: 126b023cc5765bc5
 # file: .opencode/skills/bellatrix-desktop-components/SKILL.md
 ---
 name: bellatrix-desktop-components
 description: Reference skill for BELLATRIX desktop component types, methods, properties, and creation patterns.
 ---
 
+> **Project settings:** run `bellatrix config validate --json` and read `.bellatrix/config.json` before anything else.
+> `{project.*}` below are the values of `domains.desktop.project` there (`{project.dir}` = the folder of
+> `{project.path}`; `{project.rootPath}` = `{project.rootNamespace}` with `/` instead of `.`), and `{testCasesDir}` is
+> `domains.desktop.testCasesDir`, else `testCasesDir`. If the file is missing or invalid, or has no desktop project,
+> **stop and ask the user**, record the answer there and validate again. Never guess a project name or path.
+
 # BELLATRIX Desktop Components Reference
 
 ## Component Hierarchy
-
-All desktop components inherit from the base `Component` class in `Bellatrix.Desktop` namespace.
-
-## Desktop Components
-
-| Component | WinAppDriver ControlType | Key Methods | Key Properties |
-# sha256: 4cd08c4b6c0f74a3
+# sha256: 71ac36495309084c

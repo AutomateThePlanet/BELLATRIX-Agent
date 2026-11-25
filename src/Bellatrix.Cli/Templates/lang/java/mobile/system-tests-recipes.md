@@ -19,9 +19,9 @@
 ## Login Flow Recipe (Android)
 
 ```java
-package com.myproject.mobiletests.android.tests.login;
+package {project.rootNamespace}.android.tests.login;
 
-import com.myproject.mobiletests.common.Constants;
+import {project.rootNamespace}.common.Constants;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.android.components.Button;
@@ -63,9 +63,9 @@ public class LoginRecipeTests extends AndroidTest {
 ## Login Flow Recipe (iOS)
 
 ```java
-package com.myproject.mobiletests.ios.tests.login;
+package {project.rootNamespace}.ios.tests.login;
 
-import com.myproject.mobiletests.common.Constants;
+import {project.rootNamespace}.common.Constants;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.ios.components.Button;
@@ -124,7 +124,7 @@ public void register_WithValidData_ShowsSuccessMessage() {
 }
 ```
 
-`SpinnerComboBox` is the project's custom component (`{rootPackage}.android.components`, code in
+`SpinnerComboBox` is the project's custom component (`{project.rootNamespace}.android.components`, code in
 `bellatrix-mobile-generate-code`).
 
 ---
@@ -344,13 +344,13 @@ them to merge several SPECTRA test cases into one method.
 ## Page Objects End-to-End Recipe
 
 ```java
-package com.myproject.mobiletests.android.tests.checkout;
+package {project.rootNamespace}.android.tests.checkout;
 
-import com.myproject.mobiletests.android.pages.checkout.CheckoutPage;
-import com.myproject.mobiletests.android.pages.home.HomePage;
-import com.myproject.mobiletests.android.pages.login.LoginPage;
-import com.myproject.mobiletests.android.pages.product.ProductPage;
-import com.myproject.mobiletests.common.Constants;
+import {project.rootNamespace}.android.pages.checkout.CheckoutPage;
+import {project.rootNamespace}.android.pages.home.HomePage;
+import {project.rootNamespace}.android.pages.login.LoginPage;
+import {project.rootNamespace}.android.pages.product.ProductPage;
+import {project.rootNamespace}.common.Constants;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.android.infrastructure.ExecutionApp;
@@ -418,7 +418,7 @@ org.openqa.selenium.ScreenOrientation                    (orientation tests only
 org.openqa.selenium.support.ui.WebDriverWait, java.time.Duration  (polling helpers)
 java.awt.Point, java.awt.Dimension                       (gesture geometry)
 java.util.List                                           (collections)
-{rootPackage}.common.Constants / ManualTestCase
-{rootPackage}.android.pages.<screen>.<Screen>            (your page objects)
-{rootPackage}.android.components.*                       (your custom components)
+{project.rootNamespace}.common.Constants / ManualTestCase
+{project.rootNamespace}.android.pages.<screen>.<Screen>            (your page objects)
+{project.rootNamespace}.android.components.*                       (your custom components)
 ```

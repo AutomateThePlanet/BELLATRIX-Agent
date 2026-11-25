@@ -1,9 +1,8 @@
 <!-- lang:target -->
-**Target project:** the BELLATRIX mobile test project listed in `bellatrix-mobile-project-structure`
-(placeholder `MyProject.MobileTests` — use the real name).
-- **Namespaces**: `MyProject.MobileTests.Pages`, `.Pages.Shared`, `.Components`, `.Models`, `.Tests`
+**Target project:** `domains.mobile.project` in `.bellatrix/config.json` (`{project.name}`, folder `{project.dir}`).
+- **Namespaces**: `{project.rootNamespace}.Pages`, `.Pages.Shared`, `.Components`, `.Models`, `.Tests`
 - **Platform namespace**: `Bellatrix.Mobile.Android` **or** `Bellatrix.Mobile.IOS` per file
-- **Build command**: `dotnet build MyProject.MobileTests/MyProject.MobileTests.csproj`
+- **Build command**: `{project.buildCommand}`
 
 <!-- lang:page-objects -->
 ### Folder Structure
@@ -21,7 +20,7 @@ Pages/
 using Bellatrix.Mobile.Android;
 using Bellatrix.Mobile.PageObjects;
 
-namespace {ProjectNamespace}.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class {ScreenName} : AndroidPage
 {
@@ -56,7 +55,7 @@ public partial class {ScreenName} : AndroidPage
 using Bellatrix.Mobile.IOS;
 using Bellatrix.Mobile.PageObjects;
 
-namespace {ProjectNamespace}.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class {ScreenName} : IOSPage
 {
@@ -100,7 +99,7 @@ exist — see `bellatrix-mobile-locators-and-waits`.
 using Bellatrix.Mobile;
 using Bellatrix.Mobile.Android;
 
-namespace {ProjectNamespace}.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class {ScreenName}
 {
@@ -130,7 +129,7 @@ public partial class {ScreenName}
 ```csharp
 using Bellatrix.Mobile.Android;
 
-namespace {ProjectNamespace}.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class {ScreenName}
 {
@@ -151,7 +150,7 @@ Swap `Bellatrix.Mobile.Android` for `Bellatrix.Mobile.IOS` in iOS files.
 <!-- lang:custom-components -->
 ### Folder
 ```
-{ProjectName}/
+{project.dir}/
   Components/
     {CustomComponentName}.cs
 ```
@@ -165,7 +164,7 @@ components from `Button`:
 using Bellatrix.Mobile;
 using Bellatrix.Mobile.Android;
 
-namespace {ProjectNamespace}.Components;
+namespace {project.rootNamespace}.Components;
 
 public class ScrollingButton : Button
 {
@@ -187,7 +186,7 @@ public class ScrollingButton : Button
 ```csharp
 using Bellatrix.Mobile.Android;
 
-namespace {ProjectNamespace}.Components;
+namespace {project.rootNamespace}.Components;
 
 public class ResilientComboBox : ComboBox
 {
@@ -205,7 +204,7 @@ built-ins (exception: iOS `RadioButton.GetText()` is not virtual).
 ### Using custom components in Map files
 
 ```csharp
-using {ProjectNamespace}.Components;
+using {project.rootNamespace}.Components;
 
 public ScrollingButton CheckoutButton =>
     App.Components.CreateByDescription<ScrollingButton>("Checkout");
@@ -216,7 +215,7 @@ public ResilientComboBox CountrySpinner =>
 
 <!-- lang:models -->
 ```csharp
-namespace {ProjectNamespace}.Models;
+namespace {project.rootNamespace}.Models;
 
 public class {ModelName}
 {
@@ -232,10 +231,10 @@ public class {ModelName}
 using Bellatrix.Mobile;
 using Bellatrix.Mobile.Android;
 using Bellatrix.Mobile.NUnit;
-using {ProjectNamespace}.Pages;
+using {project.rootNamespace}.Pages;
 using NUnit.Framework;
 
-namespace {ProjectNamespace}.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [Android(Constants.AppPath,
@@ -274,10 +273,10 @@ public class {TestClassName} : AndroidTest
 using Bellatrix.Mobile;
 using Bellatrix.Mobile.IOS;
 using Bellatrix.Mobile.NUnit;
-using {ProjectNamespace}.Pages;
+using {project.rootNamespace}.Pages;
 using NUnit.Framework;
 
-namespace {ProjectNamespace}.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [IOS(Constants.AppPath,
@@ -368,7 +367,7 @@ Applies everywhere — page objects, actions, assertions, sections, tests, custo
 
 <!-- lang:build -->
 ```bash
-dotnet build MyProject.MobileTests/MyProject.MobileTests.csproj
+{project.buildCommand}
 ```
 
 Common build errors:
@@ -380,7 +379,7 @@ Common build errors:
 
 <!-- lang:run-command -->
 ```bash
-dotnet test MyProject.MobileTests/MyProject.MobileTests.csproj --filter "FullyQualifiedName~{TestMethodName}" --no-build --logger "console;verbosity=detailed"
+dotnet test {project.path} --filter "FullyQualifiedName~{TestMethodName}" --no-build --logger "console;verbosity=detailed"
 ```
 
 (The user starts Appium and the device/emulator before running it.)
@@ -401,7 +400,7 @@ dotnet test MyProject.MobileTests/MyProject.MobileTests.csproj --filter "FullyQu
 
 ### Build Verification
 ```
-Build succeeded: dotnet build MyProject.MobileTests/MyProject.MobileTests.csproj
+Build succeeded: {project.buildCommand}
 ```
 <!-- lang:edit-split -->
 - **Keep the partial-class split** — all files of one screen share one class name

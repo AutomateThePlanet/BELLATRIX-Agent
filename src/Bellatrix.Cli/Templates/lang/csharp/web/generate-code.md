@@ -14,9 +14,9 @@ Pages/
     {PageName}.Assertions.*   — Assert* methods built from Validate* methods
 ```
 <!-- lang:target -->
-**Target project:** the BELLATRIX web test project recorded in `bellatrix-web-project-structure` (written below as `MyProject.WebTests` — substitute the real name).
-- **Namespaces**: `MyProject.WebTests.Pages`, `MyProject.WebTests.Sections`, `MyProject.WebTests.Components`, `MyProject.WebTests.Models`, `MyProject.WebTests.Tests`
-- **Build command**: `dotnet build MyProject.WebTests/MyProject.WebTests.csproj`
+**Target project:** `domains.web.project` in `.bellatrix/config.json` (`{project.name}`, folder `{project.dir}`).
+- **Namespaces**: `{project.rootNamespace}.Pages`, `{project.rootNamespace}.Sections`, `{project.rootNamespace}.Components`, `{project.rootNamespace}.Models`, `{project.rootNamespace}.Tests`
+- **Build command**: `{project.buildCommand}`
 - **Language**: C# with file-scoped namespaces; NUnit + `Bellatrix.Web.NUnit.WebTest` unless the project already uses MSTest
 
 <!-- lang:page-objects -->
@@ -25,7 +25,7 @@ Pages/
 ```csharp
 using Bellatrix.Web;
 
-namespace MyProject.WebTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class {PageName}
 {
@@ -61,9 +61,9 @@ public partial class {PageName}
 
 ```csharp
 using Bellatrix.Web;
-using MyProject.WebTests.Models;
+using {project.rootNamespace}.Models;
 
-namespace MyProject.WebTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class {PageName} : WebPage
 {
@@ -97,7 +97,7 @@ Every wait you needed during live execution (spinner, AJAX, URL change) belongs 
 ```csharp
 using Bellatrix.Web;
 
-namespace MyProject.WebTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class {PageName}
 {
@@ -129,7 +129,7 @@ Use the exact texts observed during live execution. `Select` has no inner-text v
 using Bellatrix.Web;
 using Bellatrix.Web.Contracts;
 
-namespace MyProject.WebTests.Components;
+namespace {project.rootNamespace}.Components;
 
 public class Toast : Component, IComponentInnerText
 {
@@ -144,7 +144,7 @@ public class Toast : Component, IComponentInnerText
 ```csharp
 using Bellatrix.Web;
 
-namespace MyProject.WebTests.Components;
+namespace {project.rootNamespace}.Components;
 
 public class ScrollingButton : Button
 {
@@ -159,7 +159,7 @@ public class ScrollingButton : Button
 ### Using custom components in Map files
 
 ```csharp
-using MyProject.WebTests.Components;
+using {project.rootNamespace}.Components;
 
 public Toast SuccessToast => App.Components.CreateByCss<Toast>("[data-testid='toast']");
 public ScrollingButton PlaceOrderButton => App.Components.CreateById<ScrollingButton>("place_order");
@@ -172,7 +172,7 @@ Inside a component, locate children with the scoped factories (`this.CreateByCss
 // Sections/HeaderSection/HeaderSection.Map.cs
 using Bellatrix.Web;
 
-namespace MyProject.WebTests.Sections;
+namespace {project.rootNamespace}.Sections;
 
 public partial class HeaderSection
 {
@@ -183,7 +183,7 @@ public partial class HeaderSection
 // Sections/HeaderSection/HeaderSection.Actions.cs
 using Bellatrix.Web;
 
-namespace MyProject.WebTests.Sections;
+namespace {project.rootNamespace}.Sections;
 
 public partial class HeaderSection : WebSection
 {
@@ -205,7 +205,7 @@ public void OpenCart() => Header.OpenCart();
 
 <!-- lang:models -->
 ```csharp
-namespace MyProject.WebTests.Models;
+namespace {project.rootNamespace}.Models;
 
 public class BillingInfo
 {
@@ -232,11 +232,11 @@ Map enum values to visible option texts inside the page object (a `switch` in th
 ```csharp
 using Bellatrix.Web;
 using Bellatrix.Web.NUnit;
-using MyProject.WebTests.Models;
-using MyProject.WebTests.Pages;
+using {project.rootNamespace}.Models;
+using {project.rootNamespace}.Pages;
 using NUnit.Framework;
 
-namespace MyProject.WebTests.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [Browser(BrowserType.Chrome, Lifecycle.ReuseIfStarted)]   // default for generated classes — speed optimization
@@ -333,7 +333,7 @@ Applies everywhere — page objects, actions, assertions, sections, tests, custo
 
 <!-- lang:build -->
 ```bash
-dotnet build MyProject.WebTests/MyProject.WebTests.csproj
+{project.buildCommand}
 ```
 
 Common build errors:
@@ -346,7 +346,7 @@ Common build errors:
 The command the user runs afterwards (include it in the hand-off; do NOT run it yourself):
 
 ```bash
-dotnet test MyProject.WebTests/MyProject.WebTests.csproj --filter "FullyQualifiedName~{TestMethodName}" --no-build --logger "console;verbosity=detailed"
+dotnet test {project.path} --filter "FullyQualifiedName~{TestMethodName}" --no-build --logger "console;verbosity=detailed"
 ```
 
 <!-- lang:output -->
@@ -368,5 +368,5 @@ dotnet test MyProject.WebTests/MyProject.WebTests.csproj --filter "FullyQualifie
 
 ### Build Verification
 ```
-Build succeeded: dotnet build MyProject.WebTests/MyProject.WebTests.csproj
+Build succeeded: {project.buildCommand}
 ```

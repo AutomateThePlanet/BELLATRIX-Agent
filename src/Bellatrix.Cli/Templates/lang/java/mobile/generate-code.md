@@ -1,12 +1,12 @@
 <!-- lang:target -->
 **Target project:** the BELLATRIX-Java mobile test project listed in `bellatrix-mobile-project-structure` (Maven,
-JUnit 5, `solutions.bellatrix:bellatrix.android:1.0` and/or `bellatrix.ios:1.0`; placeholder `my-mobile-tests`,
-root package `com.myproject.mobiletests` — use the real ones).
-- **Packages**: `{rootPackage}.android.pages.<screen>`, `.android.pages.shared`, `.android.components`,
-  `.android.tests.<featurearea>` (the same under `{rootPackage}.ios.…`), plus the shared `{rootPackage}.models` and
-  `{rootPackage}.common`; sources under `src/test/java/`
+JUnit 5, `solutions.bellatrix:bellatrix.android:1.0` and/or `bellatrix.ios:1.0`; folder `{project.dir}` and
+root package `{project.rootNamespace}` from `.bellatrix/config.json`).
+- **Packages**: `{project.rootNamespace}.android.pages.<screen>`, `.android.pages.shared`, `.android.components`,
+  `.android.tests.<featurearea>` (the same under `{project.rootNamespace}.ios.…`), plus the shared `{project.rootNamespace}.models` and
+  `{project.rootNamespace}.common`; sources under `src/test/java/`
 - **Platform imports**: `solutions.bellatrix.android.*` **or** `solutions.bellatrix.ios.*` per file
-- **Build command**: `mvn -q test-compile` (from the folder that holds `pom.xml`)
+- **Build command**: `{project.buildCommand}` (from the repository root)
 
 <!-- lang:edit-split -->
 - **Keep the 3-class split** — locators only in `Map`, workflows only in the page class (the "Actions file"),
@@ -23,7 +23,7 @@ Each screen gets a dedicated package with three classes (Java has no partial cla
 <!-- lang:page-objects -->
 ### Folder Structure
 ```
-src/test/java/{rootPath}/android/pages/      (or …/ios/pages/)
+src/test/java/{project.rootPath}/android/pages/      (or …/ios/pages/)
   {screen}/
     {ScreenName}.java   — action methods (extends AndroidPage<Map, Asserts> / IOSPage<Map, Asserts>)
     Map.java            — component methods (locators)
@@ -35,7 +35,7 @@ src/test/java/{rootPath}/android/pages/      (or …/ios/pages/)
 ### Map Class (`Map.java`) — Android
 
 ```java
-package {rootPackage}.android.pages.{screen};
+package {project.rootNamespace}.android.pages.{screen};
 
 import solutions.bellatrix.android.components.Button;
 import solutions.bellatrix.android.components.Label;
@@ -72,7 +72,7 @@ public class Map extends PageMap {
 ### Map Class (`Map.java`) — iOS
 
 ```java
-package {rootPackage}.ios.pages.{screen};
+package {project.rootNamespace}.ios.pages.{screen};
 
 import solutions.bellatrix.ios.components.Button;
 import solutions.bellatrix.ios.components.Label;
@@ -121,10 +121,10 @@ Use `byXPath` ONLY for structural locators. There is no `byAccessibilityId` sing
 ### Page Class (`{ScreenName}.java`)
 
 ```java
-package {rootPackage}.android.pages.{screen};
+package {project.rootNamespace}.android.pages.{screen};
 
-import {rootPackage}.android.pages.{nextscreen}.{NextScreen};
-import {rootPackage}.common.Constants;
+import {project.rootNamespace}.android.pages.{nextscreen}.{NextScreen};
+import {project.rootNamespace}.common.Constants;
 import solutions.bellatrix.android.pages.AndroidPage;
 
 public class {ScreenName} extends AndroidPage<Map, Asserts> {
@@ -155,7 +155,7 @@ page with `new App().createPage({NextScreen}.class)` (`solutions.bellatrix.ios.s
 ### Asserts Class (`Asserts.java`)
 
 ```java
-package {rootPackage}.android.pages.{screen};
+package {project.rootNamespace}.android.pages.{screen};
 
 import solutions.bellatrix.android.pages.PageAsserts;
 
@@ -176,7 +176,7 @@ Swap `solutions.bellatrix.android.pages.PageAsserts` for `solutions.bellatrix.io
 <!-- lang:custom-components -->
 ### Folder
 ```
-src/test/java/{rootPath}/
+src/test/java/{project.rootPath}/
   android/components/        (or ios/components/)
     {CustomComponentName}.java
 ```
@@ -187,7 +187,7 @@ src/test/java/{rootPath}/
 `Button`:
 
 ```java
-package {rootPackage}.android.components;
+package {project.rootNamespace}.android.components;
 
 import solutions.bellatrix.android.components.Button;
 
@@ -208,7 +208,7 @@ iOS switches: the built-in `ToggleButton` / `CheckBox` state reads an attribute 
 `XCUIElementTypeSwitch` with a `Button` subclass that reads `value`:
 
 ```java
-package {rootPackage}.ios.components;
+package {project.rootNamespace}.ios.components;
 
 import solutions.bellatrix.ios.components.Button;
 
@@ -238,7 +238,7 @@ an element (`NullPointerException`). Override it to open the spinner and tap the
 (confirm the option text live with the CLI):
 
 ```java
-package {rootPackage}.android.components;
+package {project.rootNamespace}.android.components;
 
 import solutions.bellatrix.android.components.Button;
 import solutions.bellatrix.android.components.ComboBox;
@@ -264,8 +264,8 @@ methods you can override.
 ### Using custom components in Map classes
 
 ```java
-import {rootPackage}.android.components.SpinnerComboBox;
-import {rootPackage}.android.components.TabButton;
+import {project.rootNamespace}.android.components.SpinnerComboBox;
+import {project.rootNamespace}.android.components.TabButton;
 
 public TabButton dealsTab() {
     return create().byDescription(TabButton.class, "Deals");
@@ -279,28 +279,28 @@ public SpinnerComboBox countrySpinner() {
 Components are created reflectively — keep the implicit public no-argument constructor.
 
 <!-- lang:models -->
-Place them in the shared `{rootPackage}.models` package — prefer records:
+Place them in the shared `{project.rootNamespace}.models` package — prefer records:
 
 ```java
-package {rootPackage}.models;
+package {project.rootNamespace}.models;
 
 public record {ModelName}(String propertyOne, String propertyTwo) {
 }
 ```
 
 <!-- lang:test-class -->
-**Java naming:** `{App}{FeatureArea}Tests.java` in package `{rootPackage}.android.tests.{featurearea}` (or
+**Java naming:** `{App}{FeatureArea}Tests.java` in package `{project.rootNamespace}.android.tests.{featurearea}` (or
 `….ios.tests.{featurearea}`) — e.g. `android/tests/login/ShopLoginTests.java`. Test methods use
 `action_Condition_ExpectedResult`.
 
 ### Test Class Template (Android)
 
 ```java
-package {rootPackage}.android.tests.{featurearea};
+package {project.rootNamespace}.android.tests.{featurearea};
 
-import {rootPackage}.android.pages.{screen}.{ScreenName};
-import {rootPackage}.common.Constants;
-import {rootPackage}.common.ManualTestCase;
+import {project.rootNamespace}.android.pages.{screen}.{ScreenName};
+import {project.rootNamespace}.common.Constants;
+import {project.rootNamespace}.common.ManualTestCase;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.android.infrastructure.ExecutionApp;
@@ -336,11 +336,11 @@ public class {TestClassName} extends AndroidTest {
 ### Test Class Template (iOS)
 
 ```java
-package {rootPackage}.ios.tests.{featurearea};
+package {project.rootNamespace}.ios.tests.{featurearea};
 
-import {rootPackage}.common.Constants;
-import {rootPackage}.common.ManualTestCase;
-import {rootPackage}.ios.pages.{screen}.{ScreenName};
+import {project.rootNamespace}.common.Constants;
+import {project.rootNamespace}.common.ManualTestCase;
+import {project.rootNamespace}.ios.pages.{screen}.{ScreenName};
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.ios.infrastructure.ExecutionApp;
@@ -364,7 +364,7 @@ public class {TestClassName} extends IOSTest {
 }
 ```
 
-`@ManualTestCase("TC-XXX")` is the project-local annotation in `{rootPackage}.common.ManualTestCase` (create it if
+`@ManualTestCase("TC-XXX")` is the project-local annotation in `{project.rootNamespace}.common.ManualTestCase` (create it if
 missing — see `bellatrix-mobile-project-structure`). It is not `@Repeatable`. Never use `@ParameterizedTest` /
 `@CsvSource` for traceability.
 
@@ -438,7 +438,7 @@ Applies everywhere — page objects, actions, assertions, sections, tests, custo
 
 <!-- lang:build -->
 ```bash
-mvn -q test-compile
+{project.buildCommand}
 ```
 
 Compile only — never `mvn test` / `mvn verify`. Common build errors:
@@ -461,17 +461,17 @@ mvn test -Dtest={TestClassName}#{testMethodName}
 ### Files Created/Modified
 
 ```
-[CREATED] src/test/java/{rootPath}/android/pages/{screen}/Map.java
-[CREATED] src/test/java/{rootPath}/android/pages/{screen}/{ScreenName}.java
-[CREATED] src/test/java/{rootPath}/android/pages/{screen}/Asserts.java
-[EDITED]  src/test/java/{rootPath}/android/pages/{existingscreen}/Map.java — added 3 new element methods
-[EDITED]  src/test/java/{rootPath}/android/pages/{existingscreen}/{ExistingScreen}.java — added 2 new methods
-[CREATED] src/test/java/{rootPath}/models/{ModelName}.java
-[CREATED] src/test/java/{rootPath}/android/tests/{featurearea}/{TestClassName}.java
+[CREATED] src/test/java/{project.rootPath}/android/pages/{screen}/Map.java
+[CREATED] src/test/java/{project.rootPath}/android/pages/{screen}/{ScreenName}.java
+[CREATED] src/test/java/{project.rootPath}/android/pages/{screen}/Asserts.java
+[EDITED]  src/test/java/{project.rootPath}/android/pages/{existingscreen}/Map.java — added 3 new element methods
+[EDITED]  src/test/java/{project.rootPath}/android/pages/{existingscreen}/{ExistingScreen}.java — added 2 new methods
+[CREATED] src/test/java/{project.rootPath}/models/{ModelName}.java
+[CREATED] src/test/java/{project.rootPath}/android/tests/{featurearea}/{TestClassName}.java
 [EDITED]  bellatrix-mobile-project-structure skill — added android/pages/{screen}
 ```
 
 ### Build Verification
 ```
-Build succeeded: mvn -q test-compile
+Build succeeded: {project.buildCommand}
 ```

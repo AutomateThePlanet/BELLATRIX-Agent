@@ -5,6 +5,12 @@ description: Skill for generating or editing BELLATRIX mobile test code (page ob
 
 # Generate Mobile Test Code
 
+> **Project settings:** run `bellatrix config validate --json` and read `.bellatrix/config.json` before anything else.
+> `{project.*}` below are the values of `domains.mobile.project` there (`{project.dir}` = the folder of
+> `{project.path}`; `{project.rootPath}` = `{project.rootNamespace}` with `/` instead of `.`), and `{testCasesDir}` is
+> `domains.mobile.testCasesDir`, else `testCasesDir`. If the file is missing or invalid, or has no mobile project,
+> **stop and ask the user**, record the answer there and validate again. Never guess a project name or path.
+
 Generate production-ready BELLATRIX mobile test code from the findings of scenario execution
 (`bellatrix-mobile-execute-scenario`). This skill handles both **creating new files** and
 **editing/expanding existing ones**.

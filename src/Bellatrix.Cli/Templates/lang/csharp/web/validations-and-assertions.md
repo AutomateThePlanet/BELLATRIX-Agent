@@ -121,7 +121,7 @@ There is **no** generic `ValidateAttributeIs(name, value)`. For an arbitrary att
 ```csharp
 using Bellatrix.Web;
 
-namespace MyProject.WebTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class CartPage
 {

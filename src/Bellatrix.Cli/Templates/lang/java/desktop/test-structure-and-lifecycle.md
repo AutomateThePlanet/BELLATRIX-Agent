@@ -5,9 +5,9 @@
 ### JUnit 5 (default)
 
 ```java
-package demo.desktoptests.tests.login;
+package {project.rootNamespace}.tests.login;
 
-import demo.desktoptests.common.Constants;
+import {project.rootNamespace}.common.Constants;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.desktop.infrastructure.ExecutionApp;
@@ -30,9 +30,9 @@ No class-level test annotation is needed (the base class carries `@TestInstance(
 ### TestNG
 
 ```java
-package demo.desktoptests.tests.login;
+package {project.rootNamespace}.tests.login;
 
-import demo.desktoptests.common.Constants;
+import {project.rootNamespace}.common.Constants;
 import org.testng.annotations.Test;
 import solutions.bellatrix.desktop.infrastructure.ExecutionApp;
 import solutions.bellatrix.desktop.infrastructure.Lifecycle;
@@ -157,10 +157,10 @@ TestNG: `@Test(groups = "Smoke")`. Run a category: `mvn test -Dgroups=Smoke`.
 ## Complete Test Class Template
 
 ```java
-package demo.desktoptests.tests.login;
+package {project.rootNamespace}.tests.login;
 
-import demo.desktoptests.common.Constants;
-import demo.desktoptests.common.UiaXPathFindStrategy;
+import {project.rootNamespace}.common.Constants;
+import {project.rootNamespace}.common.UiaXPathFindStrategy;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.desktop.components.Button;
@@ -232,8 +232,8 @@ solutions.bellatrix.desktop.infrastructure.testng.DesktopTest  + org.testng.anno
 solutions.bellatrix.desktop.infrastructure.ExecutionApp, solutions.bellatrix.desktop.infrastructure.Lifecycle
 
 // Project
-{rootPackage}.common.Constants / ManualTestCase / UiaXPathFindStrategy
-{rootPackage}.pages.<window>.<Window>
+{project.rootNamespace}.common.Constants / ManualTestCase / UiaXPathFindStrategy
+{project.rootNamespace}.pages.<window>.<Window>
 ```
 
 Never `import java.util.Map;` in a page package — that import shadows the page's own `Map` class and breaks

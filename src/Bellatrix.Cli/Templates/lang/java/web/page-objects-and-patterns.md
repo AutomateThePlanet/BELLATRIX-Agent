@@ -85,7 +85,7 @@ See `bellatrix-web-validations-and-assertions`. Inside `Asserts`, `map()` is `pr
 ## Project Structure (3-Class Pattern)
 
 ```
-src/test/java/myproject/webtests/
+src/test/java/{project.rootPath}/
   pages/
     login/
       LoginPage.java     # extends WebPage<Map, Asserts>: getUrl(), waitForPageLoad(), workflow methods
@@ -119,7 +119,7 @@ src/test/java/myproject/webtests/
 ### Map.java
 
 ```java
-package myproject.webtests.pages.login;
+package {project.rootNamespace}.pages.login;
 
 import solutions.bellatrix.web.components.*;
 import solutions.bellatrix.web.pages.PageMap;
@@ -163,10 +163,10 @@ public class Map extends PageMap {
 ### LoginPage.java (actions)
 
 ```java
-package myproject.webtests.pages.login;
+package {project.rootNamespace}.pages.login;
 
-import myproject.webtests.models.LoginCredentials;
-import myproject.webtests.pages.dashboard.DashboardPage;
+import {project.rootNamespace}.models.LoginCredentials;
+import {project.rootNamespace}.pages.dashboard.DashboardPage;
 import solutions.bellatrix.web.pages.WebPage;
 
 public class LoginPage extends WebPage<Map, Asserts> {
@@ -209,7 +209,7 @@ public class LoginPage extends WebPage<Map, Asserts> {
 ### Asserts.java
 
 ```java
-package myproject.webtests.pages.login;
+package {project.rootNamespace}.pages.login;
 
 import solutions.bellatrix.web.pages.PageAsserts;
 
@@ -374,7 +374,7 @@ Headers, navigation bars, footers, cookie banners, and mini-carts appear on many
 
 ```java
 // sections/header/Map.java
-package myproject.webtests.sections.header;
+package {project.rootNamespace}.sections.header;
 
 import solutions.bellatrix.web.components.*;
 import solutions.bellatrix.web.pages.PageMap;
@@ -402,7 +402,7 @@ public class Map extends PageMap {
 }
 
 // sections/header/HeaderSection.java
-package myproject.webtests.sections.header;
+package {project.rootNamespace}.sections.header;
 
 import solutions.bellatrix.web.pages.WebSection;
 
@@ -425,7 +425,7 @@ public class HeaderSection extends WebSection<Map, Asserts> {
 }
 
 // sections/header/Asserts.java
-package myproject.webtests.sections.header;
+package {project.rootNamespace}.sections.header;
 
 import solutions.bellatrix.web.pages.PageAsserts;
 
@@ -440,7 +440,7 @@ Expose the section from each page's `Map` and delegate from the page's action me
 
 ```java
 // pages/cart/Map.java
-import myproject.webtests.sections.header.HeaderSection;
+import {project.rootNamespace}.sections.header.HeaderSection;
 
 public HeaderSection header() {
     return app().createSection(HeaderSection.class);
@@ -467,14 +467,14 @@ Tests may also create a section directly: `var header = app().createSection(Head
 Place data models in the `models` package. A small immutable value is a record; a form with many optional fields is a plain class with getters/setters (no Lombok — it is not on a test project's classpath):
 
 ```java
-package myproject.webtests.models;
+package {project.rootNamespace}.models;
 
 public record LoginCredentials(String email, String password) {
 }
 ```
 
 ```java
-package myproject.webtests.models;
+package {project.rootNamespace}.models;
 
 public class BillingInfo {
     private String firstName;

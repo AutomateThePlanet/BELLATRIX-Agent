@@ -192,7 +192,7 @@ Extend a built-in component when you need control-level behavior it lacks (see
 `bellatrix-mobile-generate-code` → Custom Components):
 
 ```java
-package com.myproject.mobiletests.android.components;
+package {project.rootNamespace}.android.components;
 
 import solutions.bellatrix.android.components.Button;
 

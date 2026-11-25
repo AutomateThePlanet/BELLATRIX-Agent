@@ -13,9 +13,9 @@ Each platform has its OWN `ExecutionApp` and `Lifecycle` (`solutions.bellatrix.a
 ### Android (JUnit 5)
 
 ```java
-package com.myproject.mobiletests.android.tests.login;
+package {project.rootNamespace}.android.tests.login;
 
-import com.myproject.mobiletests.common.Constants;
+import {project.rootNamespace}.common.Constants;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.android.infrastructure.ExecutionApp;
@@ -38,9 +38,9 @@ public class ShopLoginTests extends AndroidTest {
 ### iOS (JUnit 5)
 
 ```java
-package com.myproject.mobiletests.ios.tests.login;
+package {project.rootNamespace}.ios.tests.login;
 
-import com.myproject.mobiletests.common.Constants;
+import {project.rootNamespace}.common.Constants;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.ios.infrastructure.ExecutionApp;
@@ -63,9 +63,9 @@ public class ShopLoginTests extends IOSTest {
 ### TestNG
 
 ```java
-package com.myproject.mobiletests.android.tests.login;
+package {project.rootNamespace}.android.tests.login;
 
-import com.myproject.mobiletests.common.Constants;
+import {project.rootNamespace}.common.Constants;
 import org.testng.annotations.Test;
 import solutions.bellatrix.android.infrastructure.ExecutionApp;
 import solutions.bellatrix.android.infrastructure.Lifecycle;
@@ -123,7 +123,7 @@ placeholders in `appPath`; iOS uses an annotation `appPath` verbatim.
 
 ```java
 // Constants — compile-time constants for @ExecutionApp
-package com.myproject.mobiletests.common;
+package {project.rootNamespace}.common;
 
 public final class Constants {
     public static final String ANDROID_APP_PATH = "${user.home}/apps/shop.apk";
@@ -251,11 +251,11 @@ TestNG: `@Test(groups = "Smoke")`. Run a category: `mvn test -Dgroups=Smoke`.
 ## Complete Test Class Template (Android)
 
 ```java
-package com.myproject.mobiletests.android.tests.login;
+package {project.rootNamespace}.android.tests.login;
 
-import com.myproject.mobiletests.android.pages.home.HomePage;
-import com.myproject.mobiletests.android.pages.login.LoginPage;
-import com.myproject.mobiletests.common.Constants;
+import {project.rootNamespace}.android.pages.home.HomePage;
+import {project.rootNamespace}.android.pages.login.LoginPage;
+import {project.rootNamespace}.common.Constants;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.android.infrastructure.ExecutionApp;
@@ -321,8 +321,8 @@ org.openqa.selenium.ScreenOrientation           (orientation tests)
 io.appium.java_client.android.nativekey.AndroidKey  (Android key presses)
 
 // Project
-{rootPackage}.common.Constants / ManualTestCase
-{rootPackage}.android.pages.<screen>.<Screen>   /   {rootPackage}.ios.pages.<screen>.<Screen>
+{project.rootNamespace}.common.Constants / ManualTestCase
+{project.rootNamespace}.android.pages.<screen>.<Screen>   /   {project.rootNamespace}.ios.pages.<screen>.<Screen>
 ```
 
 Never `import java.util.Map` in a page package — it hides the page's own `Map` class; import `java.util.List`

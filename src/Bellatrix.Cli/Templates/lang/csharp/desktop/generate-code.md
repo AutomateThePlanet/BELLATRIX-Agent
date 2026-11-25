@@ -2,9 +2,9 @@
 
 Generate production-ready BELLATRIX desktop test code using validated locators from scenario execution. This skill handles both **creating new files** and **editing/expanding existing ones**.
 
-**Target project:** `Demo.DesktopTests` — all generated code goes here.
-- **Namespaces**: `Demo.DesktopTests.Pages`, `Demo.DesktopTests.Models`, `Demo.DesktopTests.Tests`
-- **Build command**: `dotnet build Demo.DesktopTests/Demo.DesktopTests.csproj`
+**Target project:** `{project.name}` — all generated code goes here.
+- **Namespaces**: `{project.rootNamespace}.Pages`, `{project.rootNamespace}.Models`, `{project.rootNamespace}.Tests`
+- **Build command**: `{project.buildCommand}`
 
 ---
 
@@ -77,7 +77,7 @@ This file defines the `DesktopPage` base class and all component properties:
 using Bellatrix.Desktop;
 using Bellatrix.Desktop.PageObjects;
 
-namespace {ProjectNamespace}.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class {WindowName} : DesktopPage
 {
@@ -104,7 +104,7 @@ public partial class {WindowName} : DesktopPage
 ### Actions File (`{WindowName}.Actions.cs`)
 
 ```csharp
-namespace {ProjectNamespace}.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class {WindowName}
 {
@@ -121,7 +121,7 @@ public partial class {WindowName}
 ```csharp
 using Bellatrix.Desktop; // Validate* extension methods live here
 
-namespace {ProjectNamespace}.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class {WindowName}
 {
@@ -141,11 +141,11 @@ public partial class {WindowName}
 
 ## Step 2b: Custom Components (When BELLATRIX Built-ins Don't Fit)
 
-If a built-in BELLATRIX component (`Button`, `Label`, `ComboBox`, `Calendar`, etc.) is missing a method you need, or behaves incorrectly for a specific control, add a custom component under `Demo.DesktopTests/Components/` instead of working around it in page objects or tests.
+If a built-in BELLATRIX component (`Button`, `Label`, `ComboBox`, `Calendar`, etc.) is missing a method you need, or behaves incorrectly for a specific control, add a custom component under `{project.dir}/Components/` instead of working around it in page objects or tests.
 
 ### Folder
 ```
-Demo.DesktopTests/
+{project.dir}/
   Components/
     {CustomComponentName}.cs
 ```
@@ -157,7 +157,7 @@ Use when no BELLATRIX built-in models the control cleanly (e.g., a specialized c
 ```csharp
 using Bellatrix.Desktop;
 
-namespace Demo.DesktopTests.Components;
+namespace {project.rootNamespace}.Components;
 
 public class CalendarDayItem : Component
 {
@@ -176,7 +176,7 @@ Use when a built-in is *almost* right but you need to tweak behavior (e.g., a `C
 ```csharp
 using Bellatrix.Desktop;
 
-namespace Demo.DesktopTests.Components;
+namespace {project.rootNamespace}.Components;
 
 public class ResilientComboBox : ComboBox
 {
@@ -193,7 +193,7 @@ public class ResilientComboBox : ComboBox
 Reference them by the custom type in the factory generic — all factory methods work transparently:
 
 ```csharp
-using Demo.DesktopTests.Components;
+using {project.rootNamespace}.Components;
 
 public CalendarDayItem FifteenthOfMonth =>
     App.Components.CreateByAutomationId<CalendarDayItem>("Day_15");
@@ -204,7 +204,7 @@ public ResilientComboBox CountryDropdown =>
 
 ### Rules
 
-- **Never modify BELLATRIX source.** Extend in `Demo.DesktopTests/Components/` only.
+- **Never modify BELLATRIX source.** Extend in `{project.dir}/Components/` only.
 - **Keep components thin.** Methods on a custom component should be *control-level* behaviors (select day, expand menu). Business workflow stays in `.Actions.cs` page files.
 - **One file per component.** Match filename to class name.
 - **Reuse across page objects.** A custom component defined once can be referenced from any Map file.
@@ -216,7 +216,7 @@ public ResilientComboBox CountryDropdown =>
 Place in `Models/` folder. Use for structured form data:
 
 ```csharp
-namespace {ProjectNamespace}.Models;
+namespace {project.rootNamespace}.Models;
 
 public class {ModelName}
 {
@@ -260,10 +260,10 @@ Do NOT put all tests into a single file. Organize test classes by **logical feat
 ```csharp
 using Bellatrix.Desktop;
 using Bellatrix.Desktop.NUnit;
-using {ProjectNamespace}.Pages;
+using {project.rootNamespace}.Pages;
 using NUnit.Framework;
 
-namespace {ProjectNamespace}.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [App("{appPath}", Lifecycle.ReuseIfStarted)]  // default for generated classes — speed optimization

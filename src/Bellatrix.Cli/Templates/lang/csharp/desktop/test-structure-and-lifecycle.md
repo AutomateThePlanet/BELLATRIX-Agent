@@ -9,7 +9,7 @@ using Bellatrix.Desktop;        // [App], Lifecycle
 using Bellatrix.Desktop.NUnit;
 using NUnit.Framework;
 
-namespace MyProject.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [App(@"C:\Program Files\MyApp\MyApp.exe", Lifecycle.RestartEveryTime)]
@@ -31,7 +31,7 @@ using Bellatrix.Desktop;        // [App], Lifecycle
 using Bellatrix.Desktop.MSTest;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace MyProject.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestClass]
 [App(@"C:\Program Files\MyApp\MyApp.exe", Lifecycle.RestartEveryTime)]
@@ -127,7 +127,7 @@ using Bellatrix.Desktop;
 using Bellatrix.Desktop.NUnit;
 using NUnit.Framework;
 
-namespace MyProject.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [App(@"C:\Program Files\MyApp\MyApp.exe", Lifecycle.RestartEveryTime)]
@@ -193,5 +193,5 @@ using NUnit.Framework;             // [TestFixture], [Test], [Category]
 using Microsoft.VisualStudio.TestTools.UnitTesting; // [TestClass], [TestMethod]
 
 // Page objects
-using MyProject.Pages;
+using {project.rootNamespace}.Pages;
 ```

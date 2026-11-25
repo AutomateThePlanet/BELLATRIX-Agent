@@ -2,9 +2,9 @@
 
 Generate production-ready BELLATRIX-Java desktop test code using validated locators from scenario execution. This skill handles both **creating new files** and **editing/expanding existing ones**.
 
-**Target project:** `demo-desktop-tests` (Maven, JUnit 5, `solutions.bellatrix:bellatrix.desktop:1.0`) — all generated code goes here.
-- **Packages**: `{rootPackage}.pages.<window>`, `{rootPackage}.models`, `{rootPackage}.tests.<featurearea>`, `{rootPackage}.components`, `{rootPackage}.common` (demo root package: `demo.desktoptests`; sources under `src/test/java/`)
-- **Build command**: `mvn -q test-compile` (from the folder that holds `pom.xml`)
+**Target project:** `{project.dir}` (Maven, JUnit 5, `solutions.bellatrix:bellatrix.desktop:1.0`) — all generated code goes here.
+- **Packages**: `{project.rootNamespace}.pages.<window>`, `{project.rootNamespace}.models`, `{project.rootNamespace}.tests.<featurearea>`, `{project.rootNamespace}.components`, `{project.rootNamespace}.common` (demo root package: `{project.rootNamespace}`; sources under `src/test/java/`)
+- **Build command**: `{project.buildCommand}` (from the repository root)
 
 ---
 
@@ -63,7 +63,7 @@ Search for project infrastructure: src/test/java/**/common/*.java (ManualTestCas
 `common/ManualTestCase.java` — SPECTRA traceability (metadata only):
 
 ```java
-package demo.desktoptests.common;
+package {project.rootNamespace}.common;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -80,7 +80,7 @@ public @interface ManualTestCase {
 `common/Constants.java` — annotation values must be compile-time constants:
 
 ```java
-package demo.desktoptests.common;
+package {project.rootNamespace}.common;
 
 public final class Constants {
     public static final String CALCULATOR_APP_PATH = "Microsoft.WindowsCalculator_8wekyb3d8bbwe!App";
@@ -105,7 +105,7 @@ Each window gets a dedicated package with 3 classes:
 
 ### Folder Structure
 ```
-src/test/java/{rootPath}/pages/
+src/test/java/{project.rootPath}/pages/
   {window}/
     {WindowName}.java   — Action methods (extends DesktopPage<Map, Asserts>)
     Map.java            — Component methods (locators)
@@ -117,9 +117,9 @@ src/test/java/{rootPath}/pages/
 ### Map Class (`Map.java`)
 
 ```java
-package {rootPackage}.pages.{window};
+package {project.rootNamespace}.pages.{window};
 
-import {rootPackage}.common.UiaXPathFindStrategy;
+import {project.rootNamespace}.common.UiaXPathFindStrategy;
 import solutions.bellatrix.desktop.components.Button;
 import solutions.bellatrix.desktop.components.Label;
 import solutions.bellatrix.desktop.components.TextField;
@@ -159,7 +159,7 @@ public class Map extends PageMap {
 ### Page Class (`{WindowName}.java`)
 
 ```java
-package {rootPackage}.pages.{window};
+package {project.rootNamespace}.pages.{window};
 
 import solutions.bellatrix.desktop.pages.DesktopPage;
 
@@ -174,7 +174,7 @@ public class {WindowName} extends DesktopPage<Map, Asserts> {
 ### Asserts Class (`Asserts.java`)
 
 ```java
-package {rootPackage}.pages.{window};
+package {project.rootNamespace}.pages.{window};
 
 import solutions.bellatrix.desktop.pages.PageAsserts;
 
@@ -195,12 +195,12 @@ public class Asserts extends PageAsserts<Map> {
 ## Step 2b: Custom Components (When BELLATRIX Built-ins Don't Fit)
 
 If a built-in BELLATRIX component (`Button`, `Label`, `ComboBox`, …) is missing a method you need, or behaves
-incorrectly for a specific control, add a custom component under `src/test/java/{rootPath}/components/` instead of
+incorrectly for a specific control, add a custom component under `src/test/java/{project.rootPath}/components/` instead of
 working around it in page objects or tests.
 
 ### Folder
 ```
-src/test/java/{rootPath}/
+src/test/java/{project.rootPath}/
   components/
     {CustomComponentName}.java
 ```
@@ -212,7 +212,7 @@ grid cell). `DesktopComponent` has no `click()` — reuse the framework's click 
 the inherited `defaultClick`:
 
 ```java
-package demo.desktoptests.components;
+package {project.rootNamespace}.components;
 
 import solutions.bellatrix.desktop.components.Button;
 import solutions.bellatrix.desktop.components.DesktopComponent;
@@ -239,7 +239,7 @@ Use when a built-in is *almost* right but you need to tweak behavior (e.g., a `C
 extra waits, or a WinUI dropdown that ignores typed text):
 
 ```java
-package demo.desktoptests.components;
+package {project.rootNamespace}.components;
 
 import solutions.bellatrix.desktop.components.ComboBox;
 
@@ -253,9 +253,9 @@ public class ResilientComboBox extends ComboBox {
 ```
 
 ```java
-package demo.desktoptests.components;
+package {project.rootNamespace}.components;
 
-import demo.desktoptests.common.UiaXPathFindStrategy;
+import {project.rootNamespace}.common.UiaXPathFindStrategy;
 import solutions.bellatrix.desktop.components.Button;
 import solutions.bellatrix.desktop.components.ComboBox;
 
@@ -291,7 +291,7 @@ public ResilientComboBox countryDropdown() {
 
 ### Rules
 
-- **Never modify BELLATRIX source.** Extend in `{rootPackage}.components` only.
+- **Never modify BELLATRIX source.** Extend in `{project.rootNamespace}.components` only.
 - **Public no-argument constructor.** Components are created reflectively — don't add constructor parameters.
 - **Keep components thin.** Methods on a custom component should be *control-level* behaviors (select day, expand menu). Business workflow stays in the page class.
 - **One file per component.** Match filename to class name.
@@ -304,7 +304,7 @@ public ResilientComboBox countryDropdown() {
 Place in the `models` package. Use for structured form data — prefer records:
 
 ```java
-package {rootPackage}.models;
+package {project.rootNamespace}.models;
 
 public record {ModelName}(String propertyOne, String propertyTwo) {
 }
@@ -318,7 +318,7 @@ public record {ModelName}(String propertyOne, String propertyTwo) {
 
 Do NOT put all tests into a single file. Organize test classes by **logical feature area** using the test case's tags. Each distinct feature area gets its own test class file.
 
-**Naming convention:** `{Window}{FeatureArea}Tests.java` in package `{rootPackage}.tests.{featurearea}`
+**Naming convention:** `{Window}{FeatureArea}Tests.java` in package `{project.rootNamespace}.tests.{featurearea}`
 
 **Examples for standard calculator:**
 
@@ -343,11 +343,11 @@ Do NOT put all tests into a single file. Organize test classes by **logical feat
 ### Test Class Template
 
 ```java
-package {rootPackage}.tests.{featurearea};
+package {project.rootNamespace}.tests.{featurearea};
 
-import {rootPackage}.common.Constants;
-import {rootPackage}.common.ManualTestCase;
-import {rootPackage}.pages.{window}.{WindowName};
+import {project.rootNamespace}.common.Constants;
+import {project.rootNamespace}.common.ManualTestCase;
+import {project.rootNamespace}.pages.{window}.{WindowName};
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.desktop.infrastructure.ExecutionApp;
@@ -451,7 +451,7 @@ Applies everywhere — page objects, actions, assertions, tests, custom componen
 After generating/editing all files:
 
 ```bash
-mvn -q test-compile
+{project.buildCommand}
 ```
 
 Compile only — never `mvn test`/`mvn verify`. Fix any build errors until the build succeeds. Common issues:
@@ -482,7 +482,7 @@ Then wait. When the user returns with specific failures, make targeted fixes bas
 - **"Assertion expected X got Y"** → fix assertion text
 - **"Timing issue on Z"** → add a wait
 
-After each fix iteration, rebuild (`mvn -q test-compile`), then hand back to the user again. Do NOT speculatively rerun tests on your own.
+After each fix iteration, rebuild (`{project.buildCommand}`), then hand back to the user again. Do NOT speculatively rerun tests on your own.
 
 **Exception:** if the user has explicitly said "run them and fix until green" in this conversation, follow that instruction for as long as it applies.
 
@@ -493,16 +493,16 @@ After each fix iteration, rebuild (`mvn -q test-compile`), then hand back to the
 ### Files Created/Modified
 
 ```
-[CREATED] src/test/java/{rootPath}/pages/{window}/Map.java
-[CREATED] src/test/java/{rootPath}/pages/{window}/{WindowName}.java
-[CREATED] src/test/java/{rootPath}/pages/{window}/Asserts.java
-[EDITED]  src/test/java/{rootPath}/pages/{existingwindow}/Map.java — added 3 new element methods
-[EDITED]  src/test/java/{rootPath}/pages/{existingwindow}/{ExistingWindow}.java — added 2 new methods
-[CREATED] src/test/java/{rootPath}/models/{ModelName}.java
-[CREATED] src/test/java/{rootPath}/tests/{featurearea}/{TestClassName}.java
+[CREATED] src/test/java/{project.rootPath}/pages/{window}/Map.java
+[CREATED] src/test/java/{project.rootPath}/pages/{window}/{WindowName}.java
+[CREATED] src/test/java/{project.rootPath}/pages/{window}/Asserts.java
+[EDITED]  src/test/java/{project.rootPath}/pages/{existingwindow}/Map.java — added 3 new element methods
+[EDITED]  src/test/java/{project.rootPath}/pages/{existingwindow}/{ExistingWindow}.java — added 2 new methods
+[CREATED] src/test/java/{project.rootPath}/models/{ModelName}.java
+[CREATED] src/test/java/{project.rootPath}/tests/{featurearea}/{TestClassName}.java
 ```
 
 ### Build Verification
 ```
-Build succeeded: mvn -q test-compile
+Build succeeded: {project.buildCommand}
 ```

@@ -8,7 +8,7 @@
 
 ```csharp
 // CORRECT - file-scoped namespace (no braces)
-namespace MyProject.WebTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginPage : WebPage
 {
@@ -16,7 +16,7 @@ public partial class LoginPage : WebPage
 }
 
 // WRONG - block-scoped namespace
-namespace MyProject.WebTests.Pages
+namespace {project.rootNamespace}.Pages
 {
     public partial class LoginPage : WebPage { }
 }
@@ -93,7 +93,7 @@ Tests/
 ```csharp
 using Bellatrix.Web;
 
-namespace MyProject.WebTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginPage
 {
@@ -127,9 +127,9 @@ public partial class LoginPage
 
 ```csharp
 using Bellatrix.Web;
-using MyProject.WebTests.Models;
+using {project.rootNamespace}.Models;
 
-namespace MyProject.WebTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginPage : WebPage
 {
@@ -175,7 +175,7 @@ public partial class LoginPage : WebPage
 ```csharp
 using Bellatrix.Web;
 
-namespace MyProject.WebTests.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginPage
 {
@@ -306,7 +306,7 @@ Headers, navigation bars, footers, cookie banners, and mini-carts appear on many
 // Sections/HeaderSection/HeaderSection.Map.cs
 using Bellatrix.Web;
 
-namespace MyProject.WebTests.Sections;
+namespace {project.rootNamespace}.Sections;
 
 public partial class HeaderSection
 {
@@ -319,7 +319,7 @@ public partial class HeaderSection
 // Sections/HeaderSection/HeaderSection.Actions.cs
 using Bellatrix.Web;
 
-namespace MyProject.WebTests.Sections;
+namespace {project.rootNamespace}.Sections;
 
 public partial class HeaderSection : WebSection
 {
@@ -340,7 +340,7 @@ public partial class HeaderSection : WebSection
 // Sections/HeaderSection/HeaderSection.Assertions.cs
 using Bellatrix.Web;
 
-namespace MyProject.WebTests.Sections;
+namespace {project.rootNamespace}.Sections;
 
 public partial class HeaderSection
 {
@@ -352,7 +352,7 @@ Embed the section in each page's Map file and delegate from Actions:
 
 ```csharp
 // Pages/HomePage/HomePage.Map.cs
-using MyProject.WebTests.Sections;
+using {project.rootNamespace}.Sections;
 
 public partial class HomePage
 {
@@ -383,7 +383,7 @@ Tests may also create a section directly: `var header = new HeaderSection();`.
 Place data models in `Models/`:
 
 ```csharp
-namespace MyProject.WebTests.Models;
+namespace {project.rootNamespace}.Models;
 
 public class BillingInfo
 {

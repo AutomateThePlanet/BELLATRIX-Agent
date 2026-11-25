@@ -154,7 +154,7 @@ if (!removeLinks.isEmpty()) {
 A custom component extending `WebComponent` has the scoped `createBy…` factories and the protected `componentCreateService` field (also `getComponentCreateService()`) for page-wide lookups:
 
 ```java
-package myproject.webtests.components;
+package {project.rootNamespace}.components;
 
 import java.util.List;
 import solutions.bellatrix.web.components.*;
@@ -223,7 +223,7 @@ Add a custom component under the `components` package when a built-in is missing
 ### Option A — New component extending `WebComponent`
 
 ```java
-package myproject.webtests.components;
+package {project.rootNamespace}.components;
 
 import solutions.bellatrix.web.components.Button;
 import solutions.bellatrix.web.components.WebComponent;
@@ -249,7 +249,7 @@ public class Toast extends WebComponent implements ComponentText {
 ### Option B — Child component overriding a built-in
 
 ```java
-package myproject.webtests.components;
+package {project.rootNamespace}.components;
 
 import solutions.bellatrix.web.components.Button;
 
@@ -266,8 +266,8 @@ public class ScrollingButton extends Button {
 ### Using custom components in Map classes
 
 ```java
-import myproject.webtests.components.ScrollingButton;
-import myproject.webtests.components.Toast;
+import {project.rootNamespace}.components.ScrollingButton;
+import {project.rootNamespace}.components.Toast;
 
 public Toast successToast() {
     return create().byCss(Toast.class, "[data-testid='toast']");

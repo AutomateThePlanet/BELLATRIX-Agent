@@ -8,7 +8,7 @@
 
 ```csharp
 // CORRECT - File-scoped namespace (no braces)
-namespace MyProject.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginWindow : DesktopPage
 {
@@ -16,7 +16,7 @@ public partial class LoginWindow : DesktopPage
 }
 
 // WRONG - Old-style namespace
-namespace MyProject.Pages
+namespace {project.rootNamespace}.Pages
 {
     public partial class LoginWindow : DesktopPage { }
 }
@@ -72,7 +72,7 @@ Tests/
 using Bellatrix.Desktop;
 using Bellatrix.Desktop.PageObjects; // DesktopPage
 
-namespace MyProject.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginWindow : DesktopPage
 {
@@ -108,7 +108,7 @@ public partial class LoginWindow : DesktopPage
 ```csharp
 using Bellatrix.Desktop;
 
-namespace MyProject.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginWindow
 {
@@ -145,7 +145,7 @@ public partial class LoginWindow
 ```csharp
 using Bellatrix.Desktop;
 
-namespace MyProject.Pages;
+namespace {project.rootNamespace}.Pages;
 
 public partial class LoginWindow
 {
@@ -269,7 +269,7 @@ A section is NOT a `DesktopPage` — it's a plain class that resolves `App` the 
 using Bellatrix;
 using Bellatrix.Desktop;
 
-namespace Demo.DesktopTests.Pages.Shared;
+namespace {project.rootNamespace}.Pages.Shared;
 
 public class NumberPadSection
 {
@@ -320,7 +320,7 @@ public partial class CalculatorWindow
 Place data models in `Models/` folder:
 
 ```csharp
-namespace MyProject.Models;
+namespace {project.rootNamespace}.Models;
 
 public class LoginCredentials
 {

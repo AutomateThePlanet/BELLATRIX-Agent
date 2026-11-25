@@ -64,7 +64,7 @@ See `bellatrix-desktop-validations-and-assertions` for details (desktop validato
 ## Project Structure (3-Class Pattern)
 
 ```
-src/test/java/demo/desktoptests/
+src/test/java/{project.rootPath}/
   pages/
     loginwindow/
       LoginWindow.java   # Action methods (login, fill form, etc.)
@@ -89,7 +89,7 @@ src/test/java/demo/desktoptests/
 ### Map.java
 
 ```java
-package demo.desktoptests.pages.loginwindow;
+package {project.rootNamespace}.pages.loginwindow;
 
 import solutions.bellatrix.desktop.components.Button;
 import solutions.bellatrix.desktop.components.CheckBox;
@@ -136,10 +136,10 @@ public class Map extends PageMap {
 ### LoginWindow.java (actions)
 
 ```java
-package demo.desktoptests.pages.loginwindow;
+package {project.rootNamespace}.pages.loginwindow;
 
-import demo.desktoptests.models.LoginCredentials;
-import demo.desktoptests.pages.mainwindow.MainWindow;
+import {project.rootNamespace}.models.LoginCredentials;
+import {project.rootNamespace}.pages.mainwindow.MainWindow;
 import solutions.bellatrix.desktop.pages.DesktopPage;
 import solutions.bellatrix.desktop.services.App;
 
@@ -175,7 +175,7 @@ public class LoginWindow extends DesktopPage<Map, Asserts> {
 ### Asserts.java
 
 ```java
-package demo.desktoptests.pages.loginwindow;
+package {project.rootNamespace}.pages.loginwindow;
 
 import solutions.bellatrix.desktop.pages.PageAsserts;
 
@@ -301,7 +301,7 @@ A section is NOT a `DesktopPage` — it's a plain class that uses the same facto
 (`ComponentCreateService`):
 
 ```java
-package demo.desktoptests.pages.shared;
+package {project.rootNamespace}.pages.shared;
 
 import solutions.bellatrix.desktop.components.Button;
 import solutions.bellatrix.desktop.services.ComponentCreateService;
@@ -367,7 +367,7 @@ section with its own package whose `Map extends PageMap` and `Asserts extends Pa
 Place data models in the `models` package — prefer Java records for immutable form data:
 
 ```java
-package demo.desktoptests.models;
+package {project.rootNamespace}.models;
 
 public record LoginCredentials(String username, String password) {
 }

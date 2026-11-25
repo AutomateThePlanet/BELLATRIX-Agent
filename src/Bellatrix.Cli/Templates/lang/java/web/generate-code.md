@@ -8,7 +8,7 @@
 Each page (or modal / wizard step) gets a dedicated package with three classes (Java has no partial classes):
 
 ```
-src/test/java/myproject/webtests/pages/
+src/test/java/{project.rootPath}/pages/
   {page}/
     {PageName}.java   — extends WebPage<Map, Asserts>: getUrl(), waitForPageLoad(), workflow methods
     Map.java          — extends PageMap: component methods (validated locators only)
@@ -17,16 +17,16 @@ src/test/java/myproject/webtests/pages/
 
 `{page}` is the lowercase page name without the `Page` suffix (`cart`, `checkout`, `orderreceived`); `{PageName}` is the class name (`CartPage`). The `package` line must match the folder.
 <!-- lang:target -->
-**Target project:** the BELLATRIX-Java web test project recorded in `bellatrix-web-project-structure` (Maven; written below as `my-project-web-tests` with root package `myproject.webtests` — substitute the real names).
-- **Packages**: `myproject.webtests.pages.<page>`, `myproject.webtests.sections.<section>`, `myproject.webtests.components`, `myproject.webtests.models`, `myproject.webtests.tests.<featurearea>`, `myproject.webtests.common` (sources under `src/test/java/`). The folder names used below (`Pages/`, `Sections/`, `Components/`, `Models/`, `Tests/`) are these lowercase packages.
-- **Build command**: `mvn -q test-compile` (from the folder that holds `pom.xml`)
+**Target project:** the BELLATRIX-Java web test project named in `.bellatrix/config.json` (`domains.web.project`: folder `{project.dir}`, root package `{project.rootNamespace}`).
+- **Packages**: `{project.rootNamespace}.pages.<page>`, `{project.rootNamespace}.sections.<section>`, `{project.rootNamespace}.components`, `{project.rootNamespace}.models`, `{project.rootNamespace}.tests.<featurearea>`, `{project.rootNamespace}.common` (sources under `src/test/java/`). The folder names used below (`Pages/`, `Sections/`, `Components/`, `Models/`, `Tests/`) are these lowercase packages.
+- **Build command**: `{project.buildCommand}` (from the repository root)
 - **Language**: Java 19, JUnit 5 + `solutions.bellatrix.web.infrastructure.junit.WebTest` unless the project already uses TestNG (`…infrastructure.testng.WebTest`)
 
 <!-- lang:page-objects -->
 ### Map Class (`Map.java`)
 
 ```java
-package myproject.webtests.pages.{page};
+package {project.rootNamespace}.pages.{page};
 
 import java.util.List;
 import solutions.bellatrix.web.components.*;
@@ -74,10 +74,10 @@ public class Map extends PageMap {
 ### Page Class (`{PageName}.java`)
 
 ```java
-package myproject.webtests.pages.{page};
+package {project.rootNamespace}.pages.{page};
 
-import myproject.webtests.models.BillingInfo;
-import myproject.webtests.pages.orderreceived.OrderReceivedPage;
+import {project.rootNamespace}.models.BillingInfo;
+import {project.rootNamespace}.pages.orderreceived.OrderReceivedPage;
 import solutions.bellatrix.web.pages.WebPage;
 
 public class {PageName} extends WebPage<Map, Asserts> {
@@ -110,7 +110,7 @@ Every wait you needed during live execution (spinner, AJAX, URL change) belongs 
 ### Asserts Class (`Asserts.java`)
 
 ```java
-package myproject.webtests.pages.{page};
+package {project.rootNamespace}.pages.{page};
 
 import org.junit.jupiter.api.Assertions;
 import solutions.bellatrix.web.pages.PageAsserts;
@@ -143,7 +143,7 @@ Use the exact texts observed during live execution. Tests call them as `page.ass
 ### Option A — New component extending `WebComponent`
 
 ```java
-package myproject.webtests.components;
+package {project.rootNamespace}.components;
 
 import solutions.bellatrix.web.components.Button;
 import solutions.bellatrix.web.components.WebComponent;
@@ -169,7 +169,7 @@ public class Toast extends WebComponent implements ComponentText {
 ### Option B — Child component overriding a built-in
 
 ```java
-package myproject.webtests.components;
+package {project.rootNamespace}.components;
 
 import solutions.bellatrix.web.components.Button;
 
@@ -186,8 +186,8 @@ public class ScrollingButton extends Button {
 ### Using custom components in Map classes
 
 ```java
-import myproject.webtests.components.ScrollingButton;
-import myproject.webtests.components.Toast;
+import {project.rootNamespace}.components.ScrollingButton;
+import {project.rootNamespace}.components.Toast;
 
 public Toast successToast() {
     return create().byCss(Toast.class, "[data-testid='toast']");
@@ -203,7 +203,7 @@ A custom component needs a public no-argument constructor (the implicit one) —
 <!-- lang:sections -->
 ```java
 // sections/header/Map.java
-package myproject.webtests.sections.header;
+package {project.rootNamespace}.sections.header;
 
 import solutions.bellatrix.web.components.*;
 import solutions.bellatrix.web.pages.PageMap;
@@ -219,7 +219,7 @@ public class Map extends PageMap {
 }
 
 // sections/header/HeaderSection.java
-package myproject.webtests.sections.header;
+package {project.rootNamespace}.sections.header;
 
 import solutions.bellatrix.web.pages.WebSection;
 
@@ -231,7 +231,7 @@ public class HeaderSection extends WebSection<Map, Asserts> {
 }
 
 // sections/header/Asserts.java
-package myproject.webtests.sections.header;
+package {project.rootNamespace}.sections.header;
 
 import solutions.bellatrix.web.pages.PageAsserts;
 
@@ -257,7 +257,7 @@ public void openCart() {
 <!-- lang:models -->
 ```java
 // models/BillingInfo.java — a form with many fields: plain class with getters/setters (no Lombok on the classpath)
-package myproject.webtests.models;
+package {project.rootNamespace}.models;
 
 public class BillingInfo {
     private String firstName;
@@ -299,13 +299,13 @@ public class BillingInfo {
 }
 
 // models/LoginCredentials.java — a small immutable value: a record
-package myproject.webtests.models;
+package {project.rootNamespace}.models;
 
 public record LoginCredentials(String email, String password) {
 }
 
 // models/ProductSort.java — a fixed option set: an enum carrying the visible text
-package myproject.webtests.models;
+package {project.rootNamespace}.models;
 
 public enum ProductSort {
     POPULARITY("Sort by popularity"),
@@ -327,12 +327,12 @@ public enum ProductSort {
 One public top-level type per file. The page passes the enum's text to the component: `map().sortDropDown().selectByText(sort.displayText());`.
 
 <!-- lang:tests -->
-**Java file layout:** `Tests/{FeatureArea}/{FeatureArea}Tests` above means `src/test/java/myproject/webtests/tests/{featurearea}/{FeatureArea}Tests.java` in package `myproject.webtests.tests.{featurearea}` (e.g. `tests/cart/CartTests.java`).
+**Java file layout:** `Tests/{FeatureArea}/{FeatureArea}Tests` above means `src/test/java/{project.rootPath}/tests/{featurearea}/{FeatureArea}Tests.java` in package `{project.rootNamespace}.tests.{featurearea}` (e.g. `tests/cart/CartTests.java`).
 
 ### `common/ManualTestCase.java` (create once)
 
 ```java
-package myproject.webtests.common;
+package {project.rootNamespace}.common;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -354,11 +354,11 @@ public @interface ManualTestCase {
 ### Test Class Template
 
 ```java
-package myproject.webtests.tests.checkout;
+package {project.rootNamespace}.tests.checkout;
 
-import myproject.webtests.common.ManualTestCase;
-import myproject.webtests.models.BillingInfo;
-import myproject.webtests.pages.checkout.CheckoutPage;
+import {project.rootNamespace}.common.ManualTestCase;
+import {project.rootNamespace}.models.BillingInfo;
+import {project.rootNamespace}.pages.checkout.CheckoutPage;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.web.infrastructure.Browser;
@@ -461,10 +461,10 @@ Applies everywhere — page objects, actions, assertions, sections, tests, custo
 | `Thread.sleep(2000)` | `toBeVisible().waitToBe()` / `app().browser().waitForAjax()` |
 
 <!-- lang:build -->
-From the folder that holds `pom.xml` (compile only — never `mvn test` / `mvn verify`):
+From the repository root (compile only — never `mvn test` / `mvn verify`):
 
 ```bash
-mvn -q test-compile
+{project.buildCommand}
 ```
 
 Common build errors:
@@ -487,18 +487,18 @@ mvn test -Dtest={TestClassName}#{testMethodName}
 ### Files Created/Modified
 
 ```
-[CREATED] src/test/java/myproject/webtests/pages/{page}/Map.java
-[CREATED] src/test/java/myproject/webtests/pages/{page}/{PageName}.java
-[CREATED] src/test/java/myproject/webtests/pages/{page}/Asserts.java
-[EDITED]  src/test/java/myproject/webtests/pages/{existingpage}/Map.java — added 3 new element methods
-[EDITED]  src/test/java/myproject/webtests/pages/{existingpage}/{ExistingPage}.java — added 2 new methods
-[CREATED] src/test/java/myproject/webtests/sections/{section}/{SectionName}.java (+ Map, Asserts)
-[CREATED] src/test/java/myproject/webtests/models/{ModelName}.java
-[CREATED] src/test/java/myproject/webtests/tests/{featurearea}/{FeatureArea}Tests.java
+[CREATED] src/test/java/{project.rootPath}/pages/{page}/Map.java
+[CREATED] src/test/java/{project.rootPath}/pages/{page}/{PageName}.java
+[CREATED] src/test/java/{project.rootPath}/pages/{page}/Asserts.java
+[EDITED]  src/test/java/{project.rootPath}/pages/{existingpage}/Map.java — added 3 new element methods
+[EDITED]  src/test/java/{project.rootPath}/pages/{existingpage}/{ExistingPage}.java — added 2 new methods
+[CREATED] src/test/java/{project.rootPath}/sections/{section}/{SectionName}.java (+ Map, Asserts)
+[CREATED] src/test/java/{project.rootPath}/models/{ModelName}.java
+[CREATED] src/test/java/{project.rootPath}/tests/{featurearea}/{FeatureArea}Tests.java
 [EDITED]  bellatrix-web-project-structure skill — added {PageName} to the Pages table
 ```
 
 ### Build Verification
 ```
-Build succeeded: mvn -q test-compile
+Build succeeded: {project.buildCommand}
 ```

@@ -8,7 +8,7 @@ description: Reference skill for BELLATRIX Java web test classes (JUnit 5 / Test
 ### JUnit 5 (default)
 
 ```java
-package myproject.webtests.tests.login;
+package {project.rootNamespace}.tests.login;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ public class LoginTests extends WebTest {
 ### TestNG
 
 ```java
-package myproject.webtests.tests.login;
+package {project.rootNamespace}.tests.login;
 
 import org.testng.annotations.Test;
 import solutions.bellatrix.web.infrastructure.Browser;
@@ -195,12 +195,12 @@ TestNG: `@Test(groups = "Smoke")`. Run a category with `mvn test -Dgroups=Smoke`
 ## Complete Test Class Template
 
 ```java
-package myproject.webtests.tests.checkout;
+package {project.rootNamespace}.tests.checkout;
 
-import myproject.webtests.models.BillingInfo;
-import myproject.webtests.pages.cart.CartPage;
-import myproject.webtests.pages.checkout.CheckoutPage;
-import myproject.webtests.pages.home.HomePage;
+import {project.rootNamespace}.models.BillingInfo;
+import {project.rootNamespace}.pages.cart.CartPage;
+import {project.rootNamespace}.pages.checkout.CheckoutPage;
+import {project.rootNamespace}.pages.home.HomePage;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.web.infrastructure.Browser;
@@ -269,9 +269,9 @@ import solutions.bellatrix.web.services.DialogButton;
 import solutions.bellatrix.web.waitstrategies.Wait;
 
 // Project
-import myproject.webtests.common.ManualTestCase;
-import myproject.webtests.pages.login.LoginPage;
-import myproject.webtests.models.BillingInfo;
+import {project.rootNamespace}.common.ManualTestCase;
+import {project.rootNamespace}.pages.login.LoginPage;
+import {project.rootNamespace}.models.BillingInfo;
 ```
 
 Never `import java.util.*;` in a page package — the page's `Map` class would clash with `java.util.Map`.

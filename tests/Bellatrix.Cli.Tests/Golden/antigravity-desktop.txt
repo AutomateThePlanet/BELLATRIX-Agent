@@ -44,9 +44,9 @@ subagent: true
 mainAgent: true
 ---
 
-# BELLATRIX Desktop System Tests Generator
-
-# sha256: 4247f4d88664f1d8
+> **Project settings:** run `bellatrix config validate --json` and read `.bellatrix/config.json` before anything else.
+> `{project.*}` below are the values of `domains.desktop.project` there (`{project.dir}` = the folder of
+# sha256: a0b380e6f9e1a266
 # file: .agents/rules/bellatrix.md
 ---
 trigger: always_on
@@ -62,20 +62,20 @@ trigger: always_on
 Drive UI automation with the **`bellatrix <domain> <verb>`** CLI. It runs no model and
 holds no credentials — all inference is yours. The driver, browser server, or device
 is the user's to run; never start, stop, or probe it (if a command returns a
-# sha256: 58b948b181c3c71a
+# sha256: 388962053e85cbbf
 # file: .agents/skills/bellatrix-desktop-components/SKILL.md
 ---
 name: bellatrix-desktop-components
 description: Reference skill for BELLATRIX desktop component types, methods, properties, and creation patterns.
 ---
 
+> **Project settings:** run `bellatrix config validate --json` and read `.bellatrix/config.json` before anything else.
+> `{project.*}` below are the values of `domains.desktop.project` there (`{project.dir}` = the folder of
+> `{project.path}`; `{project.rootPath}` = `{project.rootNamespace}` with `/` instead of `.`), and `{testCasesDir}` is
+> `domains.desktop.testCasesDir`, else `testCasesDir`. If the file is missing or invalid, or has no desktop project,
+> **stop and ask the user**, record the answer there and validate again. Never guess a project name or path.
+
 # BELLATRIX Desktop Components Reference
 
 ## Component Hierarchy
-
-All desktop components inherit from the base `Component` class in `Bellatrix.Desktop` namespace.
-
-## Desktop Components
-
-| Component | WinAppDriver ControlType | Key Methods | Key Properties |
-# sha256: 4cd08c4b6c0f74a3
+# sha256: 71ac36495309084c

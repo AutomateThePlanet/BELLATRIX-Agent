@@ -38,8 +38,11 @@ Read [docs/architecture.md](docs/architecture.md) before changing scaffolding or
 7. **Public-safety.** This repository is public. No local machine paths, credentials, private names or private URLs;
    use public samples (Windows Calculator, Notepad, https://demos.bellatrix.solutions/, ApiDemos) and placeholders.
    `PublicSafetyGuardTests` enforces it.
-8. **The `init` contract (R1–R8) is not negotiable:** never rewrite a human-owned file beyond one line or one marked
-   block, one manifest per agent, skip user-edited files, register no MCP server.
+8. **The `init` contract (R1–R9) is not negotiable:** never rewrite a human-owned file beyond one line or one marked
+   block, one manifest per agent, skip user-edited files, register no MCP server, and never overwrite
+   `.bellatrix/config.json` without `--regenerate` (only merge in missing values).
+   Templates contain no project names or paths: they use the `{project.*}` / `{testCasesDir}` placeholders and read
+   `.bellatrix/config.json`.
 9. Use file-scoped namespaces and match the surrounding code's style; `.editorconfig` applies.
 10. **Public docs show what is supported, not verification status.** README, the NuGet README and the website never
     say READY/PARTIAL or "not yet verified live"; that tracking lives only in `docs/support-matrix.json` `internal` and

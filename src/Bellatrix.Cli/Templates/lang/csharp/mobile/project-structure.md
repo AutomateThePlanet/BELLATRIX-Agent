@@ -1,13 +1,12 @@
-# MyProject.MobileTests — Current Project Structure
+# {project.name} — Current Project Structure
 
 This file is the authoritative as-is snapshot of the mobile test project. Use it to decide whether to
 CREATE a new file/folder or EDIT an existing one. It is NOT aspirational — only list a folder or file
 after it actually exists on disk.
 
-> **First use:** this skill ships with placeholder names (`MyProject.MobileTests`). The first time you
-> generate code, scan the real project (`*.csproj` that references `Bellatrix.Mobile`), replace the
-> placeholders below with the real project name, namespaces, app constants, and folders, and empty the
-> example tables.
+> **First use:** `{project.*}` are the values of `domains.mobile.project` in `.bellatrix/config.json`; the tables below are an
+> example. The first time you generate code, scan `{project.dir}`, replace the example tables (app constants,
+> folders, classes) with what is really there, and keep the placeholders as they are.
 >
 > **Maintenance rule:** whenever you add a page object folder, section, custom component, model, or tests
 > sub-folder as part of a generation workflow, update the corresponding table in the same change. The
@@ -18,8 +17,8 @@ after it actually exists on disk.
 ## Top-Level Layout
 
 ```
-MyProject.MobileTests/
-├─ MyProject.MobileTests.csproj       # references Bellatrix.Mobile (+ NUnit or MSTest)
+{project.dir}/
+├─ {project.name}.csproj       # references Bellatrix.Mobile (+ NUnit or MSTest)
 ├─ TestsInitialize.cs                 # NUnit [SetUpFixture] — BELLATRIX bootstrap / teardown
 ├─ Constants.cs                       # app path, app id / bundle id, platform version, device, activity
 ├─ ManualTestCaseAttribute.cs         # [ManualTestCase("TC-XXX")] for SPECTRA traceability
@@ -40,7 +39,7 @@ MyProject.MobileTests/
 - **Global lifecycle (config):** `restart every time`.
 - **Class-level lifecycle (generated classes default):** `Lifecycle.ReuseIfStarted` — speed
   optimization that overrides the config per test class.
-- **Build:** `dotnet build MyProject.MobileTests/MyProject.MobileTests.csproj`
+- **Build:** `{project.buildCommand}`
 
 ### Required project wiring (`*.csproj`)
 
@@ -68,13 +67,13 @@ MyProject.MobileTests/
 </ItemGroup>
 ```
 
-Avoid a namespace segment named `Android` or `IOS` (e.g. `MyProject.MobileTests.Android`): it collides with the
+Avoid a namespace segment named `Android` or `IOS` (e.g. `{project.rootNamespace}.Android`): it collides with the
 `[Android]` / `[IOS]` attributes. Use `AndroidScreens` / `IOSScreens` style names.
 
 ### Both platforms?
 
 Android and iOS page objects cannot share a class (different component types). Prefer one test project
-per platform (`MyProject.AndroidTests`, `MyProject.IOSTests`) — as the BELLATRIX samples do. If both
+per platform (an Android and an iOS test project; record the one you work in as `domains.mobile.project`) — as the BELLATRIX samples do. If both
 must live in one project, keep them in separate folders and namespaces (e.g. `Pages/AndroidScreens/…`,
 `Pages/IOSScreens/…`) and never import `Bellatrix.Mobile.Android` and `Bellatrix.Mobile.IOS` in the
 same file.
@@ -86,7 +85,7 @@ same file.
 ### `Constants.cs`
 
 ```csharp
-namespace MyProject.MobileTests;
+namespace {project.rootNamespace};
 
 public static class Constants
 {
@@ -109,7 +108,7 @@ Create it if it does not exist (string-based, metadata only):
 ```csharp
 using System;
 
-namespace MyProject.MobileTests;
+namespace {project.rootNamespace};
 
 /// <summary>
 /// Links an automated test to a SPECTRA manual test case for traceability.
@@ -147,7 +146,7 @@ Each screen gets its own folder with `{ScreenName}.Map.cs` (base class + locator
 |--------|----------|---------|
 | `Pages/LoginPage/` *(example — replace)* | Android | Login screen — user name, password, remember me, error message |
 
-**Namespace:** `MyProject.MobileTests.Pages`
+**Namespace:** `{project.rootNamespace}.Pages`
 **Base class:** `AndroidPage` (override `PackageName`, `ActivityName`) / `IOSPage`
 
 ---
@@ -164,7 +163,7 @@ from their actions. Each section resolves `App` itself via
 |------|---------|---------|
 | *(none yet)* | | |
 
-**Namespace:** `MyProject.MobileTests.Pages.Shared`
+**Namespace:** `{project.rootNamespace}.Pages.Shared`
 **When to CREATE a new section:** two or more screens expose the same locator set AND the same workflow.
 
 ---
@@ -179,7 +178,7 @@ the closest built-in (`Button`, `ComboBox`, …) and add or override members; in
 |------|---------|-----|
 | *(none yet)* | | |
 
-**Namespace:** `MyProject.MobileTests.Components`
+**Namespace:** `{project.rootNamespace}.Components`
 **Usage in Map files:** `App.Components.CreateByDescription<ScrollingButton>("...")`.
 
 ---
@@ -192,7 +191,7 @@ Plain data classes and enums shared across page objects. No component or BELLATR
 |------|---------|
 | *(none yet)* | |
 
-**Namespace:** `MyProject.MobileTests.Models`
+**Namespace:** `{project.rootNamespace}.Models`
 
 ---
 
@@ -205,7 +204,7 @@ One file per feature area. One test method per SPECTRA TC. Every method carries
 |--------|------|--------------|
 | *(none yet)* | | |
 
-**Namespace:** `MyProject.MobileTests.Tests` (check an existing file before deciding on nested
+**Namespace:** `{project.rootNamespace}.Tests` (check an existing file before deciding on nested
 namespaces)
 
 ---

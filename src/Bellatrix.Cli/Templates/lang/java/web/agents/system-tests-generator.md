@@ -3,15 +3,15 @@
 <!-- lang:target-project -->
 ## Target Project (Java / Maven)
 
-All generated web tests, page objects, sections, and models go into the BELLATRIX-Java web test project recorded in `bellatrix-web-project-structure` (written here as `my-project-web-tests` with root package `myproject.webtests` — use the real names):
+All generated web tests, page objects, sections, and models go into the BELLATRIX-Java web test project named in `.bellatrix/config.json` (`domains.web.project`: folder `{project.dir}`, root package `{project.rootNamespace}`):
 
 ```
-my-project-web-tests/
+{project.dir}/
   pom.xml                                   # solutions.bellatrix:bellatrix.web:1.0, JUnit 5
   src/main/resources/
     application.properties                  # environment=dev
     testFrameworkSettings.dev.json          # webSettings
-  src/test/java/myproject/webtests/
+  src/test/java/{project.rootPath}/
     pages/{page}/
       {PageName}.java
       Map.java
@@ -30,13 +30,13 @@ my-project-web-tests/
       ManualTestCase.java
 ```
 
-- **Packages**: `myproject.webtests.pages.<page>`, `.sections.<section>`, `.components`, `.models`, `.tests.<featurearea>`, `.common` — the `package` line always matches the folder
-- **Build command**: `mvn -q test-compile` (from the folder that holds `pom.xml`)
+- **Packages**: `{project.rootNamespace}.pages.<page>`, `.sections.<section>`, `.components`, `.models`, `.tests.<featurearea>`, `.common` — the `package` line always matches the folder
+- **Build command**: `{project.buildCommand}` (from the repository root)
 - **Base classes**: pages `WebPage<Map, Asserts>`, sections `WebSection<Map, Asserts>`, maps `PageMap`, asserts `PageAsserts<Map>` (all `solutions.bellatrix.web.pages`); tests `WebTest` (`solutions.bellatrix.web.infrastructure.junit`; `…infrastructure.testng` only if the project already uses TestNG)
 - **SPECTRA traceability annotation**: `@ManualTestCase("TC-XXX")` from `common/ManualTestCase.java`. BELLATRIX-Java has no built-in string version — if it does not exist yet, create it:
 
 ```java
-package myproject.webtests.common;
+package {project.rootNamespace}.common;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -137,6 +137,6 @@ public class CartTests extends WebTest {
 - **Tests use page objects only** — no `app().create()` in test methods
 - **Never `import java.util.*;`** in a page or section package (the `Map` class clash) — import `java.util.List` explicitly
 - **Always brace control flow:** every `if`/`else`/`for`/`while`/`do`/`try` body uses `{ }` (opening brace on the same line), even single statements — no `if (x) continue;`
-- **SPECTRA traceability:** `@ManualTestCase("TC-XXX")` (NOT `@ParameterizedTest`) on every automated SPECTRA case, plus `@Tag("Smoke")` for high priority / `@Tag("Regression")` otherwise (TestNG: `@Test(groups = "Smoke")`); update the SPECTRA file's `automated_by` with `my-project-web-tests/src/test/java/myproject/webtests/tests/{featurearea}/{FeatureArea}Tests.java`
-- **Build-only:** `mvn -q test-compile` until it succeeds. Never run `mvn test` yourself; give the user `mvn test -Dtest={TestClassName}#{testMethodName}`
+- **SPECTRA traceability:** `@ManualTestCase("TC-XXX")` (NOT `@ParameterizedTest`) on every automated SPECTRA case, plus `@Tag("Smoke")` for high priority / `@Tag("Regression")` otherwise (TestNG: `@Test(groups = "Smoke")`); update the SPECTRA file's `automated_by` with `{project.dir}/src/test/java/{project.rootPath}/tests/{featurearea}/{FeatureArea}Tests.java`
+- **Build-only:** `{project.buildCommand}` until it succeeds. Never run `mvn test` yourself; give the user `mvn test -Dtest={TestClassName}#{testMethodName}`
 

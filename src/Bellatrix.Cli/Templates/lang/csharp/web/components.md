@@ -151,7 +151,7 @@ A custom component inheriting `Component` has the protected `ComponentCreateServ
 ```csharp
 using Bellatrix.Web;
 
-namespace MyProject.WebTests.Components;
+namespace {project.rootNamespace}.Components;
 
 public class ProductCard : Component
 {
@@ -216,7 +216,7 @@ Add a custom component under `Components/` when a built-in is missing behavior o
 using Bellatrix.Web;
 using Bellatrix.Web.Contracts;
 
-namespace MyProject.WebTests.Components;
+namespace {project.rootNamespace}.Components;
 
 // Implementing IComponentInnerText makes ValidateInnerTextIs/Contains available on it
 public class Toast : Component, IComponentInnerText
@@ -234,7 +234,7 @@ public class Toast : Component, IComponentInnerText
 ```csharp
 using Bellatrix.Web;
 
-namespace MyProject.WebTests.Components;
+namespace {project.rootNamespace}.Components;
 
 public class ScrollingButton : Button
 {
@@ -250,7 +250,7 @@ public class ScrollingButton : Button
 ### Using custom components in Map files
 
 ```csharp
-using MyProject.WebTests.Components;
+using {project.rootNamespace}.Components;
 
 public Toast SuccessToast => App.Components.CreateByCss<Toast>("[data-testid='toast']");
 public ScrollingButton PlaceOrderButton => App.Components.CreateById<ScrollingButton>("place_order");

@@ -84,10 +84,10 @@ In BELLATRIX-Java 1.0, `XPathFindStrategy.findAllElements(WindowsDriver)` search
 of `By.xpath(xpath)` (`bellatrix.desktop/.../findstrategies/XPathFindStrategy.java`). Every page-level
 `create().byXPath(...)` resolves its element through that method, so it passes the wait and then fails to find the
 element; `create().allByXPath(...)` silently returns an **empty list**. The fix is a 20-line find strategy you add
-**once** to the test project (`{rootPackage}.common`) — the documented BELLATRIX extensibility point:
+**once** to the test project (`{project.rootNamespace}.common`) — the documented BELLATRIX extensibility point:
 
 ```java
-package demo.desktoptests.common;
+package {project.rootNamespace}.common;
 
 import io.appium.java_client.windows.WindowsDriver;
 import org.openqa.selenium.By;
@@ -194,9 +194,9 @@ Custom components extend `DesktopComponent` (or a concrete component) and have n
 `getComponentCreateService()` — the same factory as `app().create()`:
 
 ```java
-package demo.desktoptests.components;
+package {project.rootNamespace}.components;
 
-import demo.desktoptests.common.UiaXPathFindStrategy;
+import {project.rootNamespace}.common.UiaXPathFindStrategy;
 import solutions.bellatrix.desktop.components.Button;
 import solutions.bellatrix.desktop.components.DesktopComponent;
 

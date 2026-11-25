@@ -5,6 +5,12 @@ description: Reference skill for BELLATRIX web component types, the HTML element
 
 # BELLATRIX Web Components Reference
 
+> **Project settings:** run `bellatrix config validate --json` and read `.bellatrix/config.json` before anything else.
+> `{project.*}` below are the values of `domains.web.project` there (`{project.dir}` = the folder of
+> `{project.path}`; `{project.rootPath}` = `{project.rootNamespace}` with `/` instead of `.`), and `{testCasesDir}` is
+> `domains.web.testCasesDir`, else `testCasesDir`. If the file is missing or invalid, or has no web project,
+> **stop and ask the user**, record the answer there and validate again. Never guess a project name or path.
+
 A BELLATRIX web component is a typed wrapper around one HTML element. The component type decides which actions and validations are available, so pick it from the element's tag, `type`, and ARIA role as recorded during scenario execution — never guess it.
 
 {{> lang:catalog}}

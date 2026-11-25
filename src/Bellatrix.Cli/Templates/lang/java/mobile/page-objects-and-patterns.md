@@ -89,7 +89,7 @@ See `bellatrix-mobile-validations-and-assertions` for details (validators read o
 ## Project Structure (3-Class Pattern)
 
 ```
-src/test/java/com/myproject/mobiletests/
+src/test/java/{project.rootPath}/
   common/
     Constants.java
     ManualTestCase.java
@@ -124,7 +124,7 @@ A single-platform project keeps only its own platform folder.
 ### Map.java
 
 ```java
-package com.myproject.mobiletests.android.pages.login;
+package {project.rootNamespace}.android.pages.login;
 
 import solutions.bellatrix.android.components.Button;
 import solutions.bellatrix.android.components.CheckBox;
@@ -163,11 +163,11 @@ public class Map extends PageMap {
 ### LoginPage.java (actions)
 
 ```java
-package com.myproject.mobiletests.android.pages.login;
+package {project.rootNamespace}.android.pages.login;
 
-import com.myproject.mobiletests.android.pages.home.HomePage;
-import com.myproject.mobiletests.common.Constants;
-import com.myproject.mobiletests.models.LoginCredentials;
+import {project.rootNamespace}.android.pages.home.HomePage;
+import {project.rootNamespace}.common.Constants;
+import {project.rootNamespace}.models.LoginCredentials;
 import solutions.bellatrix.android.pages.AndroidPage;
 
 public class LoginPage extends AndroidPage<Map, Asserts> {
@@ -202,7 +202,7 @@ public class LoginPage extends AndroidPage<Map, Asserts> {
 ### Asserts.java
 
 ```java
-package com.myproject.mobiletests.android.pages.login;
+package {project.rootNamespace}.android.pages.login;
 
 import solutions.bellatrix.android.pages.PageAsserts;
 
@@ -233,7 +233,7 @@ login.asserts().errorDisplayed("Invalid user name or password");` — `page.map(
 
 ```java
 // ios/pages/login/Map.java
-package com.myproject.mobiletests.ios.pages.login;
+package {project.rootNamespace}.ios.pages.login;
 
 import solutions.bellatrix.ios.components.Button;
 import solutions.bellatrix.ios.components.Label;
@@ -267,9 +267,9 @@ public class Map extends PageMap {
 
 ```java
 // ios/pages/login/LoginPage.java
-package com.myproject.mobiletests.ios.pages.login;
+package {project.rootNamespace}.ios.pages.login;
 
-import com.myproject.mobiletests.ios.pages.home.HomePage;
+import {project.rootNamespace}.ios.pages.home.HomePage;
 import solutions.bellatrix.ios.pages.IOSPage;
 import solutions.bellatrix.ios.services.App;
 
@@ -384,7 +384,7 @@ section class under `pages/shared/`. A section is NOT a page — it's a plain cl
 `Map` does:
 
 ```java
-package com.myproject.mobiletests.android.pages.shared;
+package {project.rootNamespace}.android.pages.shared;
 
 import solutions.bellatrix.android.components.Button;
 import solutions.bellatrix.android.services.ComponentCreateService;
@@ -447,7 +447,7 @@ the shared block also needs shared assertions.)
 Plain data in the shared `models` package — prefer Java records, no BELLATRIX types:
 
 ```java
-package com.myproject.mobiletests.models;
+package {project.rootNamespace}.models;
 
 public record LoginCredentials(String userName, String password) {
 }

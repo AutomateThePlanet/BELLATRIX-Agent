@@ -65,15 +65,15 @@ component: cart
 source_refs: [docs/cart.md]
 criteria: [AC-004]
 automated_by:
-  - my-web-tests/tests/cart/CartTests.test.ts
+  - {project.dir}/tests/cart/CartTests.test.ts
 ---
 ```
 
 <!-- lang:build -->
-TypeScript has no build output — the runner executes `.ts` directly — so the build check is a full type check of the test project (run from the folder that holds `tsconfig.json`):
+TypeScript has no build output — the runner executes `.ts` directly — so the build check is a full type check of the test project (`{project.buildCommand}` from `.bellatrix/config.json`, run from the repository root; it type-checks through `-p <folder>/tsconfig.json`):
 
 ```bash
-npx tsc --noEmit -p tsconfig.json
+{project.buildCommand}
 ```
 
 Fix every error until it exits 0 (typical: missing `await` is NOT reported — re-read every new line for it; `byXPath` → `byXpath`; `click()` on a `Div`/`Span`/`Label`/`TextField` → create it as `Button`; missing `override` on `url`/`waitForPageLoad`/hooks; missing `@Page(Map, Asserts)`; wrong import subpath). Then give the user — do not run it yourself:
@@ -103,7 +103,7 @@ npx bellatrix ./tests filter --manualTestCase TC-210
 - Automation coverage: 12% → 14% (+1 test automated)
 
 ### Build Status
-npx tsc --noEmit -p tsconfig.json — 0 errors
+{project.buildCommand} — 0 errors
 
 ### Run It
 npx bellatrix ./tests filter --manualTestCase TC-210

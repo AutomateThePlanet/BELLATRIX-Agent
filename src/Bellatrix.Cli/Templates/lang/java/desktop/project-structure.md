@@ -1,14 +1,15 @@
 ---
-description: As-is snapshot of the demo-desktop-tests (Java/Maven) project tree. Ground CREATE vs EDIT decisions on this file. Refresh whenever a new pages/, components/, models/, or tests/ package is added.
+description: As-is snapshot of the {project.dir} (Java/Maven) project tree. Ground CREATE vs EDIT decisions on this file. Refresh whenever a new pages/, components/, models/, or tests/ package is added.
 ---
 
-# demo-desktop-tests — Current Project Structure (Java)
+# {project.dir} — Current Project Structure (Java)
 
 This file is the authoritative as-is snapshot of what exists in the test project. Use it to decide whether to CREATE a new file/folder or EDIT an existing one. It is NOT aspirational — only add an entry after the folder/file is actually on disk.
 
-> **Fresh project?** The tree below is the reference layout of the BELLATRIX demo project (ported to Java). If a
-> folder or file listed here does not exist in your repo, treat it as the target layout: CREATE it (do not assume it
-> exists), then replace this tree with what is really on disk.
+> **First use:** `{project.*}` are the values of `domains.desktop.project` in `.bellatrix/config.json`; keep them.
+> The tables below are an example (the Windows Calculator). Scan `{project.dir}` and replace them with what is really
+> on disk. If a folder or file listed here does not exist yet, treat the tree as the target layout: CREATE it (do not
+> assume it exists), then record what is really there.
 
 > **Maintenance rule:** Whenever you add a new page object package, custom component, model, or tests sub-package as part of a generation workflow, update the corresponding section of this file in the same commit. The agent owns keeping this tree accurate.
 
@@ -16,14 +17,14 @@ This file is the authoritative as-is snapshot of what exists in the test project
 
 ## Top-Level Layout
 
-Root package: `demo.desktoptests` (folders under `src/test/java/demo/desktoptests/`).
+Root package: `{project.rootNamespace}` (folders under `src/test/java/{project.rootPath}/`).
 
 ```
-demo-desktop-tests/
+{project.dir}/
 ├─ pom.xml                                          # solutions.bellatrix:bellatrix.desktop:1.0 (test scope), JUnit 5
 ├─ src/main/resources/application.properties        # environment=dev
 ├─ src/main/resources/testFrameworkSettings.dev.json # desktopSettings — lifecycle, timeouts, app path, serviceUrl
-└─ src/test/java/demo/desktoptests/
+└─ src/test/java/{project.rootPath}/
    ├─ common/ManualTestCase.java          # @ManualTestCase("TC-XXX") for SPECTRA traceability
    ├─ common/UiaXPathFindStrategy.java    # XPath find strategy (BELLATRIX-Java 1.0 byXPath is broken)
    ├─ common/Constants.java               # compile-time constants for @ExecutionApp(appPath = …)
@@ -39,7 +40,7 @@ demo-desktop-tests/
 - **Driver endpoint:** `http://127.0.0.1:4723` (`desktopSettings.serviceUrl`; the driver is managed by the user — not by the agent, not by the tests)
 - **Global lifecycle (config):** `restart every time`
 - **Class-level lifecycle (generated classes default):** `Lifecycle.REUSE_IF_STARTED` — declared speed intent, overrides the config per test class (BELLATRIX-Java 1.0 still restarts per test — see `bellatrix-desktop-test-structure-and-lifecycle`)
-- **Build check:** `mvn -q test-compile` (never `mvn test` — the user runs tests)
+- **Build check:** `{project.buildCommand}` (never `mvn test` — the user runs tests)
 - **Toolchain:** BELLATRIX-Java 1.0 targets Java 19 — Maven must run on **JDK 19 or later** (`mvn -v`); BELLATRIX-Java is not on Maven Central, install it with `mvn install` from the BELLATRIX-Java repository
 
 ### Required project wiring (`pom.xml`)
@@ -93,7 +94,7 @@ Each window/view gets its own package with three classes: `Map.java` (component 
 | `pages/scientificcalculatorwindow/` | Scientific Calculator mode — DEG button, trig flyout (sin/cos/tan), scientific functions |
 | `pages/unitconverterwindow/` | Unit Converter mode — category selector, two value fields, two unit ComboBoxes |
 
-**Package:** `demo.desktoptests.pages.<window>`
+**Package:** `{project.rootNamespace}.pages.<window>`
 **Base classes:** `DesktopPage<Map, Asserts>`, `PageMap`, `PageAsserts<Map>` (`solutions.bellatrix.desktop.pages`)
 
 ---
@@ -106,7 +107,7 @@ Sections are plain classes (NOT `DesktopPage`) that group locators and workflows
 |------|---------|---------|
 | `pages/shared/NumberPadSection.java` | `CalculatorWindow`, `UnitConverterWindow` | Digits 0–9, decimal separator, and digit-entry helpers (`digitButton`, `typeCharacter`, `enterNumber`, `enterDecimalNumber`) — both windows share the same `numXButton` / `decimalSeparatorButton` AutomationIds |
 
-**Package:** `demo.desktoptests.pages.shared`
+**Package:** `{project.rootNamespace}.pages.shared`
 **When to CREATE a new section:** when two or more windows expose the same locator set AND the same workflow around it. A single-window duplicate stays on the window.
 
 ---
@@ -119,7 +120,7 @@ Custom BELLATRIX components live here when a built-in is missing behavior or nee
 |------|---------|-----|
 | `components/WinUiComboBox.java` | `ComboBox` | Overrides `selectByText` to click-expand + XPath-lookup for WinUI3 dropdown items (the built-in `selectByText` only types the text, which WinUI3 flyouts ignore) |
 
-**Package:** `demo.desktoptests.components`
+**Package:** `{project.rootNamespace}.components`
 **Usage in Map classes:** `create().byAutomationId(WinUiComboBox.class, "...")`.
 
 ---
@@ -145,7 +146,7 @@ Plain records, data classes and enums shared across page objects. No component o
 
 Each unit enum carries its display string (`LengthUnit.CENTIMETERS.displayName()` → `"Centimeters"`); Java enums replace C#'s separate extension-method class.
 
-**Package:** `demo.desktoptests.models`
+**Package:** `{project.rootNamespace}.models`
 
 ---
 
@@ -168,7 +169,7 @@ One file per feature area. One test method per SPECTRA TC. All methods carry `@M
 | `tests/unitconverter/` | `UnitConverterConversionTests.java` | Unit conversion correctness per category |
 | `tests/unitconverter/` | `UnitConverterInteractionTests.java` | Unit Converter UI interactions (category/unit selection, field focus) |
 
-**Package:** `demo.desktoptests.tests.<featurearea>` (the `package` line must match the folder)
+**Package:** `{project.rootNamespace}.tests.<featurearea>` (the `package` line must match the folder)
 
 ---
 

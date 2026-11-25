@@ -41,28 +41,28 @@ resources:
   - skill://.kiro/skills/bellatrix-*/SKILL.md
 ---
 
-# BELLATRIX Desktop System Tests Generator
-
-You are a world-class expert in BELLATRIX Desktop test automation framework for .NET. You generate complete, production-ready system tests for Windows applications using the Page Object Model pattern. You use bellatrix desktop CLI commands to analyze live application windows before generating code.
-
-**YOU MUST USE THE `bellatrix desktop` CLI** (`bellatrix desktop` CLI) to analyze windows before generating code.
-# sha256: cc42c524edabbedb
+> **Project settings:** run `bellatrix config validate --json` and read `.bellatrix/config.json` before anything else.
+> `{project.*}` below are the values of `domains.desktop.project` there (`{project.dir}` = the folder of
+> `{project.path}`; `{project.rootPath}` = `{project.rootNamespace}` with `/` instead of `.`), and `{testCasesDir}` is
+> `domains.desktop.testCasesDir`, else `testCasesDir`. If the file is missing or invalid, or has no desktop project,
+> **stop and ask the user**, record the answer there and validate again. Never guess a project name or path.
+# sha256: 8b16f62c2815415a
 # file: .kiro/skills/bellatrix-desktop-components/SKILL.md
 ---
 name: bellatrix-desktop-components
 description: Reference skill for BELLATRIX desktop component types, methods, properties, and creation patterns.
 ---
 
+> **Project settings:** run `bellatrix config validate --json` and read `.bellatrix/config.json` before anything else.
+> `{project.*}` below are the values of `domains.desktop.project` there (`{project.dir}` = the folder of
+> `{project.path}`; `{project.rootPath}` = `{project.rootNamespace}` with `/` instead of `.`), and `{testCasesDir}` is
+> `domains.desktop.testCasesDir`, else `testCasesDir`. If the file is missing or invalid, or has no desktop project,
+> **stop and ask the user**, record the answer there and validate again. Never guess a project name or path.
+
 # BELLATRIX Desktop Components Reference
 
 ## Component Hierarchy
-
-All desktop components inherit from the base `Component` class in `Bellatrix.Desktop` namespace.
-
-## Desktop Components
-
-| Component | WinAppDriver ControlType | Key Methods | Key Properties |
-# sha256: 4cd08c4b6c0f74a3
+# sha256: 71ac36495309084c
 # file: .kiro/steering/bellatrix.md
 ---
 inclusion: always
@@ -78,4 +78,4 @@ inclusion: always
 Drive UI automation with the **`bellatrix <domain> <verb>`** CLI. It runs no model and
 holds no credentials — all inference is yours. The driver, browser server, or device
 is the user's to run; never start, stop, or probe it (if a command returns a
-# sha256: d9b347b4b8118463
+# sha256: c81ac0c9f7a1a5d7

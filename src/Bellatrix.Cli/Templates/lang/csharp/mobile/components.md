@@ -159,7 +159,7 @@ Extend a built-in component when you need control-level behavior it lacks (see
 using Bellatrix.Mobile;
 using Bellatrix.Mobile.Android;
 
-namespace MyProject.MobileTests.Components;
+namespace {project.rootNamespace}.Components;
 
 public class ScrollingButton : Button
 {

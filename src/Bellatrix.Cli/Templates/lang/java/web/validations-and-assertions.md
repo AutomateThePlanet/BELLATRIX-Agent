@@ -118,7 +118,7 @@ There is **no** generic `validateAttributeIs(name, value)` and no working class/
 ## Usage in a Page `Asserts` Class
 
 ```java
-package myproject.webtests.pages.cart;
+package {project.rootNamespace}.pages.cart;
 
 import solutions.bellatrix.web.pages.PageAsserts;
 

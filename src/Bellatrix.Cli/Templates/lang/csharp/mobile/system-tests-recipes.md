@@ -22,7 +22,7 @@ using Bellatrix.Mobile.Android;
 using Bellatrix.Mobile.NUnit;
 using NUnit.Framework;
 
-namespace MyProject.MobileTests.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [Android(Constants.AppPath,
@@ -64,7 +64,7 @@ using Bellatrix.Mobile.IOS;
 using Bellatrix.Mobile.NUnit;
 using NUnit.Framework;
 
-namespace MyProject.MobileTests.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [IOS(Constants.AppPath,
@@ -324,10 +324,10 @@ SPECTRA test cases into one method.
 using Bellatrix.Mobile;
 using Bellatrix.Mobile.Android;
 using Bellatrix.Mobile.NUnit;
-using MyProject.MobileTests.Pages;
+using {project.rootNamespace}.Pages;
 using NUnit.Framework;
 
-namespace MyProject.MobileTests.Tests;
+namespace {project.rootNamespace}.Tests;
 
 [TestFixture]
 [Android(Constants.AppPath,
@@ -389,6 +389,6 @@ using Bellatrix.Mobile.Android;         // components, factories, waits, Validat
 using Bellatrix.Mobile.NUnit;           // AndroidTest / IOSTest (or Bellatrix.Mobile.MSTest)
 using NUnit.Framework;                  // [TestFixture], [Test], [Category], [TestCase]
 using OpenQA.Selenium;                  // ScreenOrientation (orientation tests only)
-using MyProject.MobileTests.Pages;      // your page objects
-using MyProject.MobileTests.Models;     // your data models (if applicable)
+using {project.rootNamespace}.Pages;      // your page objects
+using {project.rootNamespace}.Models;     // your data models (if applicable)
 ```

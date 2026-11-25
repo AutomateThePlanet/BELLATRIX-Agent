@@ -119,7 +119,7 @@ If the project does not have the attribute yet, create it once at the project ro
 (`ManualTestCaseAttribute.cs`) — it carries metadata only:
 
 ```csharp
-namespace Demo.DesktopTests;
+namespace {project.rootNamespace};
 
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
 public sealed class ManualTestCaseAttribute : Attribute
@@ -237,7 +237,7 @@ component: standard-calculator
 source_refs: [docs/standard-calculator.md]
 criteria: [AC-001, AC-003]
 automated_by:
-  - Demo.DesktopTests/Tests/StandardCalculatorTests.cs
+  - {project.dir}/Tests/StandardCalculatorTests.cs
 ---
 ```
 
@@ -262,7 +262,7 @@ The automation coverage percentage should increase after linking.
 ## Phase 4: Verify Build
 
 ```bash
-dotnet build Demo.DesktopTests/Demo.DesktopTests.csproj
+{project.buildCommand}
 ```
 
 Fix any build errors until the build succeeds.
@@ -275,7 +275,7 @@ After the build succeeds, **STOP**. Do NOT run the generated test(s). The user r
 
 ### What to do
 
-1. Verify the build succeeds with `dotnet build Demo.DesktopTests/Demo.DesktopTests.csproj`
+1. Verify the build succeeds with `{project.buildCommand}`
 2. Post a concise summary: TC-ID(s) automated, files created/edited, command the user can run to execute the test, and any assumptions you made (e.g., locator choices, lifecycle picked, custom components added)
 3. Wait for the user to report results
 
@@ -364,7 +364,7 @@ Run the **complete single-test workflow** for this one test case before moving t
 
 1. **Phase 0**: Read THIS test case file only (`test-cases/{suite}/TC-{id}.md`)
 2. **Phase 1 (MANDATORY — no shortcuts)**: `bellatrix desktop start-session` → `bellatrix desktop snapshot` → execute ALL steps via bellatrix desktop CLI commands → observe actual UI text/state → validate expected result → `bellatrix desktop close-session`. Record the ACTUAL text of any error messages, dialogs, and result displays as observed — do not assume they match a sibling TC
-3. **Phase 2**: Generate/edit page objects and test code with `[ManualTestCase("TC-XXX")]`. Create new page object folders when a new window/view is encountered. Add custom components under `Demo.DesktopTests/Components/` if BELLATRIX built-ins don't fit. Prefer `CreateByAutomationId` / `CreateByName` direct factories over `CreateByXPath` for single-attribute locators
+3. **Phase 2**: Generate/edit page objects and test code with `[ManualTestCase("TC-XXX")]`. Create new page object folders when a new window/view is encountered. Add custom components under `{project.dir}/Components/` if BELLATRIX built-ins don't fit. Prefer `CreateByAutomationId` / `CreateByName` direct factories over `CreateByXPath` for single-attribute locators
 4. **Phase 4**: `dotnet build` and fix any BUILD errors (not test failures — you don't run tests)
 5. **Phase 3**: Update THIS test case's `automated_by` frontmatter
 6. Continue to the next test case
@@ -402,7 +402,7 @@ SPECTRA's automation coverage scanner uses `scan_patterns` from `spectra.config.
 
 This means as long as you use `[ManualTestCase("TC-142")]`, SPECTRA will automatically detect the link during `spectra ai analyze --coverage` — even without manually editing `automated_by`. The manual edit in Phase 3 provides an explicit link; the scan pattern provides automatic discovery.
 
-> **Important:** Do NOT use NUnit's `[TestCase("TC-XXX")]` for traceability — that attribute is for data-driven test parameterization. Use `[ManualTestCase("TC-XXX")]` instead, which is a custom metadata-only attribute defined in `Demo.DesktopTests/ManualTestCaseAttribute.cs`.
+> **Important:** Do NOT use NUnit's `[TestCase("TC-XXX")]` for traceability — that attribute is for data-driven test parameterization. Use `[ManualTestCase("TC-XXX")]` instead, which is a custom metadata-only attribute defined in `{project.dir}/ManualTestCaseAttribute.cs`.
 
 ---
 

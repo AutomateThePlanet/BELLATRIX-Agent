@@ -48,14 +48,14 @@ Applications with splash screens or loading screens require special handling. Wh
 
 ## Target Project
 
-All generated desktop tests, page objects, and models go into the **`demo-desktop-tests`** Maven project (root package `demo.desktoptests`):
+All generated desktop tests, page objects, and models go into the **`{project.dir}`** Maven project (root package `{project.rootNamespace}`):
 
 ```
-demo-desktop-tests/
+{project.dir}/
   pom.xml                                         # solutions.bellatrix:bellatrix.desktop:1.0 (test scope), JUnit 5
   src/main/resources/application.properties       # environment=dev
   src/main/resources/testFrameworkSettings.dev.json
-  src/test/java/demo/desktoptests/
+  src/test/java/{project.rootPath}/
     common/
       ManualTestCase.java                         # @ManualTestCase("TC-XXX") — SPECTRA traceability
       UiaXPathFindStrategy.java                   # XPath find strategy (built-in byXPath is broken in 1.0)
@@ -73,8 +73,8 @@ demo-desktop-tests/
       {TestClassName}.java
 ```
 
-- **Packages**: `demo.desktoptests.pages.<window>`, `demo.desktoptests.models`, `demo.desktoptests.tests.<featurearea>`, `demo.desktoptests.components`, `demo.desktoptests.common` (the `package` line must match the folder)
-- **Build command**: `mvn -q -f demo-desktop-tests/pom.xml test-compile` (or `mvn -q test-compile` from the folder that holds `pom.xml`) — compile only, never `mvn test`
+- **Packages**: `{project.rootNamespace}.pages.<window>`, `{project.rootNamespace}.models`, `{project.rootNamespace}.tests.<featurearea>`, `{project.rootNamespace}.components`, `{project.rootNamespace}.common` (the `package` line must match the folder)
+- **Build command**: `{project.buildCommand}` (from the repository root) — compile only, never `mvn test`
 - This project depends only on BELLATRIX Desktop (`bellatrix.desktop`, no `bellatrix.web` dependency)
 
 ---
@@ -91,7 +91,7 @@ This is the **full traceability workflow**: read SPECTRA test → execute via th
 
 **CRITICAL for suite/batch automation**: Process each test case **one at a time** through the cycle — CLI scenario execution → code generation → build — before starting the next test case. Do NOT group test cases by component, do NOT batch-read test files, do NOT skip the CLI session for any test case even when "we already have the XPaths from a similar test." Each test case must get its own full CLI session cycle (start → snapshot → execute steps → close). Different test cases hit different messages, states, error dialogs, and edge behaviors — only live CLI execution reveals them.
 
-**After code generation for each TC**: ensure the project still builds (`mvn -q test-compile`). Do NOT run the test — the user runs tests. After completing the batch (or at natural checkpoints if the user asks), ping the user with a summary and wait for feedback before fixing anything. The user will tell you which tests failed and how — then you fix based on concrete guidance.
+**After code generation for each TC**: ensure the project still builds (`{project.buildCommand}`). Do NOT run the test — the user runs tests. After completing the batch (or at natural checkpoints if the user asks), ping the user with a summary and wait for feedback before fixing anything. The user will tell you which tests failed and how — then you fix based on concrete guidance.
 
 ### B) Free-Form Test Generation (when no SPECTRA TC-IDs)
 
@@ -130,7 +130,7 @@ Use the **Generate Desktop Test Code** skill (`bellatrix-desktop-generate-code`)
 3. Generate/edit page objects (3-class pattern per window: `{WindowName}`, `Map`, `Asserts`)
 4. Generate/edit model classes (records) for structured form data
 5. Generate/edit test classes using page object methods
-6. **Verify the build** — run `mvn -q test-compile` and fix any errors
+6. **Verify the build** — run `{project.buildCommand}` and fix any errors
 
 ---
 
@@ -148,7 +148,7 @@ All BELLATRIX desktop documentation is available as the `bellatrix-desktop-*` sk
 
 | Skill | File | Content |
 |-------|------|---------|
-| **Project Structure (read FIRST)** | `bellatrix-desktop-project-structure` | **As-is tree of `demo-desktop-tests/`. Ground every CREATE vs EDIT decision here. Update this file when you add a page object package, component, or tests package.** |
+| **Project Structure (read FIRST)** | `bellatrix-desktop-project-structure` | **As-is tree of `{project.dir}/`. Ground every CREATE vs EDIT decision here. Update this file when you add a page object package, component, or tests package.** |
 | Desktop Components | `bellatrix-desktop-components` | Component types, methods, factory methods, `UiaXPathFindStrategy` |
 | Desktop Locators & Waits | `bellatrix-desktop-locators-and-waits` | Find strategies, XPath patterns, waits, wait-chain trap |
 | Desktop Validations | `bellatrix-desktop-validations-and-assertions` | validate* methods (read once — wait first), assertions |
@@ -221,11 +221,11 @@ framework is fixed), but **never let a test depend on state left by a previous t
 `public static final String CALCULATOR_APP_PATH = "Microsoft.WindowsCalculator_8wekyb3d8bbwe!App";`.
 
 ```java
-package demo.desktoptests.tests.arithmetic;
+package {project.rootNamespace}.tests.arithmetic;
 
-import demo.desktoptests.common.Constants;
-import demo.desktoptests.common.ManualTestCase;
-import demo.desktoptests.pages.calculatorwindow.CalculatorWindow;
+import {project.rootNamespace}.common.Constants;
+import {project.rootNamespace}.common.ManualTestCase;
+import {project.rootNamespace}.pages.calculatorwindow.CalculatorWindow;
 import org.junit.jupiter.api.Test;
 import solutions.bellatrix.desktop.infrastructure.ExecutionApp;
 import solutions.bellatrix.desktop.infrastructure.Lifecycle;
@@ -259,7 +259,7 @@ public class CalculatorArithmeticTests extends DesktopTest {
 - **XPath goes through `UiaXPathFindStrategy`**: `create().by(T.class, new UiaXPathFindStrategy("//…"))` / `create().allBy(T.class, new UiaXPathFindStrategy("//…"))`. NEVER `byXPath` / `allByXPath` — in BELLATRIX-Java 1.0 the built-in `XPathFindStrategy` resolves page-level elements with `By.tagName(xpath)`, so `byXPath` fails after its wait and `allByXPath` returns an empty list. There is no `byId` (use `byAutomationId`). Class token first, locator second
 - **Create new page objects when needed**: If the scenario opens a dialog, wizard page, sub-window, or distinct view that doesn't have a page object yet, CREATE a new 3-class page object package (`pages/{window}/`) rather than stuffing locators into an unrelated page. One window/view = one page object
 - **Never drop to raw driver for element lookup**: Inside page objects, actions, custom components, or tests, ALWAYS locate elements via BELLATRIX factories (`create().byAutomationId(...)`, `create().by(T.class, new UiaXPathFindStrategy(...))`, `create().allBy(...)`, etc.). NEVER call `driver.findElement(s)(By.xpath(...))`, `getWrappedDriver().findElement(...)`, `getWrappedElement().findElement(...)`, or any raw Selenium/Appium `By` locator from test-project code. Raw driver lookups bypass waits, validate methods, logging, and screenshots on failure — they produce brittle tests. Example: replace `driver.findElements(By.xpath("//DataItem[@Name='" + day + "']"))` with `app().create().allBy(Button.class, new UiaXPathFindStrategy("//DataItem[@Name='" + day + "']"))`. Inside custom components (no `app()` in scope) use the inherited `getComponentCreateService()`; inside sections/helpers use `new ComponentCreateService()` (or `new App().create()`). Raw driver access (`app().appService().getWrappedDriver()`) is acceptable ONLY for things BELLATRIX doesn't expose (e.g., window-handle switching) — never for finding or clicking elements
-- **Custom components when BELLATRIX isn't enough**: If an existing BELLATRIX component (`Button`, `Label`, `ComboBox`, etc.) lacks a behavior you need, or behaves incorrectly for a specific control, add a custom component under `src/test/java/demo/desktoptests/components/`. Two options: (a) a **new component** extending `solutions.bellatrix.desktop.components.DesktopComponent` exposing the missing methods (reuse the click pipeline with the inherited `defaultClick(Button.CLICKING, Button.CLICKED)`); (b) a **child component** extending an existing BELLATRIX component and overriding its public methods (e.g. `WinUiComboBox extends ComboBox` overriding `selectByText`). Keep a public no-argument constructor (components are created reflectively). Use them in `Map` classes via `create().byAutomationId(CustomComponent.class, "id")` etc. Do NOT patch BELLATRIX source — extend in the test project
+- **Custom components when BELLATRIX isn't enough**: If an existing BELLATRIX component (`Button`, `Label`, `ComboBox`, etc.) lacks a behavior you need, or behaves incorrectly for a specific control, add a custom component under `src/test/java/{project.rootPath}/components/`. Two options: (a) a **new component** extending `solutions.bellatrix.desktop.components.DesktopComponent` exposing the missing methods (reuse the click pipeline with the inherited `defaultClick(Button.CLICKING, Button.CLICKED)`); (b) a **child component** extending an existing BELLATRIX component and overriding its public methods (e.g. `WinUiComboBox extends ComboBox` overriding `selectByText`). Keep a public no-argument constructor (components are created reflectively). Use them in `Map` classes via `create().byAutomationId(CustomComponent.class, "id")` etc. Do NOT patch BELLATRIX source — extend in the test project
 - **Always brace control flow**: Every `if`, `else`, `for`, `while`, `do`, and `try` block MUST use `{ }` — even for single-statement bodies. Braces follow Java convention (opening brace on the same line). NEVER write `if (handle.equals(mainHandle)) continue;` or `if (x) return;` without braces. This is non-negotiable — applies to page objects, actions, assertions, tests, helpers, and custom components alike.
 - **Package = folder**: the `package` line matches the directory under `src/test/java`; one public top-level class per file; file name = class name
 - **Three classes per page**: `{WindowName} extends DesktopPage<Map, Asserts>`, `Map extends PageMap`, `Asserts extends PageAsserts<Map>` — all in `solutions.bellatrix.desktop.pages`. Java has no partial classes
@@ -274,6 +274,6 @@ public class CalculatorArithmeticTests extends DesktopTest {
 - **SPECTRA traceability**: When automating SPECTRA test cases, ALWAYS include the project-defined `@ManualTestCase("TC-XXX")` annotation (NOT JUnit's `@Tag`, `@DisplayName` or `@ParameterizedTest`) and update the SPECTRA test file's `automated_by` field. The SPECTRA scan pattern for Java is `@ManualTestCase("{id}")`
 - **1 TC = 1 test method**: Every SPECTRA test case produces exactly one test method. Never combine multiple TCs into one parameterized method (`@ParameterizedTest` + `@CsvSource`/`@MethodSource`). Never put multiple `@ManualTestCase` annotations on one method (the annotation is not `@Repeatable` — keep it that way)
 - **Separate test files by feature**: Do NOT put all tests into one file. Organize by feature area based on the test case's tags (e.g., `tests/arithmetic/CalculatorArithmeticTests.java`, `tests/memory/CalculatorMemoryTests.java`, `tests/history/CalculatorHistoryTests.java`). Each file should cover one coherent feature area
-- **Build-only verification + hand off (NO speculative fix loops)**: After generating or editing code, run `mvn -q -f demo-desktop-tests/pom.xml test-compile` and fix any BUILD errors until the build succeeds. Then STOP. Do NOT run the tests yourself (`mvn test`) and do NOT enter a fix-and-retry loop. Ping the user with a short summary of what was generated (files created/edited, TC-IDs covered, and the command to run them, e.g. `mvn -f demo-desktop-tests/pom.xml test -Dtest=CalculatorArithmeticTests`) and ask them to run the tests and report feedback. Only when the user returns with specific failures or guidance do you make targeted fixes. This applies to single-test AND suite-wide automation. Rationale: the user prefers to give guidance on real failures rather than watch multiple speculative iterations. Exception: if the user has explicitly told you "run it and fix until green" in the current conversation, follow that instruction
+- **Build-only verification + hand off (NO speculative fix loops)**: After generating or editing code, run `{project.buildCommand}` and fix any BUILD errors until the build succeeds. Then STOP. Do NOT run the tests yourself (`mvn test`) and do NOT enter a fix-and-retry loop. Ping the user with a short summary of what was generated (files created/edited, TC-IDs covered, and the command to run them, e.g. `mvn -f {project.path} test -Dtest=CalculatorArithmeticTests`) and ask them to run the tests and report feedback. Only when the user returns with specific failures or guidance do you make targeted fixes. This applies to single-test AND suite-wide automation. Rationale: the user prefers to give guidance on real failures rather than watch multiple speculative iterations. Exception: if the user has explicitly told you "run it and fix until green" in the current conversation, follow that instruction
 - **Session cleanup is mandatory**: ALWAYS call `bellatrix desktop close-session` before finishing the task/response, even when execution fails or is interrupted
 - **Splash screen recovery**: If any tool call returns "UI no longer available" or "the parent window has closed", call `bellatrix desktop reattach-session` with the main window title before retrying — do NOT create a new session or give up

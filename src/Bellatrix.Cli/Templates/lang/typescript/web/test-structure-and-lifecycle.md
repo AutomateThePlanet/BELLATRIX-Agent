@@ -143,7 +143,7 @@ npx bellatrix ./tests filter --testName login_WithValidCredentials_OpensDashboar
 npx bellatrix ./tests filter --suiteName LoginTests
 ```
 
-Filter values are anchored regular expressions. The agent's own verification is the type check only: `npx tsc --noEmit -p tsconfig.json`.
+Filter values are anchored regular expressions. The agent's own verification is the type check only: `{project.buildCommand}`.
 
 ---
 
