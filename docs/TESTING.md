@@ -1,4 +1,4 @@
-# Testing `bellatrix` (current release: 3.1.4)
+# Testing `bellatrix` (current release: 3.2.0)
 
 > This guide always describes the latest release. Release history: [CHANGELOG.md](../CHANGELOG.md).
 
@@ -14,17 +14,16 @@ The CLI runs no AI model and starts no driver. **You start the driver, browser s
 
 ## 1. Install
 
-You need the .NET 8 SDK. The current release is on GitHub Releases; download, update, uninstall and
-troubleshooting are in [INSTALL-PREVIEW.md](INSTALL-PREVIEW.md).
+You need the .NET 8 SDK. Install the current release from NuGet.org (to install from the GitHub release `.nupkg`
+instead, see [INSTALL-PREVIEW.md](INSTALL-PREVIEW.md)):
 
 ```powershell
-gh release download v3.1.4 -R AutomateThePlanet/BELLATRIX-AI-Agents -p "*.nupkg" -D .\bellatrix-pkg
 # First install:
-dotnet tool install -g Bellatrix.Cli --add-source .\bellatrix-pkg --version 3.1.4
+dotnet tool install -g Bellatrix.Cli
 # …or, if an older bellatrix is already installed:
-dotnet tool update  -g Bellatrix.Cli --add-source .\bellatrix-pkg --version 3.1.4
+dotnet tool update  -g Bellatrix.Cli
 
-bellatrix --version          # → {"version":"3.1.4"}
+bellatrix --version          # → {"version":"3.2.0"}
 ```
 
 To try a build from source, pack it and add the folder as a source:
@@ -33,7 +32,7 @@ To try a build from source, pack it and add the folder as a source:
 git clone https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents
 cd BELLATRIX-AI-Agents
 dotnet pack src\Bellatrix.Cli\Bellatrix.Cli.csproj -c Release -o .\artifacts\nuget
-dotnet tool update -g Bellatrix.Cli --add-source .\artifacts\nuget --version 3.1.4
+dotnet tool update -g Bellatrix.Cli --add-source .\artifacts\nuget --version 3.2.0
 ```
 
 > **Run every command for one test from the same folder.** Sessions are stored in `.\.bellatrix\sessions.db` and

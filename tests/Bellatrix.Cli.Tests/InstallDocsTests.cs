@@ -25,11 +25,26 @@ public class InstallDocsTests
     };
 
     [Fact]
-    public void ReleaseWorkflow_StillPublishesToGitHubReleasesOnly()
+    public void ReleaseWorkflow_PushesWithTrustedPublishing_AndKeepsTheReleaseAssets()
     {
         var workflow = Read(".github/workflows/release.yml");
-        Assert.Contains("Nothing is pushed to NuGet.org", workflow);
-        Assert.DoesNotContain("dotnet nuget push", workflow);
+
+        // Trusted Publishing: the nuget.org policy names this file and the "release" environment; no API key secret.
+        Assert.Contains("environment: release", workflow);
+        Assert.Contains("id-token: write", workflow);
+        Assert.Contains("uses: NuGet/login@v1", workflow);
+        Assert.Contains("user: angelovstanton", workflow);
+        Assert.Contains("--api-key \"${{ steps.login.outputs.NUGET_API_KEY }}\"", workflow);
+        Assert.Contains("--skip-duplicate", workflow);
+        Assert.DoesNotContain("secrets.", workflow);
+
+        // Nothing is published before the tag/version and schema guards pass.
+        var push = workflow.IndexOf("dotnet nuget push", StringComparison.Ordinal);
+        Assert.True(workflow.IndexOf("Tag matches the package version", StringComparison.Ordinal) is var v && v >= 0 && v < push);
+        Assert.True(workflow.IndexOf("Config schema is served at this tag", StringComparison.Ordinal) is var s && s >= 0 && s < push);
+
+        // The .nupkg and its .sha256 stay GitHub release assets (the --add-source install in INSTALL-PREVIEW).
+        Assert.Contains("gh release create $env:TAG $env:PACKAGE \"$env:PACKAGE.sha256\"", workflow);
     }
 
     [Fact]
@@ -65,10 +80,10 @@ public class InstallDocsTests
     }
 
     [Fact]
-    public void Changelog_DoesNotClaimANuGetOrgRelease()
+    public void Changelog_NamesTheFirstNuGetOrgVersion()
     {
         var changelog = Read("CHANGELOG.md");
-        Assert.DoesNotMatch(new Regex(@"first NuGet\.org release", RegexOptions.IgnoreCase), changelog);
-        Assert.Contains("No version is on NuGet.org yet", changelog);
+        Assert.DoesNotContain("No version is on NuGet.org yet", changelog);
+        Assert.Contains("3.2.0 is the first version on NuGet.org", changelog);
     }
 }

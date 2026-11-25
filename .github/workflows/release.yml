@@ -1,19 +1,28 @@
 name: Release
 
 # Pushing a tag `v<version>` (the <Version> in src/Bellatrix.Cli/Bellatrix.Cli.csproj) builds, tests and packs
-# Bellatrix.Cli and creates a GitHub release, marked Latest, with the .nupkg, its .sha256 file and release notes made
-# of the CHANGELOG.md section for that version plus docs/INSTALL-PREVIEW.md. Nothing is pushed to NuGet.org.
+# Bellatrix.Cli, pushes the package to NuGet.org with Trusted Publishing (no API key secret: NuGet/login exchanges
+# this run's GitHub OIDC token for a short-lived key), and creates a GitHub release, marked Latest, with the .nupkg
+# and its .sha256 file attached (the --add-source install in docs/INSTALL-PREVIEW.md uses them) and release notes made
+# of the CHANGELOG.md section for that version plus GitHub's generated notes.
+#
+# nuget.org → Trusted Publishing policy: owner AutomateThePlanet, repository BELLATRIX-AI-Agents, workflow file
+# release.yml, environment release. Steps: docs/contributing/RELEASE-CHECKLIST.md.
 
 on:
   push:
     tags: ['v*']
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   release:
     runs-on: windows-latest
+    environment: release
+    permissions:
+      contents: write   # gh release create
+      id-token: write   # NuGet/login (Trusted Publishing)
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -35,7 +44,7 @@ jobs:
           "VERSION=$version" >> $env:GITHUB_ENV
 
       # Every .bellatrix/config.json that `bellatrix init` writes has "$schema" pointing at the schema in this tag
-      # (docs/contributing/RELEASE-CHECKLIST.md step 7). Stop before the release exists if the tag does not serve it.
+      # (docs/contributing/RELEASE-CHECKLIST.md). Stop before anything is published if the tag does not serve it.
       - name: Config schema is served at this tag
         shell: pwsh
         run: |
@@ -64,7 +73,8 @@ jobs:
         run: ./scripts/gen-readme-matrix.ps1 -Check
 
       - name: Pack
-        run: dotnet pack src/Bellatrix.Cli/Bellatrix.Cli.csproj --configuration Release --no-build --output artifacts/nuget
+        shell: pwsh
+        run: dotnet pack src/Bellatrix.Cli/Bellatrix.Cli.csproj --configuration Release --no-build --output artifacts/nuget "-p:Version=$env:VERSION" "-p:PackageVersion=$env:VERSION"
 
       - name: SHA-256 and release notes
         shell: pwsh
@@ -81,14 +91,29 @@ jobs:
           if (-not $section) { throw "CHANGELOG.md has no section for $env:VERSION." }
           $install = Get-Content docs/INSTALL-PREVIEW.md -Raw -Encoding utf8
           if (-not $install.Contains("--version $env:VERSION")) { throw "docs/INSTALL-PREVIEW.md does not describe $env:VERSION." }
-          $install = ($install -replace '\A# [^\r\n]*\r?\n', '').Trim()
 
-          $notes = "## What's new in $env:VERSION`n`n$section`n`n---`n`n## Install`n`n$install`n`n**SHA-256** of ``$name``: ``$hash```n"
+          $notes = @(
+            "## What's new in $env:VERSION", '', $section, '', '---', '', '## Install', '',
+            '```bash', "dotnet tool install -g Bellatrix.Cli --version $env:VERSION   # or: dotnet tool update -g Bellatrix.Cli", '```', '',
+            "From the attached ``$name`` instead (offline or pinned): [docs/INSTALL-PREVIEW.md](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/blob/$env:TAG/docs/INSTALL-PREVIEW.md).", '',
+            "**SHA-256** of ``$name``: ``$hash``", ''
+          ) -join "`n"
           [IO.File]::WriteAllText("artifacts/release-notes.md", $notes)
           "PACKAGE=$package" >> $env:GITHUB_ENV
+
+      # Trusted Publishing: exchanges the GitHub OIDC token for a NuGet API key that is valid for one hour.
+      - name: NuGet login
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: angelovstanton
+
+      - name: Push to NuGet.org
+        shell: pwsh
+        run: dotnet nuget push $env:PACKAGE --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
 
       - name: Create the GitHub release
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create $env:TAG $env:PACKAGE "$env:PACKAGE.sha256" --verify-tag --latest --title "Bellatrix.Cli $env:VERSION" --notes-file artifacts/release-notes.md
+        run: gh release create $env:TAG $env:PACKAGE "$env:PACKAGE.sha256" --verify-tag --latest --title "Bellatrix.Cli $env:VERSION" --notes-file artifacts/release-notes.md --generate-notes

@@ -5,15 +5,16 @@ All notable changes to `Bellatrix.Cli` (the `bellatrix` command) are documented 
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 Versions before 3.1.2 were distributed as packages outside NuGet.org; 3.1.2 is the first version from this
-repository. No version is on NuGet.org yet: releases are published on
-[GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/releases) (the first one is 3.1.4) and installed
-from the downloaded `.nupkg` with `--add-source` ([docs/INSTALL-PREVIEW.md](docs/INSTALL-PREVIEW.md)).
+repository. 3.1.4 was published on
+[GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/releases) only; 3.2.0 is the first version on NuGet.org
+(`dotnet tool install -g Bellatrix.Cli`). Every release also attaches its `.nupkg` to the GitHub release, for
+installs with `--add-source` ([docs/INSTALL-PREVIEW.md](docs/INSTALL-PREVIEW.md)).
 
 ## [Unreleased]
 
 ## [3.2.0]
 
-Not released yet (no tag, no package). Install the current release, 3.1.4, from GitHub Releases.
+Not released yet (no tag, no package).
 
 ### Added
 - `.bellatrix/config.json`: the project settings for your repository (the test project per domain: path, name, root
@@ -28,11 +29,12 @@ Not released yet (no tag, no package). Install the current release, 3.1.4, from 
 - `bellatrix config show` and `bellatrix config validate`.
 - The init JSON has a `config` field (path, status, values, commit, warnings).
 - `docs/contributing/RELEASE-CHECKLIST.md`; the release workflow checks that the tag serves the config schema before
-  it creates the release.
+  it publishes anything.
+- Published on NuGet.org: `dotnet tool install -g Bellatrix.Cli`. The release workflow pushes the package with
+  NuGet Trusted Publishing (no long-lived API key) and still attaches the `.nupkg` and its `.sha256` to the GitHub
+  release.
 
 ### Fixed
-- The README, the NuGet README and this changelog no longer say the package is on NuGet.org. It is not published
-  there yet; install it from GitHub Releases (`dotnet tool install -g Bellatrix.Cli --add-source ./bellatrix-pkg`).
 - The skills no longer hard-code a sample project (`Demo.DesktopTests`, `MyProject.WebTests`, `demo-desktop-tests`,
   `my-web-tests`, …) or its build command. They use `{project.*}` placeholders from `.bellatrix/config.json` and ask
   you when it has no project.
