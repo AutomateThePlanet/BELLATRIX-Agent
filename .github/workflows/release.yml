@@ -6,7 +6,7 @@ name: Release
 # and its .sha256 file attached (the --add-source install in docs/INSTALL-PREVIEW.md uses them) and release notes made
 # of the CHANGELOG.md section for that version plus GitHub's generated notes.
 #
-# nuget.org → Trusted Publishing policy: owner AutomateThePlanet, repository BELLATRIX-AI-Agents, workflow file
+# nuget.org → Trusted Publishing policy: owner AutomateThePlanet, repository BELLATRIX-Agent, workflow file
 # release.yml, environment release. Steps: docs/contributing/RELEASE-CHECKLIST.md.
 
 on:
@@ -53,7 +53,7 @@ jobs:
       - name: Config schema is served at this tag
         shell: pwsh
         run: |
-          $url = "https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-AI-Agents/$env:TAG/schemas/bellatrix-config.v1.schema.json"
+          $url = "https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-Agent/$env:TAG/schemas/bellatrix-config.v1.schema.json"
           $local = Get-Content schemas/bellatrix-config.v1.schema.json -Raw -Encoding utf8 | ConvertFrom-Json
           if ($local.'$id' -ne $url) { throw "schemas/bellatrix-config.v1.schema.json `$id is '$($local.'$id')', expected '$url'." }
           $remote = $null
@@ -100,7 +100,7 @@ jobs:
           $notes = @(
             "## What's new in $env:VERSION", '', $section, '', '---', '', '## Install', '',
             '```bash', "dotnet tool install -g Bellatrix.Cli --version $env:VERSION   # or: dotnet tool update -g Bellatrix.Cli", '```', '',
-            "From the attached ``$name`` instead (offline or pinned): [docs/INSTALL-PREVIEW.md](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/blob/$env:TAG/docs/INSTALL-PREVIEW.md).", '',
+            "From the attached ``$name`` instead (offline or pinned): [docs/INSTALL-PREVIEW.md](https://github.com/AutomateThePlanet/BELLATRIX-Agent/blob/$env:TAG/docs/INSTALL-PREVIEW.md).", '',
             "**SHA-256** of ``$name``: ``$hash``", ''
           ) -join "`n"
           [IO.File]::WriteAllText("artifacts/release-notes.md", $notes)

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-AI-Agents/v3.2.0/schemas/bellatrix-config.v1.schema.json",
+  "$id": "https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-Agent/v3.2.0/schemas/bellatrix-config.v1.schema.json",
   "title": "BELLATRIX Agent project settings (.bellatrix/config.json)",
   "description": "Where your BELLATRIX test project and your test-case files are. Written by `bellatrix init`, read by the BELLATRIX skills and by `bellatrix config show|validate`. Commit this file.",
   "type": "object",

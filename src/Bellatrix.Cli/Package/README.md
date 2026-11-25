@@ -19,7 +19,7 @@ bellatrix help
 ```
 
 To install from the `.nupkg` attached to each GitHub release instead (pinned or offline):
-[INSTALL-PREVIEW.md](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/blob/main/docs/INSTALL-PREVIEW.md).
+[INSTALL-PREVIEW.md](https://github.com/AutomateThePlanet/BELLATRIX-Agent/blob/main/docs/INSTALL-PREVIEW.md).
 
 ## Scaffold your AI agent
 
@@ -83,8 +83,8 @@ output.
 ## Learn more
 
 - Guide, CLI reference and what is supported: https://bellatrix.solutions/agent/
-- Source code, issues and contributing: https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents
+- Source code, issues and contributing: https://github.com/AutomateThePlanet/BELLATRIX-Agent
 - BELLATRIX framework documentation: https://docs.bellatrix.solutions/
-- Release notes: https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/blob/main/CHANGELOG.md
+- Release notes: https://github.com/AutomateThePlanet/BELLATRIX-Agent/blob/main/CHANGELOG.md
 - Related: SPECTRA (AI test case generation, https://github.com/AutomateThePlanet/Spectra) and Testimize (test data
   optimization, https://github.com/AutomateThePlanet/Testimize)

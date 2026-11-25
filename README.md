@@ -6,7 +6,7 @@
 <!-- Badges -->
 <p align="center">
   <a href="https://www.nuget.org/packages/Bellatrix.Cli"><img src="https://img.shields.io/nuget/v/Bellatrix.Cli?label=Bellatrix.Cli&color=blue" alt="NuGet Bellatrix.Cli"></a>
-  <a href="https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/actions/workflows/ci.yml"><img src="https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/AutomateThePlanet/BELLATRIX-Agent/actions/workflows/ci.yml"><img src="https://github.com/AutomateThePlanet/BELLATRIX-Agent/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="License: Apache 2.0"></a>
   <a href="https://dotnet.microsoft.com/download"><img src="https://img.shields.io/badge/.NET-8.0+-purple" alt=".NET 8.0+"></a>
   <a href="https://bellatrix.solutions/agent/"><img src="https://img.shields.io/badge/docs-online-00bcd4" alt="Documentation"></a>
@@ -62,7 +62,7 @@ objects and the test in your project's BELLATRIX style. Use `--agent copilot`, `
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-AI-Agents/v3.2.0/schemas/bellatrix-config.v1.schema.json",
+  "$schema": "https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-Agent/v3.2.0/schemas/bellatrix-config.v1.schema.json",
   "version": 1,
   "testCasesDir": "test-cases"
 }

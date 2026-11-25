@@ -4,7 +4,7 @@
     <Authors>Automate The Planet Ltd.</Authors>
     <Company>Automate The Planet Ltd.</Company>
     <Copyright>Copyright 2026 Automate The Planet Ltd.</Copyright>
-    <RepositoryUrl>https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents</RepositoryUrl>
+    <RepositoryUrl>https://github.com/AutomateThePlanet/BELLATRIX-Agent</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Deterministic>true</Deterministic>
   </PropertyGroup>

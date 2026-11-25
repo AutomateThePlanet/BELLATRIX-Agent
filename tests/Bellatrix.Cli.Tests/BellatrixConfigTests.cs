@@ -117,7 +117,7 @@ public class BellatrixConfigTests : IDisposable
         Assert.Equal(0, CliHarness.Run(repo.Root, "init", "--agent", "claude", "--language", "csharp", "--domains", "desktop", "--no-interaction").Exit);
 
         var url = BellatrixConfig.Load(repo.Root).Document!["$schema"]!.GetValue<string>();
-        Assert.Equal($"https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-AI-Agents/v{version}/schemas/bellatrix-config.v1.schema.json", url);
+        Assert.Equal($"https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-Agent/v{version}/schemas/bellatrix-config.v1.schema.json", url);
         Assert.Contains($"/v{version}/", url);
         Assert.DoesNotContain("/main/", url);
 

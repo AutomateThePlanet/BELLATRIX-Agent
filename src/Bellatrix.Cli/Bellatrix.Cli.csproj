@@ -24,7 +24,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>bellatrix_icon.png</PackageIcon>
-    <PackageReleaseNotes>What's new in each version: https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <PackageReleaseNotes>What's new in each version: https://github.com/AutomateThePlanet/BELLATRIX-Agent/blob/main/CHANGELOG.md</PackageReleaseNotes>
     <!-- Repository url + commit in the .nuspec (Source Link, built into the .NET 8 SDK, supplies the commit). -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
 

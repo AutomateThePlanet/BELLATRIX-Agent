@@ -29,8 +29,8 @@ bellatrix --version          # → {"version":"3.2.0"}
 To try a build from source, pack it and add the folder as a source:
 
 ```powershell
-git clone https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents
-cd BELLATRIX-AI-Agents
+git clone https://github.com/AutomateThePlanet/BELLATRIX-Agent
+cd BELLATRIX-Agent
 dotnet pack src\Bellatrix.Cli\Bellatrix.Cli.csproj -c Release -o .\artifacts\nuget
 dotnet tool update -g Bellatrix.Cli --add-source .\artifacts\nuget --version 3.2.0
 ```
@@ -201,5 +201,5 @@ bellatrix web list-sessions --json; Get-Content .\trace.jsonl; Remove-Item Env:\
 | The first 2.1.0+ command converts an existing `.bellatrix/sessions.db` to the per-domain format. Older `bellatrix` versions can no longer write sessions to it. | Upgrade everyone to ≥ 2.1.0, or delete `.bellatrix/sessions.db`. |
 | A 2.2 re-run renames `.bellatrix/manifest.json` to `manifest.claude.json`. Older `bellatrix` versions will then treat every scaffolded file as unmanaged. | Upgrade everyone to ≥ 2.2.0. |
 
-**Found a problem?** Open an issue at https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/issues with the commands
+**Found a problem?** Open an issue at https://github.com/AutomateThePlanet/BELLATRIX-Agent/issues with the commands
 you ran, the JSON each one printed (`bellatrix --version` included), and anything that differed from this guide.
