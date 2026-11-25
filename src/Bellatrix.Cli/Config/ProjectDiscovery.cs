@@ -330,8 +330,24 @@ internal static class ProjectDiscovery
             common = common is null ? parts : common.Zip(parts).TakeWhile(p => p.First == p.Second).Select(p => p.First).ToArray();
         }
 
+        // The BELLATRIX-Java layout puts tests/, pages/, components/, … (and android/, ios/) under the base package;
+        // with few sources the shared prefix can reach into one of them, so cut it there.
+        if (common is not null)
+        {
+            var layer = Array.FindIndex(common, p => JavaLayoutPackages.Contains(p));
+            if (layer >= 0)
+            {
+                common = common[..layer];
+            }
+        }
+
         return common is { Length: > 0 } ? string.Join('.', common) : null;
     }
+
+    private static readonly HashSet<string> JavaLayoutPackages = new(StringComparer.Ordinal)
+    {
+        "tests", "pages", "sections", "components", "models", "common", "infrastructure", "android", "ios",
+    };
 
     private static IEnumerable<string> Files(string root, Func<string, bool> match)
     {
