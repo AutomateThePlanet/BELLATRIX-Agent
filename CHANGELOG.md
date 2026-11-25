@@ -12,9 +12,7 @@ installs with `--add-source` ([docs/INSTALL-PREVIEW.md](docs/INSTALL-PREVIEW.md)
 
 ## [Unreleased]
 
-## [3.2.0]
-
-Not released yet (no tag, no package).
+## [3.2.0] - 2026-11-25
 
 ### Added
 - `.bellatrix/config.json`: the project settings for your repository (the test project per domain: path, name, root
