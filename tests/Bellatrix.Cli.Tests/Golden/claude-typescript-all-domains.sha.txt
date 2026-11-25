@@ -8,7 +8,7 @@ d652402a031866ff  .claude/skills/bellatrix-desktop-execute-spectra-test/SKILL.md
 d1b7db81d3704a74  .claude/skills/bellatrix-mobile-execute-scenario/SKILL.md
 34fa185749b37269  .claude/skills/bellatrix-mobile-execute-spectra-test/SKILL.md
 610fe68b3d405242  .claude/skills/bellatrix-web-app-services/SKILL.md
-6d9296d6e0b56707  .claude/skills/bellatrix-web-automate-spectra-test/SKILL.md
+34064281ad77edc9  .claude/skills/bellatrix-web-automate-spectra-test/SKILL.md
 05d3c300c391f0cc  .claude/skills/bellatrix-web-components/SKILL.md
 0d978a63e15c7597  .claude/skills/bellatrix-web-execute-scenario/SKILL.md
 21b8be4e9ff7873e  .claude/skills/bellatrix-web-execute-spectra-test/SKILL.md

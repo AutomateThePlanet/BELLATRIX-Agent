@@ -30,10 +30,10 @@ User says things like:
 
 ### Single Test Case
 
-Read the SPECTRA test case file:
+Read the SPECTRA test case file: `{testCasesDir}` is the test-case folder from `.bellatrix/config.json` (the same folder as SPECTRA's `tests.dir`; default `test-cases`).
 
 ```
-read tests/{suite}/TC-{id}.md
+read {testCasesDir}/{suite}/TC-{id}.md
 ```
 
 Extract:
@@ -148,7 +148,7 @@ Every SPECTRA test case MUST produce exactly ONE test method — even when two T
 
 ### Step 3a: Update `automated_by` in the SPECTRA test file
 
-Read `tests/{suite}/TC-{id}.md` and add or update `automated_by` in its YAML frontmatter with the path of the generated test file:
+Read `{testCasesDir}/{suite}/TC-{id}.md` and add or update `automated_by` in its YAML frontmatter with the path of the generated test file:
 
 {{> lang:automated-by}}
 ### Step 3b: Rebuild the SPECTRA index

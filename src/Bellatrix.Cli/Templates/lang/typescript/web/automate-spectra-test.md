@@ -97,7 +97,7 @@ npx bellatrix ./tests filter --manualTestCase TC-210
 [CREATED] src/pages/cartpage/CartPageAsserts.ts
 [EDITED]  src/pages/index.ts — exported CartPage
 [CREATED] tests/cart/CartTests.test.ts
-[EDITED]  tests/cart/TC-210.md — added automated_by
+[EDITED]  {testCasesDir}/cart/TC-210.md — added automated_by
 
 ### Coverage Impact
 - Automation coverage: 12% → 14% (+1 test automated)

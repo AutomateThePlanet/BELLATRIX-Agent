@@ -96,7 +96,7 @@ mvn test -Dtest=CartTests#applyCoupon_WithValidCode_ShowsSuccessAndDiscountedTot
 [CREATED] src/test/java/{project.rootPath}/pages/cart/Map.java
 [CREATED] src/test/java/{project.rootPath}/pages/cart/Asserts.java
 [CREATED] src/test/java/{project.rootPath}/tests/cart/CartTests.java
-[EDITED]  tests/cart/TC-210.md — added automated_by
+[EDITED]  {testCasesDir}/cart/TC-210.md — added automated_by
 
 ### Coverage Impact
 - Automation coverage: 12% → 14% (+1 test automated)

@@ -35,10 +35,10 @@ If the platform is not stated and the project targets both, ask once which platf
 
 ### Single Test Case
 
-Read the SPECTRA test case file:
+Read the SPECTRA test case file: `{testCasesDir}` is the test-case folder from `.bellatrix/config.json` (the same folder as SPECTRA's `tests.dir`; default `test-cases`).
 
 ```
-read tests/{suite}/TC-{id}.md
+read {testCasesDir}/{suite}/TC-{id}.md
 ```
 
 Extract:
@@ -149,7 +149,7 @@ After generating the automated test, link the SPECTRA test case back to the code
 
 ### Step 3a: Update `automated_by` in the SPECTRA test file
 
-Read the SPECTRA test file (`tests/{suite}/TC-{id}.md`) and add or update `automated_by` in its YAML
+Read the SPECTRA test file (`{testCasesDir}/{suite}/TC-{id}.md`) and add or update `automated_by` in its YAML
 frontmatter with the path of the generated test file:
 
 **Before:**

@@ -102,7 +102,7 @@ dotnet test {project.path} --filter "FullyQualifiedName~Login_WithValidCredentia
 [CREATED] Pages/LoginPage/LoginPage.Actions.cs
 [CREATED] Pages/LoginPage/LoginPage.Assertions.cs
 [CREATED] Tests/Login/ShopLoginTests.cs
-[EDITED]  tests/login/TC-101.md — added automated_by
+[EDITED]  {testCasesDir}/login/TC-101.md — added automated_by
 
 ### Coverage Impact
 - Automation coverage: 12% → 14% (+1 test automated)

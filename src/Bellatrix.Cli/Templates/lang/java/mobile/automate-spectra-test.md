@@ -121,7 +121,7 @@ mvn test -Dtest=ShopLoginTests#login_WithValidCredentials_OpensHome
 [CREATED] src/test/java/{project.rootPath}/android/pages/login/LoginPage.java
 [CREATED] src/test/java/{project.rootPath}/android/pages/login/Asserts.java
 [CREATED] src/test/java/{project.rootPath}/android/tests/login/ShopLoginTests.java
-[EDITED]  tests/login/TC-101.md — added automated_by
+[EDITED]  {testCasesDir}/login/TC-101.md — added automated_by
 
 ### Coverage Impact
 - Automation coverage: 12% → 14% (+1 test automated)

@@ -21,6 +21,14 @@ first release from this repository.
 - `bellatrix config show` and `bellatrix config validate`.
 - The init JSON has a `config` field (path, status, values, commit, warnings).
 
+### Fixed
+- The skills no longer hard-code a sample project (`Demo.DesktopTests`, `MyProject.WebTests`, `demo-desktop-tests`,
+  `my-web-tests`, …) or its build command. They use `{project.*}` placeholders from `.bellatrix/config.json` and ask
+  you when it has no project.
+- One test-case convention in every skill: `{testCasesDir}/{suite}/TC-{id}.md`. Previously some skills read
+  `tests/{suite}/…` and others `test-cases/{suite}/…`. The folder is recorded in `.bellatrix/config.json`
+  (default: SPECTRA's `tests.dir`, else `test-cases`).
+
 ### Changed
 - `--no-interaction` now has an effect: `init` is the one command that may prompt, and only in a terminal.
 - `init` contract rule R9: re-running `init` / `update-skills` never overwrites `.bellatrix/config.json` without

@@ -93,7 +93,7 @@ dotnet test {project.path} --filter "FullyQualifiedName~ApplyCoupon_WithValidCod
 [CREATED] Pages/CartPage/CartPage.Actions.cs
 [CREATED] Pages/CartPage/CartPage.Assertions.cs
 [CREATED] Tests/Cart/CartTests.cs
-[EDITED]  tests/cart/TC-210.md — added automated_by
+[EDITED]  {testCasesDir}/cart/TC-210.md — added automated_by
 
 ### Coverage Impact
 - Automation coverage: 12% → 14% (+1 test automated)

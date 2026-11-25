@@ -6,7 +6,7 @@ c54ffd2d45b6913d  .claude/agents/bellatrix-mobile-system-tests-generator.md
 9a0d731decca484e  .claude/agents/bellatrix-web-locator-specialist.md
 d994ce1b30eb4b98  .claude/agents/bellatrix-web-system-tests-generator.md
 5f6f95bb0635bed9  .claude/skills/bellatrix-desktop-app-services/SKILL.md
-076dbc49517f073f  .claude/skills/bellatrix-desktop-automate-spectra-test/SKILL.md
+3cf938cd0d4b1ff8  .claude/skills/bellatrix-desktop-automate-spectra-test/SKILL.md
 4b3550ea88f27f42  .claude/skills/bellatrix-desktop-components/SKILL.md
 486b7a43a5ac2e74  .claude/skills/bellatrix-desktop-execute-scenario/SKILL.md
 d652402a031866ff  .claude/skills/bellatrix-desktop-execute-spectra-test/SKILL.md
@@ -18,7 +18,7 @@ d7e3fc5f91ab0f76  .claude/skills/bellatrix-desktop-system-tests-recipes/SKILL.md
 71761f3ac30444cf  .claude/skills/bellatrix-desktop-test-structure-and-lifecycle/SKILL.md
 941af4cf37c570fd  .claude/skills/bellatrix-desktop-validations-and-assertions/SKILL.md
 2b42d48373a4dd9d  .claude/skills/bellatrix-mobile-app-services/SKILL.md
-8991e627ab08fee9  .claude/skills/bellatrix-mobile-automate-spectra-test/SKILL.md
+97cbae1622a92146  .claude/skills/bellatrix-mobile-automate-spectra-test/SKILL.md
 8d3110fe2e4fcc92  .claude/skills/bellatrix-mobile-components/SKILL.md
 0ae14cc5686b64f9  .claude/skills/bellatrix-mobile-execute-scenario/SKILL.md
 a69cfccc2d578387  .claude/skills/bellatrix-mobile-execute-spectra-test/SKILL.md
@@ -30,7 +30,7 @@ bb8551dbfe9c45aa  .claude/skills/bellatrix-mobile-system-tests-recipes/SKILL.md
 9fa14016f93921f1  .claude/skills/bellatrix-mobile-test-structure-and-lifecycle/SKILL.md
 7c1c06c5c102557f  .claude/skills/bellatrix-mobile-validations-and-assertions/SKILL.md
 1c0f961dee0081cb  .claude/skills/bellatrix-web-app-services/SKILL.md
-b932d064b8756296  .claude/skills/bellatrix-web-automate-spectra-test/SKILL.md
+5ee6079b6b741445  .claude/skills/bellatrix-web-automate-spectra-test/SKILL.md
 286c38312bf5448d  .claude/skills/bellatrix-web-components/SKILL.md
 5fba52b0f87c439c  .claude/skills/bellatrix-web-execute-scenario/SKILL.md
 21b8be4e9ff7873e  .claude/skills/bellatrix-web-execute-spectra-test/SKILL.md

@@ -22,10 +22,10 @@ User says things like:
 
 ### Single Test Case
 
-Read the SPECTRA test case file to extract the scenario:
+Read the SPECTRA test case file to extract the scenario: `{testCasesDir}` is the test-case folder from `.bellatrix/config.json` (the same folder as SPECTRA's `tests.dir`; default `test-cases`).
 
 ```
-read tests/{suite}/TC-{id}.md
+read {testCasesDir}/{suite}/TC-{id}.md
 ```
 
 Extract from the file:
@@ -239,7 +239,7 @@ After generating the automated test, update the SPECTRA test case file to link b
 
 Read the SPECTRA test file:
 ```
-read tests/{suite}/TC-{id}.md
+read {testCasesDir}/{suite}/TC-{id}.md
 ```
 
 Add or update the `automated_by` field in the YAML frontmatter:
@@ -348,7 +348,7 @@ After completing all phases, report:
 [CREATED] src/test/java/{project.rootPath}/pages/calculatorwindow/CalculatorWindow.java
 [CREATED] src/test/java/{project.rootPath}/pages/calculatorwindow/Asserts.java
 [CREATED] src/test/java/{project.rootPath}/tests/arithmetic/CalculatorArithmeticTests.java
-[EDITED]  tests/standard/TC-142.md — added automated_by
+[EDITED]  {testCasesDir}/standard/TC-142.md — added automated_by
 
 ### Coverage Impact
 - Automation coverage: 12% → 14% (+1 test automated)
@@ -392,7 +392,7 @@ spectra list --suite {suite} --output-format json
 
 Run the **complete single-test workflow** for this one test case before moving to the next. The cycle is: **CLI → generate → build → update coverage → next** (the user runs the tests).
 
-1. **Phase 0**: Read THIS test case file only (`test-cases/{suite}/TC-{id}.md`)
+1. **Phase 0**: Read THIS test case file only (`{testCasesDir}/{suite}/TC-{id}.md`)
 2. **Phase 1 (MANDATORY — no shortcuts)**: `bellatrix desktop start-session` → `bellatrix desktop snapshot` → execute ALL steps via bellatrix desktop CLI commands → observe actual UI text/state → validate expected result → `bellatrix desktop close-session`. Record the ACTUAL text of any error messages, dialogs, and result displays as observed — do not assume they match a sibling TC
 3. **Phase 2**: Generate/edit page objects and test code with `@ManualTestCase("TC-XXX")`. Create a new page object package (`pages/{window}/` with `{Window}.java`, `Map.java`, `Asserts.java`) when a new window/view is encountered. Add custom components under `src/test/java/{project.rootPath}/components/` if BELLATRIX built-ins don't fit. Prefer the direct factories `byAutomationId` / `byName` over `by(T.class, new UiaXPathFindStrategy(...))` for single-attribute locators (never `byXPath` — broken in BELLATRIX-Java 1.0)
 4. **Phase 4**: `{project.buildCommand}` and fix any BUILD errors (not test failures — you don't run tests)
