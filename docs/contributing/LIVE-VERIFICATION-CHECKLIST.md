@@ -5,7 +5,7 @@
 > failures with the version (`bellatrix --version`) and date, and open an issue with the JSON output.
 >
 > Sections: **A. per AI agent**, **B. per domain** (automated by `scripts/run-e2e.ps1` where the drivers are
-> reachable), **C. golden paths** (four end-to-end runs).
+> reachable), **C. golden paths** (four end-to-end runs), **D. project settings and interactive `init`** (3.2.0).
 
 ---
 
@@ -170,6 +170,10 @@ other cell relies on L1 (E2E) + L2 (conformance) only.
     the SPECTRA-style test cases.
   - If the copy registers a `bellatrix-*-mcp` server in an MCP config, `bellatrix init` removes that key, which is
     intended.
+  - From 3.2.0, `init` records the projects in `.bellatrix/config.json`. The demo has two desktop candidates
+    (`Demo.WebTests` also references `Bellatrix.Desktop`), so pass them:
+    `--project desktop=Demo.DesktopTests/Demo.DesktopTests.csproj,web=Demo.WebTests/Demo.WebTests.csproj`.
+    `bellatrix config show --json` must list both before you start the agent.
 - In the terminal you start the agent from, set `$env:BELLATRIX_TRACE="<scratch>\<run>\trace.jsonl"`.
   - After the run, `Select-String '"contextHeavy":true' trace.jsonl` must be empty.
   - That proves no `--inline` snapshot and no `get-page-source` entered the agent's context.
@@ -356,3 +360,41 @@ Same as C.1, with these differences:
 
 > The former per-language live items (Java desktop/mobile, TypeScript web, C# mobile) now live in
 > [LANGUAGE-VERIFICATION-CHECKLIST.md](LANGUAGE-VERIFICATION-CHECKLIST.md) §4. They are useful checks, but they are not golden paths.
+
+---
+
+## D. Project settings and interactive `init` (3.2.0)
+
+`InteractiveInitPtyTests` drives `bellatrix init` through a Windows pseudo console in CI (confirm, typed path, several
+candidates, Ctrl+C, `CI`/`--dry-run`/`--no-interaction`). Run this section by hand on a release candidate, in a real
+terminal (Windows Terminal; on macOS/Linux any terminal; the unit tests do not cover those), with the **installed**
+tool. Use an empty scratch folder per step.
+
+**Setup:** in `<scratch>\d`, create `src\Acme.UiTests\Acme.UiTests.csproj` with
+`<PackageReference Include="Bellatrix.Desktop" Version="1.0.0" />`, and for D.3 also
+`qa\Acme.Other\Acme.Other.csproj` with the same reference.
+
+- [ ] **D.1 Confirm.** `bellatrix init --agent claude --language csharp --domains desktop` shows
+  `[1] src/Acme.UiTests/Acme.UiTests.csproj  (proposed)`; press Enter. Exit 0; `.bellatrix\config.json` has that path,
+  `"version": 1` and `$schema` ending in `/v<version>/schemas/bellatrix-config.v1.schema.json`; stderr says to commit it.
+- [ ] **D.2 Reject + manual path.** Delete `.bellatrix`, run D.1 again, type `nope\X.csproj` (it says "does not exist"),
+  then `qa\Acme.Other\Acme.Other.csproj`. The config records the typed project.
+- [ ] **D.3 Several candidates.** With both projects, the prompt lists `[1]` and `[2]` and proposes none; type `2`.
+- [ ] **D.4 Ctrl+C.** Start D.3 and press Ctrl+C at the prompt. Non-zero exit; `dir -Force` shows no `.bellatrix`,
+  `.claude` or `CLAUDE.md`.
+- [ ] **D.5 Never prompts.** With both projects, each of these exits 2 at once with "Several BELLATRIX desktop test
+  projects found … --project desktop=…" and writes nothing:
+  `$env:CI="true"; bellatrix init --agent claude --language csharp --domains desktop; Remove-Item Env:CI`,
+  `bellatrix init --agent claude --language csharp --domains desktop --dry-run`,
+  `bellatrix init --agent claude --language csharp --domains desktop --no-interaction`.
+- [ ] **D.6 Re-run keeps your edits.** After D.1, change `buildCommand` in the config by hand, then
+  `bellatrix update-skills` and `bellatrix init --project desktop=qa\Acme.Other\Acme.Other.csproj`: the config is
+  unchanged (`"status":"unchanged"` and a "stays … --regenerate" warning). `bellatrix init --regenerate --project
+  desktop=qa\Acme.Other\Acme.Other.csproj` replaces it (`"status":"replaced"`).
+- [ ] **D.7 Validate.** `bellatrix config validate --json` → `{"valid":true,…}`. Break the file (delete `"name"`):
+  exit 1, `config_invalid`, the path `$.domains.desktop.project.name`. Delete the file: `config_missing`.
+  `bellatrix config show --json` lists `resolved.desktop.projectDir` and `testCasesDir`.
+- [ ] **D.8 The agent asks when it must.** In a repo with no BELLATRIX project, `bellatrix init --agent claude
+  --domains desktop` (warning: no desktop project), then ask Claude Code "Automate TC-1001". It runs
+  `bellatrix config validate`, sees no desktop project and **asks you** which project to use instead of guessing,
+  then records it in `.bellatrix\config.json`.

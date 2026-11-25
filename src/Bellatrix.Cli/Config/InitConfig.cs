@@ -297,7 +297,9 @@ internal static class InitConfig
             var answer = prompter.Ask(question)?.Trim();
             if (answer is null)
             {
-                break; // end of input: behave as non-interactive
+                // End of input (Ctrl+C / Ctrl+Z / a closed terminal): cancel. Nothing has been written yet, because
+                // the config is settled before any file is scaffolded.
+                throw new CliException("cancelled", "bellatrix init was cancelled at the prompt; nothing was written.", exitCode: 130);
             }
 
             if (answer.Length == 0 && proposal is not null)
