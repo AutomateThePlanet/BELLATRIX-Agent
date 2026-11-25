@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-Agent/main/schemas/bellatrix-config.v1.schema.json",
+  "title": "BELLATRIX Agent project settings (.bellatrix/config.json)",
+  "description": "Where your BELLATRIX test project and your test-case files are. Written by `bellatrix init`, read by the BELLATRIX skills and by `bellatrix config show|validate`. Commit this file.",
+  "type": "object",
+  "required": ["version", "testCasesDir", "domains"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "The URL of this schema (lets editors validate the file)."
+    },
+    "version": {
+      "const": 1,
+      "description": "Format version of this file."
+    },
+    "testCasesDir": {
+      "$ref": "#/$defs/relativePath",
+      "description": "Folder of the test-case files ({testCasesDir}/{suite}/TC-{id}.md), relative to the repository root. Same as SPECTRA's tests.dir; default test-cases."
+    },
+    "domains": {
+      "type": "object",
+      "description": "Settings per BELLATRIX domain. A domain without a project means: ask the user.",
+      "additionalProperties": false,
+      "properties": {
+        "desktop": { "$ref": "#/$defs/domain" },
+        "web": { "$ref": "#/$defs/domain" },
+        "mobile": { "$ref": "#/$defs/domain" }
+      }
+    }
+  },
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![/~])(?![A-Za-z]:)(?!(?:.*/)?\\.\\.(?:/|$))[^\\\\]+$",
+      "description": "A repository-relative path with forward slashes and no '..' segment."
+    },
+    "domain": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "project": { "$ref": "#/$defs/project" },
+        "testCasesDir": {
+          "$ref": "#/$defs/relativePath",
+          "description": "Overrides the top-level testCasesDir for this domain."
+        }
+      }
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "name", "buildCommand"],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/relativePath",
+          "description": "The project file: a .csproj (C#), pom.xml or build.gradle(.kts) (Java), or package.json (TypeScript)."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The project name (C#: the .csproj name; Java: the artifactId; TypeScript: the package name)."
+        },
+        "rootNamespace": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "description": "C#: the root namespace. Java: the base package of the test sources. Null when unknown or not used (TypeScript)."
+        },
+        "buildCommand": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The command that compiles the tests without running them, from the repository root."
+        }
+      }
+    }
+  }
+}

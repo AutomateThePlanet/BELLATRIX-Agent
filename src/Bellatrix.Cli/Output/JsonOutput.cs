@@ -28,4 +28,11 @@ public static class JsonOutput
         Console.Out.WriteLine(JsonSerializer.Serialize(new { error = new { code, message } }, Options));
         return exitCode;
     }
+
+    /// <summary>The error envelope with a <c>details</c> object: <c>{ "error": { "code", "message", "details" } }</c>.</summary>
+    public static int Error(string code, string message, object details, int exitCode = 1)
+    {
+        Console.Out.WriteLine(JsonSerializer.Serialize(new { error = new { code, message, details } }, Options));
+        return exitCode;
+    }
 }

@@ -44,7 +44,7 @@ An AI agent's context is its scarcest resource; a full UI tree can be hundreds o
 Every scaffolded instruction fragment makes this mandatory: delegate, or query narrowly — never read a snapshot or
 page source into the main context.
 
-## The `init` contract (R1–R8)
+## The `init` contract (R1–R9)
 
 `bellatrix init` writes into a repository that belongs to someone else, so it follows these rules:
 
@@ -58,9 +58,28 @@ page source into the main context.
 | R6 | A per-agent manifest (`.bellatrix/manifest.<agent>.json`) records a SHA-256 per owned file; on a re-run a file you edited is skipped and reported unless you pass `--regenerate`. Hashes ignore CRLF/LF differences. |
 | R7 | No MCP server is registered. `init` only removes BELLATRIX's own stale MCP keys from the agents' MCP config files and keeps every other entry. |
 | R8 | Re-runs are idempotent inside the BELLATRIX namespace only; files of other tools and of other agents are never touched. |
+| R9 | `.bellatrix/config.json` (your test project per domain and the test-case folder; format `schemas/bellatrix-config.v1.schema.json`) is created once and then belongs to you: a re-run only merges in missing values (a new domain, a missing project) and never overwrites it without `--regenerate`; an invalid file is left untouched. It is not in the manifests and is never removed. The skills contain no project names or paths; they read this file (and stop and ask when it is missing or invalid). |
 
 A custom template folder (`--template-source <dir> --prefix <p>`) follows the same rules in its own namespace
-(`.bellatrix/<p>.instructions.md`, `<p>-…` names, `.bellatrix/<p>-manifest.<agent>.json`).
+(`.bellatrix/<p>.instructions.md`, `<p>-…` names, `.bellatrix/<p>-manifest.<agent>.json`). It does not read or write
+`.bellatrix/config.json`.
+
+### How `init` finds your test project
+
+For every selected domain without a recorded project, `init` takes `--project` (one path for every domain, or
+`desktop=<path>,web=<path>`), else scans the repository (6 levels, skipping `bin`, `obj`, `node_modules`, `target`,
+dot-folders) for projects that reference that domain's BELLATRIX package: `Bellatrix.Desktop`, `Bellatrix.Web` /
+`Bellatrix.Playwright`, `Bellatrix.Mobile` (C#); `solutions.bellatrix:bellatrix.desktop|web|playwright|android|ios`
+(Java); `@bellatrix/web` / `@bellatrix/appium` (TypeScript). Projects named `Bellatrix.*` / `bellatrix*` /
+`@bellatrix/*` are the framework itself (for example a vendored copy) and are skipped.
+
+- One candidate, or several of which exactly one has the domain in its name, is proposed.
+- In a terminal (stdin, stdout and stderr all interactive, no `CI`, no `--no-interaction`, no `--dry-run`) `init`
+  asks you to confirm, pick a number or type a path; the questions go to stderr, so stdout stays JSON.
+- Otherwise several candidates are a usage error (exit 2, nothing written) that names them; none leaves the domain
+  empty with a warning, and the skills ask you.
+
+The test-case folder is `--test-cases-dir`, else SPECTRA's `spectra.config.json` `tests.dir`, else `test-cases`.
 
 ## Provider emitters
 

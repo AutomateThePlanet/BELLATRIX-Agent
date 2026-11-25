@@ -563,24 +563,8 @@ public class ScaffoldTargetTests
 
     private static (int Exit, string Output) RunCli(string cwd, params string[] args)
     {
-        var originalCwd = Directory.GetCurrentDirectory();
-        var originalOut = Console.Out;
-        var originalErr = Console.Error;
-        var captured = new StringWriter();
-        try
-        {
-            Directory.SetCurrentDirectory(cwd);
-            Console.SetOut(captured);
-            Console.SetError(TextWriter.Null);
-            var exit = CliRunner.Run(args);
-            return (exit, captured.ToString());
-        }
-        finally
-        {
-            Console.SetOut(originalOut);
-            Console.SetError(originalErr);
-            Directory.SetCurrentDirectory(originalCwd);
-        }
+        var (exit, output, _) = CliHarness.Run(cwd, args);
+        return (exit, output);
     }
 
     private static Dictionary<string, string> Snapshot(string root, string exclude)

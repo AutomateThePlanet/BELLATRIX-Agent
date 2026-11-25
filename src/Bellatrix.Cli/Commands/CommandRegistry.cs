@@ -61,11 +61,11 @@ internal static class Flags
     public static FlagSpec AliasOf(FlagSpec canonical, string name)
         => canonical with { Name = name, Required = false, Default = null, DeprecatedAliasOf = canonical.Name, Description = $"Legacy spelling of --{canonical.Name}." };
 
-    /// <summary>Accepted by every command and ignored: output is always JSON and the CLI never prompts.</summary>
+    /// <summary>Accepted by every command: output is always JSON; only <c>init</c> may prompt, and only in a terminal.</summary>
     public static readonly IReadOnlyList<FlagSpec> Global = new[]
     {
         Switch("json", "Accepted for compatibility; output is always JSON."),
-        Switch("no-interaction", "Accepted and ignored; the CLI never prompts."),
+        Switch("no-interaction", "Never prompt. Only init prompts (to confirm the detected test project), and only in a terminal."),
     };
 
     public static readonly FlagSpec Session = Value("session", "<name>",
@@ -141,11 +141,14 @@ internal static class CommandRegistry
 {
     public static readonly IReadOnlyList<string> Domains = new[] { "desktop", "web", "mobile" };
 
+    /// <summary>Verb groups routed as <c>bellatrix &lt;group&gt; &lt;verb&gt;</c>: the domains plus <c>config</c>.</summary>
+    public static readonly IReadOnlyList<string> Groups = Domains.Append("config").ToArray();
+
     public static readonly IReadOnlyDictionary<int, string> ExitCodes = new SortedDictionary<int, string>
     {
         [0] = "Success; the success JSON on stdout is the contract.",
         [1] = "Error; stdout is {\"error\":{\"code\",\"message\"}} (e.g. usage, unknown_verb, session_not_found, driver_unreachable).",
-        [2] = "Usage error in agent or language selection (init: unknown/ambiguous --agent or --language).",
+        [2] = "Usage error in agent, language or project selection (init: unknown/ambiguous --agent, --language or test project; a bad --project / --test-cases-dir).",
     };
 
     internal static readonly IReadOnlyList<FlagSpec> InitFlags = Flags.Of(
@@ -161,9 +164,13 @@ internal static class CommandRegistry
         Flags.AliasOf(Flags.Switch("regenerate", ""), "force"),
         Flags.Switch("dry-run", "Report what would be written; change nothing."),
         Flags.Value("template-source", "<dir>", "Render your own template folder (same layout as the built-in templates) instead of the BELLATRIX templates."),
-        Flags.Value("prefix", "<prefix>", "Namespace for --template-source output (skills, agents, fragment, manifests). Default: inferred from the folder."));
+        Flags.Value("prefix", "<prefix>", "Namespace for --template-source output (skills, agents, fragment, manifests). Default: inferred from the folder."),
+        Flags.Value("project", "<path | d=path,...>", "Your BELLATRIX test project file (.csproj, pom.xml, build.gradle, package.json) for every domain, or per domain " +
+                                                    "(desktop=<path>,web=<path>). Default: detected (projects referencing BELLATRIX); recorded in .bellatrix/config.json."),
+        Flags.Value("test-cases-dir", "<dir | d=dir,...>", "Folder of your test-case files ({dir}/{suite}/TC-{id}.md), or per domain. " +
+                                                          "Default: spectra.config.json tests.dir, else test-cases; recorded in .bellatrix/config.json."));
 
-    private const string InitOutput = "{agents[], language, domains[], emitted[], skipped[], removed[], registered, mcpRemoved[], perAgent{}, decisions[], unsupported[], warnings[], dryRun, ...}";
+    private const string InitOutput = "{agents[], language, domains[], emitted[], skipped[], removed[], registered, mcpRemoved[], perAgent{}, decisions[], unsupported[], warnings[], dryRun, config{path, status, values, commit, warnings[]}, ...}";
 
     public static readonly IReadOnlyList<CommandSpec<CommandContext>> TopLevel = new CommandSpec<CommandContext>[]
     {
@@ -188,9 +195,9 @@ internal static class CommandRegistry
         },
     };
 
-    /// <summary>Every command, top-level first, then desktop, web, mobile.</summary>
+    /// <summary>Every command, top-level first, then config, desktop, web, mobile.</summary>
     public static IEnumerable<CommandSpec> All
-        => TopLevel.Cast<CommandSpec>().Concat(DesktopCommands.Specs).Concat(WebCommands.Specs).Concat(MobileCommands.Specs);
+        => TopLevel.Cast<CommandSpec>().Concat(ConfigCommand.Specs).Concat(DesktopCommands.Specs).Concat(WebCommands.Specs).Concat(MobileCommands.Specs);
 
     public static IEnumerable<CommandSpec> For(string? domain)
         => All.Where(s => string.Equals(s.Domain, domain, StringComparison.OrdinalIgnoreCase));
@@ -203,7 +210,7 @@ internal static class CommandRegistry
     public static IReadOnlySet<string> RoutedNames(string? domain)
         => new HashSet<string>(For(domain).SelectMany(s => s.RoutedNames), StringComparer.OrdinalIgnoreCase);
 
-    public const string Usage = "bellatrix <init|sessions|version|help> [--flag value] | bellatrix <desktop|web|mobile> <verb> [--flag value] | bellatrix <domain> help";
+    public const string Usage = "bellatrix <init|sessions|version|help> [--flag value] | bellatrix config <show|validate> | bellatrix <desktop|web|mobile> <verb> [--flag value] | bellatrix <domain> help";
 
     /// <summary>The usage line of one command: <c>bellatrix [&lt;domain&gt;] &lt;name&gt; [--flag value]</c>.</summary>
     public static string UsageOf(CommandSpec spec)
@@ -254,7 +261,7 @@ internal static class CommandRegistry
         }
 
         sb.AppendLine();
-        sb.AppendLine("Every command also accepts --json and --no-interaction (no effect).");
+        sb.AppendLine("Every command also accepts --json (no effect) and --no-interaction (never prompt; only init prompts, in a terminal).");
         sb.AppendLine("Exit codes: " + string.Join("; ", ExitCodes.Select(e => $"{e.Key} = {e.Value}")));
         sb.AppendLine("Machine-readable: bellatrix help --json (or bellatrix <domain> help --json).");
         return sb.ToString();

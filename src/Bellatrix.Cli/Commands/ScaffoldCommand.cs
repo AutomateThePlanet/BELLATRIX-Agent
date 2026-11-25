@@ -1,4 +1,5 @@
 using System.Text;
+using Bellatrix.Cli.Config;
 using Bellatrix.Cli.Output;
 using Bellatrix.Cli.Scaffolding;
 using Bellatrix.Cli.Scaffolding.Emitters;
@@ -19,6 +20,9 @@ namespace Bellatrix.Cli.Commands;
 /// <item>R6/R8 — one manifest per agent (<c>.bellatrix/manifest.&lt;agent&gt;.json</c>); a file edited by the
 /// developer is skipped unless <c>--regenerate</c>; a re-run for one agent never touches another agent's paths.</item>
 /// <item>R7 — no MCP server is registered; only BELLATRIX's own stale keys are removed from the agent's MCP config.</item>
+/// <item>R9 — <c>.bellatrix/config.json</c> (the user's test project per domain and test-case folder) is created once
+/// and is human-owned: a re-run only merges in missing values and never overwrites it without <c>--regenerate</c>
+/// (see <see cref="InitConfig"/>). It is not tracked in the manifests and never removed.</item>
 /// </list>
 /// With <c>--template-source &lt;dir&gt; [--prefix &lt;p&gt;]</c> the caller supplies the template folder instead of the
 /// built-in BELLATRIX templates (see <see cref="CustomTemplateSource"/>): same contract, rendered under the
@@ -27,7 +31,8 @@ namespace Bellatrix.Cli.Commands;
 ///
 /// Options: <c>--agent a,b</c> (default: auto-detect; <c>--target</c> is a deprecated alias, <c>windsurf</c> →
 /// <c>devin</c>), <c>--domains</c> (desktop,web,mobile), <c>--language</c>, <c>--out &lt;dir&gt;</c>,
-/// <c>--regenerate</c>/<c>--force</c>, <c>--dry-run</c>, <c>--template-source &lt;dir&gt;</c>, <c>--prefix &lt;p&gt;</c>.
+/// <c>--regenerate</c>/<c>--force</c>, <c>--dry-run</c>, <c>--template-source &lt;dir&gt;</c>, <c>--prefix &lt;p&gt;</c>,
+/// <c>--project</c> and <c>--test-cases-dir</c> (a value, or <c>desktop=&lt;v&gt;,web=&lt;v&gt;</c> per domain).
 /// </summary>
 internal static class ScaffoldCommand
 {
@@ -81,8 +86,48 @@ internal static class ScaffoldCommand
         var regenerate = ctx.Options.ContainsKey("regenerate") || ctx.Options.ContainsKey("force");
         var dryRun = ctx.Options.ContainsKey("dry-run");
 
+        // R9: settle .bellatrix/config.json first, so an ambiguous test project fails before anything is written.
+        // A custom template folder does not read it, so it is left alone.
+        InitConfig.Plan? config = null;
+        if (!CustomTemplateSource.IsCustom(profile))
+        {
+            var interactive = InitConfig.IsInteractive(ctx.Options.ContainsKey("no-interaction"), dryRun);
+            config = InitConfig.Prepare(root, language, domains, ctx.Opt("project"), ctx.Opt("test-cases-dir"), regenerate, interactive);
+        }
+        else if (ctx.Opt("project") is not null || ctx.Opt("test-cases-dir") is not null)
+        {
+            throw new CliException("usage", "--project and --test-cases-dir apply to the built-in BELLATRIX templates, not to --template-source.");
+        }
+
         var result = Scaffold(root, string.Join(",", agents), regenerate, profile, templateSource, domains, dryRun, language);
+        if (config is not null)
+        {
+            result = WithConfig(result, config, root, dryRun);
+        }
+
         return JsonOutput.Success(result);
+    }
+
+    /// <summary>Writes the planned config (unless dry-run) and adds it, its warnings and the commit note to the result.</summary>
+    internal static ScaffoldResult WithConfig(ScaffoldResult result, InitConfig.Plan plan, string root, bool dryRun)
+    {
+        if (plan.Write && !dryRun)
+        {
+            BellatrixConfig.Save(root, plan.Document!);
+        }
+
+        foreach (var warning in plan.Outcome.warnings)
+        {
+            Console.Error.WriteLine($"[bellatrix init] warning: {warning}");
+        }
+
+        Console.Error.WriteLine($"[bellatrix init] {BellatrixConfig.RelativePath}: {plan.Outcome.status}. {InitConfig.CommitNote}");
+        return result with
+        {
+            config = plan.Outcome,
+            decisions = result.decisions.Append(InitConfig.CommitNote).ToArray(),
+            warnings = result.warnings.Concat(plan.Outcome.warnings).ToArray(),
+        };
     }
 
     /// <summary>
@@ -138,7 +183,8 @@ internal static class ScaffoldCommand
     /// <c>perAgent</c>, <c>decisions</c>, <c>removed</c> and <c>dryRun</c> are the 2.2 surface; <c>target</c>
     /// (first agent), <c>emitted</c>/<c>skipped</c> (distinct paths across agents), <c>registered</c> (first agent's
     /// fragment), <c>mcpMerged</c> (always empty), <c>mandatesDelegation</c> and <c>mcpRemoved</c> keep the
-    /// pre-2.2 shape.
+    /// pre-2.2 shape. <c>config</c> (3.2) reports <c>.bellatrix/config.json</c>: path, status
+    /// (created|merged|unchanged|replaced|kept-invalid), values, commit (always true) and warnings.
     /// </summary>
     internal sealed record ScaffoldResult(
         string target,
@@ -156,7 +202,8 @@ internal static class ScaffoldCommand
         string[] decisions,
         string language,
         string[] unsupported,
-        string[] warnings);
+        string[] warnings,
+        ConfigOutcome? config = null);
 
     /// <summary>One planned file: its content and the agents that rely on it.</summary>
     private sealed class PlannedFile

@@ -100,8 +100,42 @@ bellatrix update-skills                              # refresh what is already s
 | `--out <dir>` | target repo root | current directory |
 | `--regenerate` / `--force` | overwrite files you edited | edited files are skipped |
 | `--dry-run` | report `emitted`/`skipped`/`removed` per agent, write nothing | off |
+| `--project` | your test project file (`.csproj`, `pom.xml`, `build.gradle`, `package.json`) for every domain, or per domain: `desktop=<path>,web=<path>` | detected (projects that reference BELLATRIX); in a terminal you confirm it. Several and no terminal → exit 2 |
+| `--test-cases-dir` | folder of your test-case files, or per domain (`web=<dir>`) | `spectra.config.json` `tests.dir`, else `test-cases` |
 
 `--target` still works as a deprecated alias for `--agent`.
+
+### Project settings (`.bellatrix/config.json`)
+
+`init` records where your test project is, so the skills never guess a project name:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-Agent/main/schemas/bellatrix-config.v1.schema.json",
+  "version": 1,
+  "testCasesDir": "test-cases",
+  "domains": {
+    "desktop": {
+      "project": {
+        "path": "src/Acme.UiTests/Acme.UiTests.csproj",
+        "name": "Acme.UiTests",
+        "rootNamespace": "Acme.UiTests",
+        "buildCommand": "dotnet build src/Acme.UiTests/Acme.UiTests.csproj"
+      }
+    }
+  }
+}
+```
+
+- **Commit this file.** It is meant to be shared: your agent and your team use the same project and test-case folder.
+  Keep `.bellatrix/sessions.db`, `.bellatrix/snapshots/` and `.bellatrix/screenshots/` out of Git.
+- **Where the values come from:** `--project` / `--test-cases-dir`, else detection (see the options above). A
+  domain without a project means "ask me": the skills stop and ask you, then record the answer.
+- **Re-runs never overwrite it.** `init` and `update-skills` only add missing values (a new domain, a missing
+  project); use `--regenerate` to rebuild it. Edit it by hand any time.
+- **Check it:** `bellatrix config validate` (exit 1 with the problems) and `bellatrix config show` (the values per
+  domain, with the project folder and test-case folder resolved). The skills run `validate` before they build or
+  write code. Format: [schemas/bellatrix-config.v1.schema.json](schemas/bellatrix-config.v1.schema.json).
 
 ### Your own templates (`--template-source`)
 

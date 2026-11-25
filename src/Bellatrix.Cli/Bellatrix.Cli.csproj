@@ -54,6 +54,13 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <!-- The .bellatrix/config.json schema (schemas/ at the repo root), embedded so `bellatrix config validate` works offline. -->
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\schemas\bellatrix-config.v1.schema.json">
+      <LogicalName>schemas/bellatrix-config.v1.schema.json</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <!-- Custom template folders (`bellatrix init` with a template-source folder and a prefix) are NOT embedded: they
        are read from disk and rendered at runtime — see Scaffolding/CustomTemplateSource.cs. -->
 </Project>

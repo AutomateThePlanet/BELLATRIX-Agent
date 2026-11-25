@@ -32,9 +32,9 @@ internal sealed class CommandContext
     }
 
     // Output is ALWAYS JSON — the success/error JSON is the contract. `--json` is accepted for
-    // compatibility (and as a self-documenting hint) but never changes behavior; likewise the CLI is
-    // non-interactive, so `--no-interaction` is accepted-and-ignored. Both pass through ParseOptions
-    // harmlessly and never error.
+    // compatibility (and as a self-documenting hint) but never changes behavior. `--no-interaction` only
+    // matters to init (the one command that may prompt, and only in a terminal). Both pass through
+    // ParseOptions harmlessly and never error.
     public bool Json => Options.ContainsKey("json");
 
     public string? Opt(string key) => Options.TryGetValue(key, out var v) ? v : null;

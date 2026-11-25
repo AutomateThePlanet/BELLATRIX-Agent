@@ -26,6 +26,7 @@ public class HelpDriftTests
     public void Registry_PinsTheSurface_PerDomain()
     {
         Assert.Equal(new[] { "init", "sessions", "version", "help" }, CommandRegistry.For(null).Select(s => s.Name));
+        Assert.Equal(new[] { "show", "validate" }, CommandRegistry.For("config").Select(s => s.Name));
         Assert.Equal(20, CommandRegistry.For("desktop").Count()); // 19 verbs + deprecated scaffold
         Assert.Equal(24, CommandRegistry.For("web").Count());
         Assert.Equal(27, CommandRegistry.For("mobile").Count());
@@ -34,7 +35,7 @@ public class HelpDriftTests
     [Fact]
     public void Registry_RoutedNamesAreUnique_AndEverySpecHasAHandlerAndSummary()
     {
-        foreach (var domain in new string?[] { null }.Concat(CommandRegistry.Domains))
+        foreach (var domain in new string?[] { null }.Concat(CommandRegistry.Groups))
         {
             var names = CommandRegistry.For(domain).SelectMany(s => s.RoutedNames).ToList();
             Assert.Equal(names.Count, names.Distinct(StringComparer.OrdinalIgnoreCase).Count());
@@ -203,6 +204,7 @@ public class HelpDriftTests
         {
             CommandSpec<CommandContext> when spec.HandlerName == "Run" && name is "init" or "scaffold" => ("Commands/ScaffoldCommand.cs", "CommandContext"),
             CommandSpec<CommandContext> when name == "sessions" => ("Commands/SessionsCommand.cs", "CommandContext"),
+            CommandSpec<CommandContext> when domain == "config" => ("Commands/ConfigCommand.cs", "CommandContext"),
             CommandSpec<CommandContext> when domain == "" => ("Commands/CommandRegistry.cs", "CommandContext"),
             CommandSpec<CommandContext> => ("Commands/DesktopCommands.cs", "CommandContext"),
             CommandSpec<WebCommandContext> => ("Commands/WebCommands.cs", "WebCommandContext"),

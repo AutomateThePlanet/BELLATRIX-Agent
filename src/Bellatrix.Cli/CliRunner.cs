@@ -4,8 +4,8 @@ using Bellatrix.Cli.Output;
 namespace Bellatrix.Cli;
 
 /// <summary>
-/// Root dispatcher: `bellatrix &lt;command&gt;` (init, sessions, version, help) and `bellatrix &lt;desktop|web|mobile&gt;
-/// &lt;verb&gt;`. Every invocation is resolved through <see cref="CommandRegistry"/>, the single declaration of the
+/// Root dispatcher: `bellatrix &lt;command&gt;` (init, sessions, version, help), `bellatrix config &lt;show|validate&gt;`
+/// and `bellatrix &lt;desktop|web|mobile&gt; &lt;verb&gt;`. Every invocation is resolved through <see cref="CommandRegistry"/>, the single declaration of the
 /// command surface that `bellatrix help` also renders. The model-free CLI holds no credentials and runs no model;
 /// it only shapes arguments, calls the shared engine, and prints the JSON contract.
 /// </summary>
@@ -45,8 +45,8 @@ public static class CliRunner
     {
         if (args.Length == 0)
         {
-            // Output is always JSON; `--json` and `--no-interaction` are accepted-and-ignored (the CLI
-            // is non-interactive and JSON is the contract). They pass through ParseOptions and never error.
+            // Output is always JSON; `--json` is accepted-and-ignored and `--no-interaction` only matters to init
+            // (the one command that may prompt, in a terminal). They pass through ParseOptions and never error.
             return JsonOutput.Error("usage", "Usage: " + CommandRegistry.Usage + " | bellatrix --version. See: bellatrix help");
         }
 
@@ -81,15 +81,15 @@ public static class CliRunner
         }
 
         var domain = args[0].ToLowerInvariant();
-        if (!CommandRegistry.Domains.Contains(domain))
+        if (!CommandRegistry.Groups.Contains(domain))
         {
             return JsonOutput.Error("unknown_domain",
-                $"Unknown domain '{args[0]}'. Supported domains: 'desktop', 'web', 'mobile'. See: bellatrix help");
+                $"Unknown domain '{args[0]}'. Supported domains: 'desktop', 'web', 'mobile' (and 'config'). See: bellatrix help");
         }
 
         if (args.Length < 2)
         {
-            var example = domain == "desktop" ? "list-apps" : "list-sessions";
+            var example = domain switch { "desktop" => "list-apps", "config" => "validate", _ => "list-sessions" };
             return JsonOutput.Error("usage", $"Missing <verb>. Example: bellatrix {domain} {example}");
         }
 
@@ -254,7 +254,7 @@ public static class CliRunner
     {
         var json = options.ContainsKey("json");
         var domain = topic.ToLowerInvariant();
-        if (CommandRegistry.Domains.Contains(domain))
+        if (CommandRegistry.Groups.Contains(domain))
         {
             if (verb is null)
             {

@@ -92,3 +92,30 @@ internal sealed class CustomTemplateFixture : IDisposable
         }
     }
 }
+
+/// <summary>Runs the CLI in-process from a working directory, capturing stdout and stderr.</summary>
+internal static class CliHarness
+{
+    public static (int Exit, string Output, string Errors) Run(string cwd, params string[] args)
+    {
+        var originalCwd = Directory.GetCurrentDirectory();
+        var originalOut = Console.Out;
+        var originalErr = Console.Error;
+        var captured = new StringWriter();
+        var errors = new StringWriter();
+        try
+        {
+            Directory.SetCurrentDirectory(cwd);
+            Console.SetOut(captured);
+            Console.SetError(errors);
+            var exit = CliRunner.Run(args);
+            return (exit, captured.ToString(), errors.ToString());
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            Console.SetError(originalErr);
+            Directory.SetCurrentDirectory(originalCwd);
+        }
+    }
+}

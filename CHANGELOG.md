@@ -9,6 +9,23 @@ first release from this repository.
 
 ## [Unreleased]
 
+### Added
+- `.bellatrix/config.json`: the project settings for your repository (the test project per domain: path, name, root
+  namespace or base package, build command; and the test-case folder), with a JSON schema
+  (`schemas/bellatrix-config.v1.schema.json`, `"version": 1`). Commit it.
+- `bellatrix init` finds the BELLATRIX test project per domain (C# `*.csproj`, Java `pom.xml` / `build.gradle`,
+  TypeScript `package.json` that reference BELLATRIX; the framework's own projects are skipped), proposes it and, in
+  a terminal, asks you to confirm. New flags `--project <path>` / `--project desktop=<path>,web=<path>` and
+  `--test-cases-dir <dir>` (default: SPECTRA's `tests.dir`, else `test-cases`). Without a terminal, several
+  candidates are a usage error (exit 2) and nothing is written.
+- `bellatrix config show` and `bellatrix config validate`.
+- The init JSON has a `config` field (path, status, values, commit, warnings).
+
+### Changed
+- `--no-interaction` now has an effect: `init` is the one command that may prompt, and only in a terminal.
+- `init` contract rule R9: re-running `init` / `update-skills` never overwrites `.bellatrix/config.json` without
+  `--regenerate`; missing values are merged in, an invalid file is left untouched.
+
 ## [3.1.4] - 2026-10-28
 
 Released on GitHub Releases (NuGet.org package coming soon). Install it with
