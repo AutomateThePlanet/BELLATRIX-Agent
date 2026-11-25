@@ -54,7 +54,7 @@ internal static class BellatrixConfig
     /// the release checklist verifies that the tag serves it before a release is published.
     /// </summary>
     public static string SchemaUrl =>
-        $"https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-Agent/v{CliRunner.Version}/schemas/bellatrix-config.v1.schema.json";
+        $"https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-AI-Agents/v{CliRunner.Version}/schemas/bellatrix-config.v1.schema.json";
 
     /// <summary>The embedded copy of <c>schemas/bellatrix-config.v1.schema.json</c>.</summary>
     public const string SchemaResource = "schemas/bellatrix-config.v1.schema.json";

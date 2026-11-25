@@ -1,7 +1,7 @@
 # BELLATRIX Agent — the Agentic Test Automation Framework
 
-[![CI](https://github.com/AutomateThePlanet/BELLATRIX-Agent/actions/workflows/ci.yml/badge.svg)](https://github.com/AutomateThePlanet/BELLATRIX-Agent/actions/workflows/ci.yml)
-[![GitHub release](https://img.shields.io/github/v/release/AutomateThePlanet/BELLATRIX-Agent)](https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/latest)
+[![CI](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/actions/workflows/ci.yml/badge.svg)](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/actions/workflows/ci.yml)
+[![GitHub release](https://img.shields.io/github/v/release/AutomateThePlanet/BELLATRIX-AI-Agents)](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/releases/latest)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 BELLATRIX Agent lets your AI coding agent (Claude Code, GitHub Copilot, Cursor, Devin, Codex CLI, Gemini CLI,
@@ -39,12 +39,12 @@ More: [docs/architecture.md](docs/architecture.md).
 You need the **.NET 8 SDK** (also for Java and TypeScript projects: the CLI is a .NET tool).
 
 The current release, 3.1.4, is on
-[GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.4): download the `.nupkg`
+[GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/releases/tag/v3.1.4): download the `.nupkg`
 into a folder and install the tool from it (needs the [GitHub CLI](https://cli.github.com/), or download the file in
 the browser).
 
 ```bash
-gh release download v3.1.4 -R AutomateThePlanet/BELLATRIX-Agent -p "*.nupkg" -D ./bellatrix-pkg
+gh release download v3.1.4 -R AutomateThePlanet/BELLATRIX-AI-Agents -p "*.nupkg" -D ./bellatrix-pkg
 dotnet tool install -g Bellatrix.Cli --add-source ./bellatrix-pkg --version 3.1.4   # or: dotnet tool update -g …
 bellatrix --version
 bellatrix help
@@ -111,7 +111,7 @@ bellatrix update-skills                              # refresh what is already s
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-Agent/v3.2.0/schemas/bellatrix-config.v1.schema.json",
+  "$schema": "https://raw.githubusercontent.com/AutomateThePlanet/BELLATRIX-AI-Agents/v3.2.0/schemas/bellatrix-config.v1.schema.json",
   "version": 1,
   "testCasesDir": "test-cases",
   "domains": {

@@ -36,7 +36,7 @@ if ($version -ne $expected) { throw "'$Exe' is $version but this repo is ${expec
 . (Join-Path $PSScriptRoot "matrix-json.ps1")
 $matrix = [IO.File]::ReadAllText((Join-Path $repo "docs\support-matrix.json"), $utf8) | ConvertFrom-Json
 $public = [pscustomobject][ordered]@{
-    '$comment'    = "Public fields of BELLATRIX-Agent docs/support-matrix.json, written by its scripts/export-website-data.ps1. Never hand-edit."
+    '$comment'    = "Public fields of BELLATRIX-AI-Agents docs/support-matrix.json, written by its scripts/export-website-data.ps1. Never hand-edit."
     schemaVersion = $matrix.schemaVersion
     updated       = $matrix.updated
     languages     = $matrix.languages

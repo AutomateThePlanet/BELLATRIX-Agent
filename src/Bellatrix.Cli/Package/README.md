@@ -11,18 +11,18 @@ how to resolve stable locators without reading whole UI trees into its context.
 ## Install
 
 You need the .NET 8 SDK. The package is published on
-[GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases) (not on NuGet.org yet): download the
+[GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/releases) (not on NuGet.org yet): download the
 `.nupkg` into a folder and install the tool from it.
 
 ```
-gh release download v3.2.0 -R AutomateThePlanet/BELLATRIX-Agent -p "*.nupkg" -D ./bellatrix-pkg
+gh release download v3.2.0 -R AutomateThePlanet/BELLATRIX-AI-Agents -p "*.nupkg" -D ./bellatrix-pkg
 dotnet tool install -g Bellatrix.Cli --add-source ./bellatrix-pkg --version 3.2.0
 bellatrix --version
 bellatrix help
 ```
 
 Update, integrity check and troubleshooting:
-[INSTALL-PREVIEW.md](https://github.com/AutomateThePlanet/BELLATRIX-Agent/blob/main/docs/INSTALL-PREVIEW.md).
+[INSTALL-PREVIEW.md](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/blob/main/docs/INSTALL-PREVIEW.md).
 
 ## Scaffold your AI agent
 
@@ -84,5 +84,5 @@ output.
 ## Learn more
 
 - Guide, CLI reference and what is supported: https://bellatrix.solutions/agent/
-- Source code, issues and contributing: https://github.com/AutomateThePlanet/BELLATRIX-Agent
+- Source code, issues and contributing: https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents
 - BELLATRIX framework documentation: https://docs.bellatrix.solutions/

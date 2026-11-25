@@ -5,7 +5,7 @@
     { "id": "msys-dev-path", "pattern": "(?i)(^|[\\s\"'(=])/[a-z]/(sourcecode|users)/" },
     { "id": "unix-home-path", "pattern": "(^|[\\s\"'(=])/(home|Users)/[a-z][a-z0-9_.-]+/" },
     { "id": "local-nuget-feed", "pattern": "(?i)nuget-local" },
-    { "id": "non-public-repository-link", "pattern": "(?i)github(usercontent)?\\.com/AutomateThePlanet/(?!(BELLATRIX|BELLATRIX-Java|BELLATRIX-JavaScript|BELLATRIX-Agent|Spectra)(?![A-Za-z0-9_.-]))[A-Za-z0-9_.-]+" },
+    { "id": "non-public-repository-link", "pattern": "(?i)github(usercontent)?\\.com/AutomateThePlanet/(?!(BELLATRIX|BELLATRIX-Java|BELLATRIX-JavaScript|BELLATRIX-AI-Agents|Spectra|Testimize)(?![A-Za-z0-9_.-]))[A-Za-z0-9_.-]+" },
     { "id": "email-address", "pattern": "(?i)\\b[a-z0-9._%+-]+@(?!(example\\.(com|org|net)|bellatrix\\.solutions)\\b)[a-z0-9-]+(\\.[a-z0-9-]+)*\\.[a-z]{2,}\\b" },
     { "id": "aws-access-key", "pattern": "\\bAKIA[0-9A-Z]{16}\\b" },
     { "id": "github-token", "pattern": "\\b(ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36}\\b|\\bgithub_pat_[A-Za-z0-9_]{40,}" },

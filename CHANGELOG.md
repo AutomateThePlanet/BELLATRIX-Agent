@@ -6,7 +6,7 @@ All notable changes to `Bellatrix.Cli` (the `bellatrix` command) are documented 
 
 Versions before 3.1.2 were distributed as packages outside NuGet.org; 3.1.2 is the first version from this
 repository. No version is on NuGet.org yet: releases are published on
-[GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases) (the first one is 3.1.4) and installed
+[GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/releases) (the first one is 3.1.4) and installed
 from the downloaded `.nupkg` with `--add-source` ([docs/INSTALL-PREVIEW.md](docs/INSTALL-PREVIEW.md)).
 
 ## [Unreleased]
@@ -19,7 +19,7 @@ Not released yet (no tag, no package). Install the current release, 3.1.4, from 
 - `.bellatrix/config.json`: the project settings for your repository (the test project per domain: path, name, root
   namespace or base package, build command; and the test-case folder), with a JSON schema
   (`schemas/bellatrix-config.v1.schema.json`, `"version": 1`). Commit it. Its `$schema` points at the schema in the
-  release tag (`…/BELLATRIX-Agent/v<version>/schemas/…`), so it never changes under you.
+  release tag (`…/BELLATRIX-AI-Agents/v<version>/schemas/…`), so it never changes under you.
 - `bellatrix init` finds the BELLATRIX test project per domain (C# `*.csproj`, Java `pom.xml` / `build.gradle`,
   TypeScript `package.json` that reference BELLATRIX; the framework's own projects are skipped), proposes it and, in
   a terminal, asks you to confirm. New flags `--project <path>` / `--project desktop=<path>,web=<path>` and
@@ -58,7 +58,7 @@ Not released yet (no tag, no package). Install the current release, 3.1.4, from 
 ## [3.1.4] - 2026-10-28
 
 Released on GitHub Releases (NuGet.org package coming soon). Install it with
-[docs/INSTALL-PREVIEW.md](https://github.com/AutomateThePlanet/BELLATRIX-Agent/blob/main/docs/INSTALL-PREVIEW.md).
+[docs/INSTALL-PREVIEW.md](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/blob/main/docs/INSTALL-PREVIEW.md).
 
 ### Added
 - `docs/INSTALL-PREVIEW.md`: download, integrity check, install, update, uninstall and troubleshooting for the preview
@@ -142,7 +142,7 @@ Released on GitHub Releases (NuGet.org package coming soon). Install it with
   compile-verified against the framework source.
 - Support matrix (language × domain × agent) in the README.
 
-[3.2.0]: https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.2.0
-[3.1.4]: https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.4
-[3.1.3]: https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.3
-[3.1.2]: https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.2
+[3.2.0]: https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/releases/tag/v3.2.0
+[3.1.4]: https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/releases/tag/v3.1.4
+[3.1.3]: https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/releases/tag/v3.1.3
+[3.1.2]: https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/releases/tag/v3.1.2

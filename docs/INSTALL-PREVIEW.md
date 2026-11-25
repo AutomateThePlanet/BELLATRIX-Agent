@@ -1,7 +1,7 @@
 # Install Bellatrix.Cli 3.1.4 from GitHub Releases
 
 `Bellatrix.Cli` 3.1.4 is published on
-[GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.4): you download the
+[GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/releases/tag/v3.1.4): you download the
 `.nupkg` into a folder and install the `bellatrix` .NET tool from that folder. NuGet.org package coming soon.
 
 ## Prerequisites
@@ -15,11 +15,11 @@
 PowerShell or bash:
 
 ```bash
-gh release download v3.1.4 -R AutomateThePlanet/BELLATRIX-Agent -p "*.nupkg" -D ./bellatrix-pkg
+gh release download v3.1.4 -R AutomateThePlanet/BELLATRIX-AI-Agents -p "*.nupkg" -D ./bellatrix-pkg
 ```
 
 Browser alternative: open the
-[v3.1.4 release page](https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/tag/v3.1.4), download
+[v3.1.4 release page](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/releases/tag/v3.1.4), download
 `Bellatrix.Cli.3.1.4.nupkg` and save it into a new folder named `bellatrix-pkg`.
 
 ## 2. Check the download (optional)
@@ -27,7 +27,7 @@ Browser alternative: open the
 The release also has `Bellatrix.Cli.3.1.4.nupkg.sha256`. Download it and compare it with the hash of your file:
 
 ```bash
-gh release download v3.1.4 -R AutomateThePlanet/BELLATRIX-Agent -p "*.sha256" -D ./bellatrix-pkg
+gh release download v3.1.4 -R AutomateThePlanet/BELLATRIX-AI-Agents -p "*.sha256" -D ./bellatrix-pkg
 ```
 
 PowerShell:
@@ -82,12 +82,12 @@ bellatrix init --agent <your agent> --language <lang>
 `opencode`; `--language` is `csharp`, `java` or `typescript`. Add `--dry-run` to preview the files.
 
 Then try one copy-paste flow per domain from
-[docs/TESTING.md](https://github.com/AutomateThePlanet/BELLATRIX-Agent/blob/main/docs/TESTING.md):
-[desktop](https://github.com/AutomateThePlanet/BELLATRIX-Agent/blob/main/docs/TESTING.md#2-desktop--windows-calculator),
-[web](https://github.com/AutomateThePlanet/BELLATRIX-Agent/blob/main/docs/TESTING.md#3-web--chrome-against-the-bellatrix-demo-shop),
-[mobile](https://github.com/AutomateThePlanet/BELLATRIX-Agent/blob/main/docs/TESTING.md#4-mobile--android-emulator).
+[docs/TESTING.md](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/blob/main/docs/TESTING.md):
+[desktop](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/blob/main/docs/TESTING.md#2-desktop--windows-calculator),
+[web](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/blob/main/docs/TESTING.md#3-web--chrome-against-the-bellatrix-demo-shop),
+[mobile](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/blob/main/docs/TESTING.md#4-mobile--android-emulator).
 
 ## Report an issue
 
-Open an issue in [this repository](https://github.com/AutomateThePlanet/BELLATRIX-Agent/issues/new/choose) and
+Open an issue in [this repository](https://github.com/AutomateThePlanet/BELLATRIX-AI-Agents/issues/new/choose) and
 include the output of `bellatrix --version`, the command you ran and the JSON it printed.
