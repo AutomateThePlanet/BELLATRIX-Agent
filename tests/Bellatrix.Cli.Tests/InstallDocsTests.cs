@@ -5,9 +5,8 @@ using Xunit;
 namespace Bellatrix.Cli.Tests;
 
 /// <summary>
-/// The install instructions match how the package is really distributed: GitHub Releases, not NuGet.org
-/// (<c>release.yml</c> pushes nothing to NuGet.org). Once the package is on NuGet.org, change the workflow and these
-/// docs together, and this test with them.
+/// The install instructions match how the package is really distributed: NuGet.org first, and the same .nupkg as a
+/// GitHub release asset for pinned or offline installs with <c>--add-source</c>.
 /// </summary>
 public class InstallDocsTests
 {
@@ -33,27 +32,36 @@ public class InstallDocsTests
         Assert.DoesNotContain("dotnet nuget push", workflow);
     }
 
-    [Theory]
-    [MemberData(nameof(InstallDocs))]
-    public void EveryToolInstall_NamesTheDownloadedPackageSource(string relative)
+    [Fact]
+    public void Readme_QuickStart_InstallsFromNuGetOrg()
     {
-        var lines = Read(relative).Split('\n');
-        var bad = lines
-            .Select((line, i) => (line, i))
-            .Where(x => Regex.IsMatch(x.line, @"dotnet tool (install|update) (-g|--global) Bellatrix\.Cli") && !x.line.Contains("--add-source"))
-            .Select(x => $"{relative}:{x.i + 1}: {x.line.Trim()}")
-            .ToArray();
-
-        Assert.True(bad.Length == 0, "Bellatrix.Cli is not on NuGet.org; installs need --add-source:\n" + string.Join("\n", bad));
+        var readme = Read("README.md");
+        Assert.Contains("dotnet tool install -g Bellatrix.Cli\n", readme);
+        Assert.Contains("https://www.nuget.org/packages/Bellatrix.Cli", readme);
+        Assert.DoesNotContain("coming soon", readme, StringComparison.OrdinalIgnoreCase);
     }
 
     [Theory]
     [MemberData(nameof(InstallDocs))]
-    public void NoDocClaimsTheNuGetOrgPackage(string relative)
+    public void EveryLocalSourceInstall_PinsTheVersion(string relative)
     {
-        var text = Read(relative);
-        Assert.DoesNotContain("nuget.org/packages/Bellatrix.Cli", text, StringComparison.OrdinalIgnoreCase);
-        Assert.DoesNotContain("img.shields.io/nuget", text, StringComparison.OrdinalIgnoreCase);
+        // An install from a downloaded .nupkg folder must name the version, or it silently picks NuGet.org's.
+        var bad = Read(relative).Split('\n')
+            .Select((line, i) => (line, i))
+            .Where(x => Regex.IsMatch(x.line, @"dotnet tool (install|update) (-g|--global) Bellatrix\.Cli") && x.line.Contains("--add-source") && !x.line.Contains("--version"))
+            .Select(x => $"{relative}:{x.i + 1}: {x.line.Trim()}")
+            .ToArray();
+
+        Assert.True(bad.Length == 0, "--add-source installs need --version:\n" + string.Join("\n", bad));
+    }
+
+    [Fact]
+    public void InstallPreview_KeepsTheGitHubReleasePackagePath()
+    {
+        // The .nupkg stays a GitHub release asset, so the documented download-and---add-source install keeps working.
+        var install = Read("docs/INSTALL-PREVIEW.md");
+        Assert.Contains("gh release download", install);
+        Assert.Contains("--add-source", install);
     }
 
     [Fact]
