@@ -41,6 +41,11 @@ jobs:
           $csproj = Get-Content src/Bellatrix.Cli/Bellatrix.Cli.csproj -Raw
           $packageVersion = [regex]::Match($csproj, '<Version>([^<]+)</Version>').Groups[1].Value
           if ($packageVersion -ne $version) { throw "Tag $env:TAG does not match the csproj version $packageVersion." }
+          # RELEASE-CHECKLIST.md step 3: the changelog section is dated and no longer says "Not released yet".
+          $changelog = Get-Content CHANGELOG.md -Raw -Encoding utf8
+          if ($changelog -notmatch "(?m)^## \[$([regex]::Escape($version))\] - \d{4}-\d{2}-\d{2}\s*$") { throw "CHANGELOG.md has no dated '## [$version] - YYYY-MM-DD' heading." }
+          $section = [regex]::Match($changelog, "(?ms)^## \[$([regex]::Escape($version))\][^\r\n]*\r?\n(.*?)(?=^## \[|^\[[^\]]+\]: )").Groups[1].Value
+          if ($section -match 'Not released yet') { throw "CHANGELOG.md [$version] still says 'Not released yet'." }
           "VERSION=$version" >> $env:GITHUB_ENV
 
       # Every .bellatrix/config.json that `bellatrix init` writes has "$schema" pointing at the schema in this tag
