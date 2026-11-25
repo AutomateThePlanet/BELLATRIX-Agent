@@ -4,8 +4,10 @@ All notable changes to `Bellatrix.Cli` (the `bellatrix` command) are documented 
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-Versions before 3.1.2 were distributed as packages outside NuGet.org; 3.1.2 is the first NuGet.org release and the
-first release from this repository.
+Versions before 3.1.2 were distributed as packages outside NuGet.org; 3.1.2 is the first version from this
+repository. No version is on NuGet.org yet: releases are published on
+[GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases) (the first one is 3.1.4) and installed
+from the downloaded `.nupkg` with `--add-source` ([docs/INSTALL-PREVIEW.md](docs/INSTALL-PREVIEW.md)).
 
 ## [Unreleased]
 
@@ -22,6 +24,8 @@ first release from this repository.
 - The init JSON has a `config` field (path, status, values, commit, warnings).
 
 ### Fixed
+- The README, the NuGet README and this changelog no longer say the package is on NuGet.org. It is not published
+  there yet; install it from GitHub Releases (`dotnet tool install -g Bellatrix.Cli --add-source ./bellatrix-pkg`).
 - The skills no longer hard-code a sample project (`Demo.DesktopTests`, `MyProject.WebTests`, `demo-desktop-tests`,
   `my-web-tests`, …) or its build command. They use `{project.*}` placeholders from `.bellatrix/config.json` and ask
   you when it has no project.

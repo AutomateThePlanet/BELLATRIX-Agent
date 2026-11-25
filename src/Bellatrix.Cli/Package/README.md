@@ -10,13 +10,19 @@ how to resolve stable locators without reading whole UI trees into its context.
 
 ## Install
 
-You need the .NET 8 SDK.
+You need the .NET 8 SDK. The package is published on
+[GitHub Releases](https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases) (not on NuGet.org yet): download the
+`.nupkg` into a folder and install the tool from it.
 
 ```
-dotnet tool install -g Bellatrix.Cli
+gh release download v3.1.4 -R AutomateThePlanet/BELLATRIX-Agent -p "*.nupkg" -D ./bellatrix-pkg
+dotnet tool install -g Bellatrix.Cli --add-source ./bellatrix-pkg --version 3.1.4
 bellatrix --version
 bellatrix help
 ```
+
+Update, integrity check and troubleshooting:
+[INSTALL-PREVIEW.md](https://github.com/AutomateThePlanet/BELLATRIX-Agent/blob/main/docs/INSTALL-PREVIEW.md).
 
 ## Scaffold your AI agent
 
@@ -42,8 +48,11 @@ from your build files when omitted). Add `--dry-run` to preview the files.
 | Kiro CLI | `kiro` |
 | OpenCode | `opencode` |
 
-Re-running `bellatrix init` refreshes what is already scaffolded and never overwrites a file you edited unless you
-pass `--regenerate`.
+`init` finds your BELLATRIX test project (or takes `--project <path>`) and records it in `.bellatrix/config.json`;
+commit that file. The skills read it, so they never guess a project name. Check it with `bellatrix config validate`.
+
+Re-running `bellatrix init` refreshes what is already scaffolded and never overwrites a file you edited (or
+`.bellatrix/config.json`) unless you pass `--regenerate`.
 
 ## What is supported
 

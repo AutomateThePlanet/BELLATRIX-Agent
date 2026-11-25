@@ -1,7 +1,7 @@
 # BELLATRIX Agent — the Agentic Test Automation Framework
 
 [![CI](https://github.com/AutomateThePlanet/BELLATRIX-Agent/actions/workflows/ci.yml/badge.svg)](https://github.com/AutomateThePlanet/BELLATRIX-Agent/actions/workflows/ci.yml)
-[![NuGet](https://img.shields.io/nuget/v/Bellatrix.Cli.svg)](https://www.nuget.org/packages/Bellatrix.Cli)
+[![GitHub release](https://img.shields.io/github/v/release/AutomateThePlanet/BELLATRIX-Agent)](https://github.com/AutomateThePlanet/BELLATRIX-Agent/releases/latest)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 BELLATRIX Agent lets your AI coding agent (Claude Code, GitHub Copilot, Cursor, Devin, Codex CLI, Gemini CLI,
